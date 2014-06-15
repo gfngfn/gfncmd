@@ -1,0 +1,367 @@
+%This is style file "gfncmd.sty" made by SUWA Takashi.
+%
+%---括弧類------------------------------
+\newcommand{\dist}[1]{\left\|#1\right\|}
+\newcommand{\paren}[1]{\left(#1\right)}
+\newcommand{\sqbrc}[1]{\left[#1\right]}
+\newcommand{\curlybrc}[1]{\left\{#1\right\}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\setprn}[1]{\curlybrc{#1}}
+    %集合用の括弧
+\newcommand{\seqprn}[1]{\paren{#1}}
+    %直積の元の括弧
+\newcommand{\setprnsep}[2]{\setprn{{\:}#1{\:}|{\:}#2{\:}}}
+    %分出公理に基づいて定義される集合用の括弧
+%---函数引数用括弧----------------------
+\newcounter{casefprn@gfncmd}
+\setcounter{casefprn@gfncmd}{0}
+\newcommand{\usenormalfprn}{\setcounter{casefprn@gfncmd}{0}}
+\newcommand{\usescriptfprn}{\setcounter{casefprn@gfncmd}{1}}
+\newcommand{\usesmallfprn}{\setcounter{casefprn@gfncmd}{2}}
+\newcommand{\fprn}[1]{%
+  \ifcase\value{casefprn@gfncmd}%
+    \paren{#1}%
+  \or%
+    {\scriptstyle\paren{#1}}%
+  \or%
+    \text{\small$\displaystyle\paren{#1}$}%
+  \fi%
+}
+%
+%===集合========================================================================
+%---有名な集合--------------------------
+\newcounter{caseset@gfncmd} \setcounter{caseset@gfncmd}{0}
+\newcommand{\usemathbfset}{\setcounter{caseset@gfncmd}{0}}
+\newcommand{\usebmset}{\setcounter{caseset@gfncmd}{1}}
+\newcommand{\usemathbbset}{\setcounter{caseset@gfncmd}{2}}
+\newcommand{\setcapital}[1]{%
+  {%
+    \ifcase\value{caseset@gfncmd}%
+      \mathbf{#1}%
+    \or%
+      \bm{#1}%
+    \or%
+      \mathbb{#1}%
+    \fi%
+  }%
+}
+\newcommand{\setZ}{\setcapital{Z}}
+\newcommand{\setN}{\setcapital{N}}
+\newcommand{\setQ}{\setcapital{Q}}
+\newcommand{\setR}{\setcapital{R}}
+\newcommand{\setC}{\setcapital{C}}
+\newcommand{\setH}{\setcapital{H}}
+\newcommand{\setP}{\setcapital{P}}
+\newcommand{\setNp}{\setcapital{N}^{+}}
+%---行列の集合--------------------------
+\newcounter{caseMat@gfncmd}
+\setcounter{caseMat@gfncmd}{0}
+\newcommand{\useromanMat}{\setcounter{caseMat@gfncmd}{0}}
+\newcommand{\useitalicMat}{\setcounter{caseMat@gfncmd}{1}}
+\newcommand{\usebmMat}{\setcounter{caseMat@gfncmd}{2}}
+\newcommand{\usetimesMat}{\setcounter{caseMat@gfncmd}{3}}
+\newcommand{\Mat}[3]{%
+  {%
+    \ifcase\value{caseMat@gfncmd}%
+      \mathrm{M}_{#1, #2}\paren{#3}%
+    \or%
+      M_{#1, #2}\paren{#3}%
+    \or%
+      \bm{M}_{#1, #2}\paren{#3}%
+    \or%
+      #3^{#1\times#2}%
+    \fi%
+  }%
+}
+%---冪集合------------------------------
+\newcounter{casePowerset@gfncmd}
+\setcounter{casePowerset@gfncmd}{0}
+\newcommand{\useromanPowerset}{\setcounter{casePowerset@gfncmd}{0}}
+\newcommand{\usebinaryPowerset}{\setcounter{casePowerset@gfncmd}{1}}
+\newcommand{\usefrakPowerset}{\setcounter{casePowerset@gfncmd}{2}}
+\newcommand{\Powerset}[1]{%
+  {%
+    \ifcase\value{casePowerset@gfncmd}%
+      \mathop{\mathrm{Pow}}#1%
+    \or%
+      2^{#1}%
+    \or%
+      \mathfrak{P}#1%
+    \fi%
+  }%
+}
+\newcommand{\Powersetprn}[1]{%
+  {%
+    \ifcase\value{casePowerset@gfncmd}%
+      \mathop{\mathrm{Pow}}\paren{#1}%
+    \or%
+      2^{#1}%
+    \or%
+      \mathop{\mathfrak{P}}\paren{#1}%
+    \fi%
+  }%
+}
+%---開区間・閉区間----------------------
+\newcommand{\openinterval}[2]{\paren{#1, #2}}
+\newcommand{\closedinterval}[2]{\sqbrc{#1, #2}}
+\newcommand{\openclosedinterval}[2]{\left(#1, #2\right]}
+\newcommand{\closedopeninterval}[2]{\left[#1, #2\right)}
+%---函数の定義域と値域------------------
+\newcommand{\funcdoms}[3]{#1:{\:}#2\to#3}
+%
+%論理類
+\newcommand{\Defarrow}{\stackrel{\mathrm{def.}}{\Leftrightarrow}}
+\newcommand{\suchthat}{\quad \mathrm{s.t.} \quad}
+\newcommand{\qed}{\quad ■}
+%
+%===記号論理====================================================================
+\newcommand{\deductleft}{\enskip \vdash \enskip}
+\newcommand{\deductleftnoassump}{\vdash \enskip}
+\newcommand{\deductright}{\enskip \dashv \enskip}
+\newcommand{\deductleftright}{\enskip \vdash \dashv \enskip}
+%---論理包含 (implimentation) ----------
+\newcounter{caseimpl@gfncmd}
+\setcounter{caseimpl@gfncmd}{0}
+\newcommand{\userightarrowasimpl}{\setcounter{caseimpl@gfncmd}{0}}
+\newcommand{\useRightarrowasimpl}{\setcounter{caseimpl@gfncmd}{1}}
+\newcommand{\useinvertedCasimpl}{\setcounter{caseimpl@gfncmd}{2}}
+\newcommand{\impl}{%
+  \mathrel{%
+    \ifcase\value{caseimpl@gfncmd}%
+      \rightarrow%
+    \or%
+      \Rightarrow%
+    \or%
+      \supset%
+    \fi%
+  }%
+}
+%---相互論理包含（同値）----------------
+\newcounter{caseimplequiv@gfncmd}
+\setcounter{caseimplequiv@gfncmd}{0}
+\newcommand{\useleftrightarrowasimplequiv}{\setcounter{caseimplequiv@gfncmd}{0}}
+\newcommand{\userightleftarrowsasimplequiv}{\setcounter{caseimplequiv@gfncmd}{1}}
+\newcommand{\useLeftrightarrowasimplequiv}{\setcounter{caseimplequiv@gfncmd}{2}}
+\newcommand{\implequiv}{%
+  \mathrel{%
+    \ifcase\value{caseimplequiv@gfncmd}%
+      \leftrightarrow%
+    \or%
+      \rightleftarrows% (amssymb.sty)
+    \or%
+      \Leftrightarrow%
+    \fi%
+  }%
+}
+%===束論========================================================================
+%---半順序 (partial order) -------------
+\newcounter{casepord@gfncmd} \setcounter{casepord@gfncmd}{0}
+\newcommand{\usepreccurlyeqaspord}{\setcounter{casepord@gfncmd}{0}}
+\newcommand{\usepreceqaspord}{\setcounter{casepord@gfncmd}{1}}
+\newcommand{\useleqaspord}{\setcounter{casepord@gfncmd}{2}}
+\newcommand{\pord}{%
+  \mathrel{%
+    \ifcase\value{casepord@gfncmd}%
+      \mathord{\preccurlyeq}%
+    \or%
+      \mathord{\preceq}%
+    \or%
+      \mathord{\leq}%
+    \fi%
+  }%
+}
+\newcommand{\join}{\mathbin{\scriptstyle \!\mathord{\lor}}\!} % join
+\newcommand{\meet}{\mathbin{\scriptstyle \!\mathord{\land}}\!} % meet
+%
+%===体裁========================================================================
+\newcommand{\vblank}{\vspace{1em}}
+\newcommand{\widecomma}{,\enskip}
+\newcommand{\widecolon}{:\enskip}
+%
+%===微積分======================================================================
+\newcommand{\dif}[2]{\frac{{\rmd}#1}{{\rmd}#2}}
+\newcommand{\ddif}[2]{\frac{{\rmd}^{2}#1}{{\rmd}#2^{2}}}
+\newcommand{\ndif}[3]{\frac{{\rmd}^{#1}#2}{{\rmd}#3^{#1}}}
+\newcommand{\pdif}[2]{\frac{{\partial}#1}{{\partial}#2}}
+\newcommand{\pddif}[2]{\frac{{\partial}^{2}#1}{{\partial}#2^{2}}}
+\newcommand{\pndif}[3]{\frac{{\partial}^{#1}#2}{{\partial}#3^{#1}}}
+\newcommand{\thmpdif}[3]{\paren{\frac{{\partial}#1}{{\partial}#2}}_{#3}}
+%---微分演算子--------------------------
+\newcounter{casermd@gfncmd} \setcounter{casermd@gfncmd}{0}
+\newcommand{\useromandif}{\setcounter{casermd@gfncmd}{0}}
+\newcommand{\useitalicdif}{\setcounter{casermd@gfncmd}{1}}
+\newcommand{\rmd}{%
+  {%
+    \ifcase\value{casermd@gfncmd}%
+      \mathrm{d}%
+    \or%
+      d%
+    \fi%
+  }%
+}
+%
+%===文字類======================================================================
+%---イプシロンの再定義------------------
+\newcounter{casemakeepsilonsdifferent@gfncmd}
+\setcounter{casemakeepsilonsdifferent@gfncmd}{0}
+\newcommand{\makeepsilonssame}{\setcounter{casemakeepsilonsdifferent@gfncmd}{0}}
+\newcommand{\makeepsilonsdifferent}{\setcounter{casemakeepsilonsdifferent@gfncmd}{1}}
+\newcounter{caseepsilon@gfncmd}
+\setcounter{caseepsilon@gfncmd}{0}
+\newcommand{\usesymbolepsilon}{\setcounter{caseepsilon@gfncmd}{0}}
+\newcommand{\usescriptepsilon}{\setcounter{caseepsilon@gfncmd}{1}}
+\let\varepsilon@gfncmd=\varepsilon
+\let\epsilon@gfncmd=\epsilon
+\renewcommand{\epsilon}{%
+  {%
+    \ifcase\value{casemakeepsilonsdifferent@gfncmd}%
+      \ifcase\value{caseepsilon@gfncmd}%
+        \epsilon@gfncmd%
+      \or%
+        \varepsilon@gfncmd%
+      \fi%
+    \or%
+      \epsilon@gfncmd%
+    \fi%
+  }%
+}
+\renewcommand{\varepsilon}{%
+  {%
+    \ifcase\value{casemakeepsilonsdifferent@gfncmd}%
+      \undefined@gfncmd%
+    \or%
+      \varepsilon@gfncmd%
+    \fi%
+  }%
+}
+%---ファイの再定義----------------------
+\newcounter{casemakephisdifferent@gfncmd}
+\setcounter{casemakephisdifferent@gfncmd}{0}
+\newcommand{\makephissame}{\setcounter{casemakephisdifferent@gfncmd}{0}}
+\newcommand{\makephisdifferent}{\setcounter{casemakephisdifferent@gfncmd}{1}}
+\newcounter{casephi@gfncmd}
+\setcounter{casephi@gfncmd}{0}
+\newcommand{\usesymbolphi}{\setcounter{casephi@gfncmd}{0}}
+\newcommand{\usescriptphi}{\setcounter{casephi@gfncmd}{1}}
+\let\phi@gfncmd=\phi
+\let\varphi@gfncmd=\varphi
+\renewcommand{\phi}{%
+  {%
+    \ifcase\value{casemakephisdifferent@gfncmd}%
+      \ifcase\value{casephi@gfncmd}%
+        \phi@gfncmd%
+      \or%
+        \varphi@gfncmd%
+      \fi%
+    \or%
+      \phi@gfncmd%
+    \fi%
+  }%
+}
+\renewcommand{\varphi}{%
+  {%
+    \ifcase\value{casemakephisdifferent@gfncmd}%
+      \undefined@gfncmd%
+    \or%
+      \varphi@gfncmd%
+    \fi%
+  }%
+}
+%---ギリシア大文字の再定義--------------
+\newcounter{casegreekcapital@gfncmd}
+\setcounter{casegreekcapital@gfncmd}{0}
+\newcommand{\useitalicgreekcapital}{\setcounter{casegreekcapital@gfncmd}{0}}
+\newcommand{\useromangreekcapital}{\setcounter{casegreekcapital@gfncmd}{1}}
+\let\Gamma@gfncmd=\Gamma
+\let\varGamma@gfncmd=\varGamma
+\renewcommand{\Gamma}{\ifcase\value{casegreekcapital@gfncmd}\varGamma@gfncmd\or\Gamma@gfncmd\fi}
+\renewcommand{\varGamma}{\undefined@gfncmd}
+\let\Delta@gfncmd=\Delta
+\let\varDelta@gfncmd=\varDelta
+\renewcommand{\Delta}{\ifcase\value{casegreekcapital@gfncmd}\varDelta@gfncmd\or\Delta@gfncmd\fi}
+\renewcommand{\varDelta}{\undefined@gfncmd}
+\let\Theta@gfncmd=\Theta
+\let\varTheta@gfncmd=\varTheta
+\renewcommand{\Theta}{\ifcase\value{casegreekcapital@gfncmd}\varTheta@gfncmd\or\Theta@gfncmd\fi}
+\renewcommand{\varTheta}{\undefined@gfncmd}
+\let\Lambda@gfncmd=\Lambda
+\let\varLambda@gfncmd=\varLambda
+\renewcommand{\Lambda}{\ifcase\value{casegreekcapital@gfncmd}\varLambda@gfncmd\or\Lambda@gfncmd\fi}
+\renewcommand{\varLambda}{\undefined@gfncmd}
+\let\Xi@gfncmd=\Xi
+\let\varXi@gfncmd=\varXi
+\renewcommand{\Xi}{\ifcase\value{casegreekcapital@gfncmd}\varXi@gfncmd\or\Xi@gfncmd\fi}
+\renewcommand{\varXi}{\undefined@gfncmd}
+\let\Pi@gfncmd=\Pi
+\let\varPi@gfncmd=\varPi
+\renewcommand{\Pi}{\ifcase\value{casegreekcapital@gfncmd}\varPi@gfncmd\or\Pi@gfncmd\fi}
+\renewcommand{\varPi}{\undefined@gfncmd}
+\let\Sigma@gfncmd=\Sigma
+\let\varSigma@gfncmd=\varSigma
+\renewcommand{\Sigma}{\ifcase\value{casegreekcapital@gfncmd}\varSigma@gfncmd\or\Sigma@gfncmd\fi}
+\renewcommand{\varSigma}{\undefined@gfncmd}
+\let\Upsilon@gfncmd=\Upsilon
+\let\varUpsilon@gfncmd=\varUpsilon
+\renewcommand{\Upsilon}{\ifcase\value{casegreekcapital@gfncmd}\varUpsilon@gfncmd\or\Upsilon@gfncmd\fi}
+\renewcommand{\varUpsilon}{\undefined@gfncmd}
+\let\Phi@gfncmd=\Phi
+\let\varPhi@gfncmd=\varPhi
+\renewcommand{\Phi}{\ifcase\value{casegreekcapital@gfncmd}\varPhi@gfncmd\or\Phi@gfncmd\fi}
+\renewcommand{\varPhi}{\undefined@gfncmd}
+\let\Psi@gfncmd=\Psi
+\let\varPsi@gfncmd=\varPsi
+\renewcommand{\Psi}{\ifcase\value{casegreekcapital@gfncmd}\varPsi@gfncmd\or\Psi@gfncmd\fi}
+\renewcommand{\varPsi}{\undefined@gfncmd}
+\let\Omega@gfncmd=\Omega
+\let\varOmega@gfncmd=\varOmega
+\renewcommand{\Omega}{\ifcase\value{casegreekcapital@gfncmd}\varOmega@gfncmd\or\Omega@gfncmd\fi}
+\renewcommand{\varOmega}{\undefined@gfncmd}
+%---------------------------------------
+% machine epsilon
+\newcommand{\epsm}{\epsilon_{\mathrm{M}}}
+
+%最適化
+%\newcommand{\minimize}{\quad\mathrm{Minimize}\quad}
+%\newcommand{\subjectto}{\quad\mathrm{subject to}\quad}
+%
+%trps（転置）
+\newcounter{casetrps}
+\setcounter{casetrps}{0}
+\newcommand{\usetoptrps}{\setcounter{casetrps}{0}}
+\newcommand{\useTtrps}{\setcounter{casetrps}{1}}
+\newcommand{\uselefttrps}{\setcounter{casetrps}{2}}
+\newcommand{\trps}[1]{%
+  {%
+    \ifcase\value{casetrps}%
+      {#1}^{\top}\!%
+    \or%
+      {#1}^{\mathrm{T}}%
+    \or%
+      {}^{t}\!#1%
+    \fi%
+  }%
+}
+\let\transposed=\trps
+%\newcommand{\newoptioncommand}[3]{\newcommand{#1}{\makeatletter \setcounter{#2}{#3} \makeatother}}
+%\newcommand{\newoptioncounter}[2]{\makeatletter \newcounter{#1} \setcounter{#1}{#2} \makeatother}
+%\newoptioncounter{@casetrps}{0}
+%\newoptioncommand{\usetoptrps}{@casetrps}{0}
+%\newoptioncommand{\useTtrps}{@casetrps}{1}
+%\newoptioncommand{\uselefttrps}{@casetrps}{2}
+%
+%体裁
+%\renewcommand{\rmdefault}{ptm}
+%\renewcommand{\sfdefault}{phv}
+%\renewcommand{\ttdefault}{pcr}
+\newcommand{\newword}[2][\relax]{%
+  \textgt{#2}%
+  \ifx#1\relax%
+  \else%
+    \index{#1}%
+  \fi%
+}
+%
+%\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+%
+%章節系パッケージ連携
+%\renewcommand{\labelenumi}{\theenumi）}

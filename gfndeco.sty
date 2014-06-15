@@ -1,0 +1,141 @@
+\newcommand{\refsection}[1]{\ref{#1}}
+%
+\newcommand{\thicksection}[1]{
+\clearpage
+\noindent
+\samepage
+\begin{tikzpicture}
+\draw[line width=2pt] (0,0) -- (\textwidth,0);
+\draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
+\end{tikzpicture}
+\refstepcounter{section}
+\parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE \arabic{section} #1}}
+\addcontentsline{toc}{section}{#1}
+\begin{tikzpicture}
+\draw[line width=1pt] (0,0) -- (\textwidth,0);
+\draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
+\end{tikzpicture}
+\par
+\nopagebreak
+\vblank
+}
+%
+\newcommand{\thicksectionnonum}[1]{
+\clearpage
+\noindent
+\samepage
+\begin{tikzpicture}
+\draw[line width=2pt] (0,0) -- (\textwidth,0);
+\draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
+\end{tikzpicture}
+\parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE \enskip#1}}
+\begin{tikzpicture}
+\draw[line width=1pt] (0,0) -- (\textwidth,0);
+\draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
+\end{tikzpicture}
+\par
+\nopagebreak
+\vblank
+}
+%
+\newcommand{\thicksubsection}[1]{
+\noindent
+\samepage
+\refstepcounter{subsection}
+\parbox[c][1.25zw][c]{\textwidth}{\textsf{\large \arabic{section}.\arabic{subsection} #1}}
+\addcontentsline{toc}{subsection}{#1}
+\parbox[c][1zw][t]{\textwidth}{
+\begin{tikzpicture}
+\draw[line width=1pt] (0,0)--(\textwidth,0);
+\end{tikzpicture}
+}
+\par\nopagebreak
+\vblank
+}
+%
+%---äÓñ{----------------------------------------------------
+\newcommand{\stdcmd}[4]{
+\noindent
+\refstepcounter{subsubsection}%
+\if\relax#1\else\label{#1}\fi%
+\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\quad#2}
+\par\nopagebreak
+\indent
+#3
+\par\vblank
+}
+\newcommand{\stdplain}[3]{
+\noindent
+\textsf{#1\quad#2}
+\par\nopagebreak
+\indent
+#3
+\par\vblank
+}
+\newcommand{\stdplainsmall}[1]{
+\indent
+{\footnotesize #1}
+\par\vblank
+}
+\newcommand{\stddef}[3][\relax]{\stdcmd{#1}{#2}{#3}{íËã`}}
+\newcommand{\stdthm}[3][\relax]{\stdcmd{#1}{#2}{#3}{íËóù}}
+\newcommand{\stdsup}[3][\relax]{\stdcmd{#1}{#2}{#3}{ï‚ëË}}
+\newcommand{\stdcor}[3][\relax]{\stdcmd{#1}{#2}{#3}{ån}}
+\newcommand{\stdatt}[3][\relax]{\stdcmd{#1}{#2}{#3}{íçà”}}
+\newcommand{\stdprb}[3][\relax]{\stdcmd{#1}{#2}{#3}{ñ‚ëË}}
+\newcommand{\stdprp}[3][\relax]{\stdcmd{#1}{#2}{#3}{ñΩëË}}
+\newcommand{\stdproof}[2][\relax]{\stdplain{èÿñæ}{#1}{#2}}
+\newcommand{\stdcompl}[2][\relax]{\stdplain{ï‚ë´}{#1}{#2}}
+%
+%---â∫ê¸Ç¬Ç´----------------------------------------------------
+\newcommand{\ulcmd}[4]{
+\noindent
+\refstepcounter{subsubsection}%
+\if\relax#1\else\label{#1}\fi%
+\underline{\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\quad #2}}
+\par\nopagebreak
+\indent
+#3
+\par\vblank
+}
+\newcommand{\ulplain}[3]{
+\noindent
+\underline{\textsf{#1\quad#2}}
+\par\nopagebreak
+\indent
+#3
+\par\vblank
+}
+\newcommand{\uldef}[3][\relax]{\ulcmd{#1}{#2}{#3}{íËã`}}
+\newcommand{\ulthm}[3][\relax]{\ulcmd{#1}{#2}{#3}{íËóù}}
+\newcommand{\ulsup}[3][\relax]{\ulcmd{#1}{#2}{#3}{ï‚ëË}}
+\newcommand{\ulcor}[3][\relax]{\ulcmd{#1}{#2}{#3}{ån}}
+\newcommand{\ulatt}[3][\relax]{\ulcmd{#1}{#2}{#3}{íçà”}}
+\newcommand{\ulprb}[3][\relax]{\ulcmd{#1}{#2}{#3}{ñ‚ëË}}
+\newcommand{\ulprp}[3][\relax]{\ulcmd{#1}{#2}{#3}{ñΩëË}}
+%
+%---î†ì¸ÇË------------------------------------------------------
+\newcommand{\boxcmd}[4]{
+\noindent
+\begin{itembox}[l]{\textsf{#4%
+\refstepcounter{subsubsection}%
+\if\relax#1\else\label{#1}\fi%
+\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\quad#2}}
+#3
+\end{itembox}
+\par\vblank
+}
+\newcommand{\boxplain}[3]{
+\noindent
+\begin{itembox}[l]{\textsf{#1\quad#2}}
+#3
+\end{itembox}
+\par\vblank
+}
+\newcommand{\boxdef}[3][\relax]{\boxcmd{#1}{#2}{#3}{íËã`}}
+\newcommand{\boxthm}[3][\relax]{\boxcmd{#1}{#2}{#3}{íËóù}}
+\newcommand{\boxsup}[3][\relax]{\boxcmd{#1}{#2}{#3}{ï‚ëË}}
+\newcommand{\boxcor}[3][\relax]{\boxcmd{#1}{#2}{#3}{ån}}
+\newcommand{\boxatt}[3][\relax]{\boxcmd{#1}{#2}{#3}{íçà”}}
+\newcommand{\boxprb}[3][\relax]{\boxcmd{#1}{#2}{#3}{ñ‚ëË}}
+\newcommand{\boxprp}[3][\relax]{\boxcmd{#1}{#2}{#3}{ñΩëË}}
