@@ -112,7 +112,7 @@
 %˜_——Ş
 \newcommand{\Defarrow}{\stackrel{\mathrm{def.}}{\Leftrightarrow}}
 \newcommand{\suchthat}{\quad \mathrm{s.t.} \quad}
-\newcommand{\qed}{\quad ¡}
+\newcommand{\qed}{\hfill ¡}
 %
 %===‹L†˜_—====================================================================
 \newcommand{\deductleft}{\enskip \vdash \enskip}
@@ -355,7 +355,7 @@
 %\renewcommand{\ttdefault}{pcr}
 \newcommand{\newword}[2][\relax]{%
   \textgt{#2}%
-  \ifx#1\relax%
+  \ifx{#1}\relax%
   \else%
     \index{#1}%
   \fi%
