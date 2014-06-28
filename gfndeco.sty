@@ -53,12 +53,13 @@
 \vblank
 }
 %
+\def\emptyparam@gfncmd{}
 %---基本----------------------------------------------------
 \newcommand{\stdcmd}[4]{
 \noindent
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
-\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\quad#2}
+\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\quad#2\fi}
 \par
 \nopagebreak
 \indent
@@ -69,7 +70,7 @@
 }
 \newcommand{\stdplain}[3]{
 \noindent
-\textsf{#1\quad#2}
+\textsf{#1\enskip#2}
 \par
 \nopagebreak
 \indent
@@ -97,7 +98,14 @@
 \noindent
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
-\underline{\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\quad #2}}
+\underline{\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
+  \def\tempparam@gfncmd{#2}%
+  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+    \relax%
+  \else%
+    \enskip#2%
+  \fi%
+}}
 \par\nopagebreak
 \indent
 #3
@@ -107,7 +115,14 @@
 }
 \newcommand{\ulplain}[3]{
 \noindent
-\underline{\textsf{#1\quad#2}}
+\underline{\textsf{#1%
+  \def\tempparam@gfncmd{#2}%
+  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+    \relax%
+  \else%
+    \enskip#2%
+  \fi%
+}}
 \par
 \nopagebreak
 \indent
@@ -124,13 +139,60 @@
 \newcommand{\ulprb}[3][\relax]{\ulcmd{#1}{#2}{#3}{問題}}
 \newcommand{\ulprp}[3][\relax]{\ulcmd{#1}{#2}{#3}{命題}}
 %
+%---タイトル込み段落--------------------------------------------
+\newcommand{\topcmd}[4]{
+\noindent
+\refstepcounter{subsubsection}%
+\if\relax#1\else\label{#1}\fi%
+\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
+  \def\tempparam@gfncmd{#2}%
+  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+    \relax%
+  \else%
+    \enskip#2%
+  \fi%
+}\quad#3
+\par
+\allowbreak
+\vblank
+}
+\newcommand{\topplain}[3]{
+\noindent
+\textsf{#1%
+  \def\tempparam@gfncmd{#2}%
+  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+    \relax%
+  \else%
+    \enskip#2%
+  \fi%
+}\quad#3
+\par
+\allowbreak
+\vblank
+}
+\newcommand{\topdef}[3][\relax]{\topcmd{#1}{#2}{#3}{定義}}
+\newcommand{\topthm}[3][\relax]{\topcmd{#1}{#2}{#3}{定理}}
+\newcommand{\topsup}[3][\relax]{\topcmd{#1}{#2}{#3}{補題}}
+\newcommand{\topcor}[3][\relax]{\topcmd{#1}{#2}{#3}{系}}
+\newcommand{\topatt}[3][\relax]{\topcmd{#1}{#2}{#3}{注意}}
+\newcommand{\topprb}[3][\relax]{\topcmd{#1}{#2}{#3}{問題}}
+\newcommand{\topprp}[3][\relax]{\topcmd{#1}{#2}{#3}{命題}}
+\newcommand{\topproof}[2][]{\topplain{証明}{#1}{#2}}
+\newcommand{\topcompl}[2][]{\topplain{補足}{#1}{#2}}
 %---箱入り------------------------------------------------------
 \newcommand{\boxcmd}[4]{
 \noindent
 \begin{itembox}[l]{\textsf{#4%
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
-\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\quad#2}}
+\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
+  \def\tempparam@gfncmd{#2}%
+  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+    \relax%
+  \else%
+    \enskip#2%
+  \fi%
+}}
 #3
 \end{itembox}
 \par
@@ -138,7 +200,7 @@
 }
 \newcommand{\boxplain}[3]{
 \noindent
-\begin{itembox}[l]{\textsf{#1\quad#2}}
+\begin{itembox}[l]{\textsf{#1\enskip#2}}
 #3
 \end{itembox}
 \par\vblank
