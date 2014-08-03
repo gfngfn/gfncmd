@@ -1,14 +1,30 @@
 %This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
 %
 %---括弧類------------------------------
-\newcommand{\dist}[1]{\left\|#1\right\|}
-\newcommand{\paren}[1]{\left(#1\right)}
+\newcounter{caseparen@gfncmd}\setcounter{caseparen@gfncmd}{0}
+\newcommand{\usenormalparen}{\setcounter{caseparen@gfncmd}{0}}
+\newcommand{\useexpandingparen}{\setcounter{caseparen@gfncmd}{1}}
+\newlength{\parenheight}
+\newlength{\parendepth}
+\newcommand{\paren}[1]{%
+  \ifcase\value{caseparen@gfncmd}%
+    \left(#1\right)%
+  \or%
+    \left(#1\right)
+    \settoheight{\parenheight}{$\displaystyle #1$}
+    \addtolength{\parenheight}{0.2zw}
+    \settodepth{\parendepth}{$\displaystyle #1$}
+    \addtolength{\parendepth}{0.1zw}
+    \rule[-\parendepth]{0zw}{\parenheight}%
+  \fi%
+}
 \newcommand{\sqbrc}[1]{\left[#1\right]}
 \newcommand{\curlybrc}[1]{\left\{#1\right\}}
-\newcommand{\abs}[1]{\left|#1\right|}
-\newcommand{\setprn}[1]{\curlybrc{#1}}
+\newcommand{\absprn}[1]{\left|#1\right|}
+\newcommand{\dist}[1]{\left\|#1\right\|}
+\newcommand{\setprn}[1]{\left\{#1\right\}}
     %集合用の括弧
-\newcommand{\seqprn}[1]{\paren{#1}}
+\newcommand{\seqprn}[1]{\left(#1\right)}
     %直積の元の括弧
 \newcommand{\setprnsep}[2]{\setprn{{\:}#1{\:}|{\:}#2{\:}}}
     %分出公理に基づいて定義される集合用の括弧
@@ -46,7 +62,6 @@
   }%
 }
 \newcommand{\setZ}{\setcapital{Z}}
-\newcommand{\setZnz}{\setcapital{Z}^{*}}
 \newcommand{\setN}{\setcapital{N}}
 \newcommand{\setQ}{\setcapital{Q}}
 \newcommand{\setR}{\setcapital{R}}
@@ -55,20 +70,23 @@
 \newcommand{\setP}{\setcapital{P}}
 \newcommand{\setNp}{\setcapital{N}^{+}}
 %---行列の集合--------------------------
-\newcounter{caseMat@gfncmd}
-\setcounter{caseMat@gfncmd}{0}
-\newcommand{\useromanMat}{\setcounter{caseMat@gfncmd}{0}}
-\newcommand{\useitalicMat}{\setcounter{caseMat@gfncmd}{1}}
-\newcommand{\usebmMat}{\setcounter{caseMat@gfncmd}{2}}
-\newcommand{\usetimesMat}{\setcounter{caseMat@gfncmd}{3}}
-\newcommand{\Mat}[3]{%
+\newcounter{casesetMatrix@gfncmd}
+\setcounter{casesetMatrix@gfncmd}{0}
+\newcommand{\usemathbfsetMatrix}{\setcounter{casesetMatrix@gfncmd}{0}}
+\newcommand{\usebmsetMatrix}{\setcounter{casesetMatrix@gfncmd}{1}}
+\newcommand{\useromansetMatrix}{\setcounter{casesetMatrix@gfncmd}{2}}
+\newcommand{\useitalicsetMatrix}{\setcounter{casesetMatrix@gfncmd}{3}}
+\newcommand{\usetimessetMatrix}{\setcounter{casesetMatrix@gfncmd}{4}}
+\newcommand{\setMatrix}[3]{%
   {%
-    \ifcase\value{caseMat@gfncmd}%
+    \ifcase\value{casesetMatrix@gfncmd}%
+      \mathbf{M}_{#1, #2}\paren{#3}%
+    \or%
+      \bm{M}_{#1, #2}\paren{#3}%
+    \or%
       \mathrm{M}_{#1, #2}\paren{#3}%
     \or%
       M_{#1, #2}\paren{#3}%
-    \or%
-      \bm{M}_{#1, #2}\paren{#3}%
     \or%
       #3^{#1\times#2}%
     \fi%
@@ -103,8 +121,8 @@
   }%
 }
 %---開区間・閉区間----------------------
-\newcommand{\openinterval}[2]{\paren{#1, #2}}
-\newcommand{\closedinterval}[2]{\sqbrc{#1, #2}}
+\newcommand{\openinterval}[2]{\left(#1, #2\right)}
+\newcommand{\closedinterval}[2]{\left[#1, #2\right]}
 \newcommand{\openclosedinterval}[2]{\left(#1, #2\right]}
 \newcommand{\closedopeninterval}[2]{\left[#1, #2\right)}
 %---函数の定義域と値域------------------
@@ -160,6 +178,7 @@
 \newcommand{\usepreccurlyeqaspord}{\setcounter{casepord@gfncmd}{0}}
 \newcommand{\usepreceqaspord}{\setcounter{casepord@gfncmd}{1}}
 \newcommand{\useleqaspord}{\setcounter{casepord@gfncmd}{2}}
+\newcommand{\useleqslantaspord}{\setcounter{casepord@gfncmd}{3}}
 \newcommand{\pord}{%
   \mathrel{%
     \ifcase\value{casepord@gfncmd}%
@@ -168,11 +187,13 @@
       \mathord{\preceq}%
     \or%
       \mathord{\leq}%
+    \or%
+      \mathord{\leqslant}
     \fi%
   }%
 }
-\newcommand{\join}{\mathbin{\scriptstyle \!\mathord{\lor}}\!} % join
-\newcommand{\meet}{\mathbin{\scriptstyle \!\mathord{\land}}\!} % meet
+\newcommand{\join}{\mathbin{\scriptstyle \!\mathord{\lor}\!}} % join
+\newcommand{\meet}{\mathbin{\scriptstyle \!\mathord{\land}\!}} % meet
 %
 %===体裁========================================================================
 \newcommand{\vblank}{\vspace{1em}}
@@ -180,20 +201,20 @@
 \newcommand{\widecolon}{:\enskip}
 %
 %===微積分======================================================================
-\newcommand{\dif}[2]{\frac{{\rmd}#1}{{\rmd}#2}}
-\newcommand{\ddif}[2]{\frac{{\rmd}^{2}#1}{{\rmd}#2^{2}}}
-\newcommand{\ndif}[3]{\frac{{\rmd}^{#1}#2}{{\rmd}#3^{#1}}}
+\newcommand{\dif}[2]{\frac{{\ordd}#1}{{\ordd}#2}}
+\newcommand{\ddif}[2]{\frac{{\ordd}^{2}#1}{{\ordd}#2^{2}}}
+\newcommand{\ndif}[3]{\frac{{\ordd}^{#1}#2}{{\ordd}#3^{#1}}}
 \newcommand{\pdif}[2]{\frac{{\partial}#1}{{\partial}#2}}
 \newcommand{\pddif}[2]{\frac{{\partial}^{2}#1}{{\partial}#2^{2}}}
 \newcommand{\pndif}[3]{\frac{{\partial}^{#1}#2}{{\partial}#3^{#1}}}
 \newcommand{\thmpdif}[3]{\paren{\frac{{\partial}#1}{{\partial}#2}}_{#3}}
 %---微分演算子--------------------------
-\newcounter{casermd@gfncmd} \setcounter{casermd@gfncmd}{0}
-\newcommand{\useromandif}{\setcounter{casermd@gfncmd}{0}}
-\newcommand{\useitalicdif}{\setcounter{casermd@gfncmd}{1}}
-\newcommand{\rmd}{%
+\newcounter{caseordd@gfncmd} \setcounter{caseordd@gfncmd}{0}
+\newcommand{\useromanordd}{\setcounter{caseordd@gfncmd}{0}}
+\newcommand{\useitalicordd}{\setcounter{caseordd@gfncmd}{1}}
+\newcommand{\ordd}{%
   {%
-    \ifcase\value{casermd@gfncmd}%
+    \ifcase\value{caseordd@gfncmd}%
       \mathrm{d}%
     \or%
       d%
@@ -273,49 +294,49 @@
 \setcounter{casegreekcapital@gfncmd}{0}
 \newcommand{\useitalicgreekcapital}{\setcounter{casegreekcapital@gfncmd}{0}}
 \newcommand{\useromangreekcapital}{\setcounter{casegreekcapital@gfncmd}{1}}
-\let\Gamma@gfncmd=\Gamma
+\let\rmGamma=\Gamma
 \let\varGamma@gfncmd=\varGamma
-\renewcommand{\Gamma}{\ifcase\value{casegreekcapital@gfncmd}\varGamma@gfncmd\or\Gamma@gfncmd\fi}
+\renewcommand{\Gamma}{\ifcase\value{casegreekcapital@gfncmd}\varGamma@gfncmd\or\rmGamma\fi}
 \renewcommand{\varGamma}{\undefined@gfncmd}
-\let\Delta@gfncmd=\Delta
+\let\rmDelta=\Delta
 \let\varDelta@gfncmd=\varDelta
-\renewcommand{\Delta}{\ifcase\value{casegreekcapital@gfncmd}\varDelta@gfncmd\or\Delta@gfncmd\fi}
+\renewcommand{\Delta}{\ifcase\value{casegreekcapital@gfncmd}\varDelta@gfncmd\or\rmDelta\fi}
 \renewcommand{\varDelta}{\undefined@gfncmd}
-\let\Theta@gfncmd=\Theta
+\let\rmTheta=\Theta
 \let\varTheta@gfncmd=\varTheta
-\renewcommand{\Theta}{\ifcase\value{casegreekcapital@gfncmd}\varTheta@gfncmd\or\Theta@gfncmd\fi}
+\renewcommand{\Theta}{\ifcase\value{casegreekcapital@gfncmd}\varTheta@gfncmd\or\rmTheta\fi}
 \renewcommand{\varTheta}{\undefined@gfncmd}
-\let\Lambda@gfncmd=\Lambda
+\let\rmLambda=\Lambda
 \let\varLambda@gfncmd=\varLambda
-\renewcommand{\Lambda}{\ifcase\value{casegreekcapital@gfncmd}\varLambda@gfncmd\or\Lambda@gfncmd\fi}
+\renewcommand{\Lambda}{\ifcase\value{casegreekcapital@gfncmd}\varLambda@gfncmd\or\rmLambda\fi}
 \renewcommand{\varLambda}{\undefined@gfncmd}
-\let\Xi@gfncmd=\Xi
+\let\rmXi=\Xi
 \let\varXi@gfncmd=\varXi
-\renewcommand{\Xi}{\ifcase\value{casegreekcapital@gfncmd}\varXi@gfncmd\or\Xi@gfncmd\fi}
+\renewcommand{\Xi}{\ifcase\value{casegreekcapital@gfncmd}\varXi@gfncmd\or\rmXi\fi}
 \renewcommand{\varXi}{\undefined@gfncmd}
-\let\Pi@gfncmd=\Pi
+\let\rmPi=\Pi
 \let\varPi@gfncmd=\varPi
-\renewcommand{\Pi}{\ifcase\value{casegreekcapital@gfncmd}\varPi@gfncmd\or\Pi@gfncmd\fi}
+\renewcommand{\Pi}{\ifcase\value{casegreekcapital@gfncmd}\varPi@gfncmd\or\rmPi\fi}
 \renewcommand{\varPi}{\undefined@gfncmd}
-\let\Sigma@gfncmd=\Sigma
+\let\rmSigma=\Sigma
 \let\varSigma@gfncmd=\varSigma
-\renewcommand{\Sigma}{\ifcase\value{casegreekcapital@gfncmd}\varSigma@gfncmd\or\Sigma@gfncmd\fi}
+\renewcommand{\Sigma}{\ifcase\value{casegreekcapital@gfncmd}\varSigma@gfncmd\or\rmSigma\fi}
 \renewcommand{\varSigma}{\undefined@gfncmd}
-\let\Upsilon@gfncmd=\Upsilon
+\let\rmUpsilon=\Upsilon
 \let\varUpsilon@gfncmd=\varUpsilon
-\renewcommand{\Upsilon}{\ifcase\value{casegreekcapital@gfncmd}\varUpsilon@gfncmd\or\Upsilon@gfncmd\fi}
+\renewcommand{\Upsilon}{\ifcase\value{casegreekcapital@gfncmd}\varUpsilon@gfncmd\or\rmUpsilon\fi}
 \renewcommand{\varUpsilon}{\undefined@gfncmd}
-\let\Phi@gfncmd=\Phi
+\let\rmPhi=\Phi
 \let\varPhi@gfncmd=\varPhi
-\renewcommand{\Phi}{\ifcase\value{casegreekcapital@gfncmd}\varPhi@gfncmd\or\Phi@gfncmd\fi}
+\renewcommand{\Phi}{\ifcase\value{casegreekcapital@gfncmd}\varPhi@gfncmd\or\rmPhi\fi}
 \renewcommand{\varPhi}{\undefined@gfncmd}
-\let\Psi@gfncmd=\Psi
+\let\rmPsi=\Psi
 \let\varPsi@gfncmd=\varPsi
-\renewcommand{\Psi}{\ifcase\value{casegreekcapital@gfncmd}\varPsi@gfncmd\or\Psi@gfncmd\fi}
+\renewcommand{\Psi}{\ifcase\value{casegreekcapital@gfncmd}\varPsi@gfncmd\or\rmPsi\fi}
 \renewcommand{\varPsi}{\undefined@gfncmd}
-\let\Omega@gfncmd=\Omega
+\let\rmOmega=\Omega
 \let\varOmega@gfncmd=\varOmega
-\renewcommand{\Omega}{\ifcase\value{casegreekcapital@gfncmd}\varOmega@gfncmd\or\Omega@gfncmd\fi}
+\renewcommand{\Omega}{\ifcase\value{casegreekcapital@gfncmd}\varOmega@gfncmd\or\rmOmega\fi}
 \renewcommand{\varOmega}{\undefined@gfncmd}
 %---------------------------------------
 % machine epsilon
@@ -325,15 +346,15 @@
 %\newcommand{\minimize}{\quad\mathrm{Minimize}\quad}
 %\newcommand{\subjectto}{\quad\mathrm{subject to}\quad}
 %
-%trps（転置）
-\newcounter{casetrps}
-\setcounter{casetrps}{0}
-\newcommand{\usetoptrps}{\setcounter{casetrps}{0}}
-\newcommand{\useTtrps}{\setcounter{casetrps}{1}}
-\newcommand{\uselefttrps}{\setcounter{casetrps}{2}}
-\newcommand{\trps}[1]{%
+%transposed（転置）
+\newcounter{casetransposed}
+\setcounter{casetransposed}{0}
+\newcommand{\usetoptransposed}{\setcounter{casetransposed}{0}}
+\newcommand{\useTtransposed}{\setcounter{casetransposed}{1}}
+\newcommand{\uselefttransposed}{\setcounter{casetransposed}{2}}
+\newcommand{\transposed}[1]{%
   {%
-    \ifcase\value{casetrps}%
+    \ifcase\value{casetransposed}%
       {#1}^{\top}\!%
     \or%
       {#1}^{\mathrm{T}}%
@@ -342,13 +363,13 @@
     \fi%
   }%
 }
-\let\transposed=\trps
+\let\trps=\transposed
 %\newcommand{\newoptioncommand}[3]{\newcommand{#1}{\makeatletter \setcounter{#2}{#3} \makeatother}}
 %\newcommand{\newoptioncounter}[2]{\makeatletter \newcounter{#1} \setcounter{#1}{#2} \makeatother}
-%\newoptioncounter{@casetrps}{0}
-%\newoptioncommand{\usetoptrps}{@casetrps}{0}
-%\newoptioncommand{\useTtrps}{@casetrps}{1}
-%\newoptioncommand{\uselefttrps}{@casetrps}{2}
+%\newoptioncounter{@casetransposed}{0}
+%\newoptioncommand{\usetoptransposed}{@casetransposed}{0}
+%\newoptioncommand{\useTtransposed}{@casetransposed}{1}
+%\newoptioncommand{\uselefttransposed}{@casetransposed}{2}
 %
 %体裁
 %\renewcommand{\rmdefault}{ptm}
