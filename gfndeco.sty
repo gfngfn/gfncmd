@@ -53,15 +53,27 @@
 \vblank
 }
 %
-\def\emptyparam@gfncmd{}
+\newcommand{\prefixofdef}{定義}
+\newcommand{\prefixofthm}{定理}
+\newcommand{\prefixoflem}{補題}
+\newcommand{\prefixofcor}{系}
+\newcommand{\prefixofatt}{注意}
+\newcommand{\prefixofprb}{問題}
+\newcommand{\prefixofprp}{命題}
 %---基本----------------------------------------------------
 \newcommand{\stdcmd}[4]{
 \noindent
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
-\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\quad#2\fi}
-\par
-\nopagebreak
+\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
+  \def\tempparam@gfncmd{#2}%
+  \ifx\tempparam@gfncmd\empty%
+    \relax%
+  \else%
+    \enskip#2%
+  \fi%
+}
+\par\nopagebreak
 \indent
 #3
 \par
@@ -83,13 +95,13 @@
 {\footnotesize #1}
 \par\vblank
 }
-\newcommand{\stddef}[3][\relax]{\stdcmd{#1}{#2}{#3}{定義}}
-\newcommand{\stdthm}[3][\relax]{\stdcmd{#1}{#2}{#3}{定理}}
-\newcommand{\stdsup}[3][\relax]{\stdcmd{#1}{#2}{#3}{補題}}
-\newcommand{\stdcor}[3][\relax]{\stdcmd{#1}{#2}{#3}{系}}
-\newcommand{\stdatt}[3][\relax]{\stdcmd{#1}{#2}{#3}{注意}}
-\newcommand{\stdprb}[3][\relax]{\stdcmd{#1}{#2}{#3}{問題}}
-\newcommand{\stdprp}[3][\relax]{\stdcmd{#1}{#2}{#3}{命題}}
+\newcommand{\stddef}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofdef}}
+\newcommand{\stdthm}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofthm}}
+\newcommand{\stdlem}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixoflem}}
+\newcommand{\stdcor}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofcor}}
+\newcommand{\stdatt}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofatt}}
+\newcommand{\stdprb}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofprb}}
+\newcommand{\stdprp}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofprp}}
 \newcommand{\stdproof}[2][\relax]{\stdplain{証明}{#1}{#2}}
 \newcommand{\stdcompl}[2][\relax]{\stdplain{補足}{#1}{#2}}
 %
@@ -100,7 +112,7 @@
 \if\relax#1\else\label{#1}\fi%
 \underline{\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
   \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+  \ifx\tempparam@gfncmd\empty%
     \relax%
   \else%
     \enskip#2%
@@ -117,7 +129,7 @@
 \noindent
 \underline{\textsf{#1%
   \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+  \ifx\tempparam@gfncmd\empty%
     \relax%
   \else%
     \enskip#2%
@@ -131,13 +143,13 @@
 \allowbreak
 \vblank
 }
-\newcommand{\uldef}[3][\relax]{\ulcmd{#1}{#2}{#3}{定義}}
-\newcommand{\ulthm}[3][\relax]{\ulcmd{#1}{#2}{#3}{定理}}
-\newcommand{\ulsup}[3][\relax]{\ulcmd{#1}{#2}{#3}{補題}}
-\newcommand{\ulcor}[3][\relax]{\ulcmd{#1}{#2}{#3}{系}}
-\newcommand{\ulatt}[3][\relax]{\ulcmd{#1}{#2}{#3}{注意}}
-\newcommand{\ulprb}[3][\relax]{\ulcmd{#1}{#2}{#3}{問題}}
-\newcommand{\ulprp}[3][\relax]{\ulcmd{#1}{#2}{#3}{命題}}
+\newcommand{\uldef}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofdef}}
+\newcommand{\ulthm}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofthm}}
+\newcommand{\ullem}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixoflem}}
+\newcommand{\ulcor}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofcor}}
+\newcommand{\ulatt}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofatt}}
+\newcommand{\ulprb}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofprb}}
+\newcommand{\ulprp}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofprp}}
 %
 %---タイトル込み段落--------------------------------------------
 \newcommand{\topcmd}[4]{
@@ -146,7 +158,7 @@
 \if\relax#1\else\label{#1}\fi%
 \textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
   \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+  \ifx\tempparam@gfncmd\empty%
     \relax%
   \else%
     \enskip#2%
@@ -160,7 +172,7 @@
 \noindent
 \textsf{#1%
   \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+  \ifx\tempparam@gfncmd\empty%
     \relax%
   \else%
     \enskip#2%
@@ -170,13 +182,13 @@
 \allowbreak
 \vblank
 }
-\newcommand{\topdef}[3][\relax]{\topcmd{#1}{#2}{#3}{定義}}
-\newcommand{\topthm}[3][\relax]{\topcmd{#1}{#2}{#3}{定理}}
-\newcommand{\topsup}[3][\relax]{\topcmd{#1}{#2}{#3}{補題}}
-\newcommand{\topcor}[3][\relax]{\topcmd{#1}{#2}{#3}{系}}
-\newcommand{\topatt}[3][\relax]{\topcmd{#1}{#2}{#3}{注意}}
-\newcommand{\topprb}[3][\relax]{\topcmd{#1}{#2}{#3}{問題}}
-\newcommand{\topprp}[3][\relax]{\topcmd{#1}{#2}{#3}{命題}}
+\newcommand{\topdef}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofdef}}
+\newcommand{\topthm}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofthm}}
+\newcommand{\toplem}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixoflem}}
+\newcommand{\topcor}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofcor}}
+\newcommand{\topatt}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofatt}}
+\newcommand{\topprb}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofprb}}
+\newcommand{\topprp}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofprp}}
 \newcommand{\topproof}[2][]{\topplain{証明}{#1}{#2}}
 \newcommand{\topcompl}[2][]{\topplain{補足}{#1}{#2}}
 %---箱入り------------------------------------------------------
@@ -187,7 +199,7 @@
 \if\relax#1\else\label{#1}\fi%
 \arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
   \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\emptyparam@gfncmd%
+  \ifx\tempparam@gfncmd\empty%
     \relax%
   \else%
     \enskip#2%
@@ -205,10 +217,10 @@
 \end{itembox}
 \par\vblank
 }
-\newcommand{\boxdef}[3][\relax]{\boxcmd{#1}{#2}{#3}{定義}}
-\newcommand{\boxthm}[3][\relax]{\boxcmd{#1}{#2}{#3}{定理}}
-\newcommand{\boxsup}[3][\relax]{\boxcmd{#1}{#2}{#3}{補題}}
-\newcommand{\boxcor}[3][\relax]{\boxcmd{#1}{#2}{#3}{系}}
-\newcommand{\boxatt}[3][\relax]{\boxcmd{#1}{#2}{#3}{注意}}
-\newcommand{\boxprb}[3][\relax]{\boxcmd{#1}{#2}{#3}{問題}}
-\newcommand{\boxprp}[3][\relax]{\boxcmd{#1}{#2}{#3}{命題}}
+\newcommand{\boxdef}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofdef}}
+\newcommand{\boxthm}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofthm}}
+\newcommand{\boxlem}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixoflem}}
+\newcommand{\boxcor}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofcor}}
+\newcommand{\boxatt}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofatt}}
+\newcommand{\boxprb}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofprb}}
+\newcommand{\boxprp}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofprp}}
