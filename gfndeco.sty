@@ -1,5 +1,7 @@
-\newcommand{\refsection}[1]{\ref{#1}}
+%===============================================================================
+%    gfndeco.sty  (C) @bd_gfngfn on Twitter
 %
+%===============================================================================
 \newcommand{\thicksection}[1]{
 \clearpage
 \noindent
@@ -52,22 +54,34 @@
 \nopagebreak
 \vblank
 }
+%==============================================================================
+\newcommand{\newdecoclass}[1]{%
+  \expandafter\newcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{\undefined@gfndeco}%
+  \expandafter\newcommand\expandafter{\csname setprefixof#1\endcsname}[1]{\expandafter\renewcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{##1}}%
+  \expandafter\newcommand\expandafter{\csname deco#1\endcsname}{\undefined@gfndeco}%
+  \expandafter\newcommand\expandafter{\csname setstyleof#1\endcsname}[1]{\expandafter\renewcommand\expandafter{\csname deco#1\endcsname}[3][\relax]{\csname##1cmd\endcsname{####1}{####2}{####3}{\csname prefixof#1@gfndeco\endcsname}}}%
+}%
 %
-\newcommand{\prefixofdef}{定義}
-\newcommand{\prefixofthm}{定理}
-\newcommand{\prefixoflem}{補題}
-\newcommand{\prefixofcor}{系}
-\newcommand{\prefixofatt}{注意}
-\newcommand{\prefixofprb}{問題}
-\newcommand{\prefixofprp}{命題}
+% \newdecoclass{●} により \setprefixof●，\setstyleof● がそれぞれつくられる
+% +--------------------------------------+
+% |  \newdecoclass{●}                   |
+% |  \setprefixof●{▲}                  |
+% |  \setstyleof●{■}                   |
+% +--------------------------------------+
+% とすることで，分類●（例えば"def"）の接頭語が▲（例えば「定義」）に，スタイルが■（例えば"ul"）に設定される
+% 以下は最初から使えるもの
+\newdecoclass{def}\setprefixofdef{定義}
+\newdecoclass{thm}\setprefixofthm{定理}
+\newdecoclass{lem}\setprefixoflem{補題}
+\newdecoclass{cor}\setprefixofcor{系}
 %---基本----------------------------------------------------
 \newcommand{\stdcmd}[4]{
 \noindent
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
 \textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
-  \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\empty%
+  \def\tempparam@gfndeco{#2}%
+  \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
     \enskip#2%
@@ -95,15 +109,6 @@
 {\footnotesize #1}
 \par\vblank
 }
-\newcommand{\stddef}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofdef}}
-\newcommand{\stdthm}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofthm}}
-\newcommand{\stdlem}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixoflem}}
-\newcommand{\stdcor}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofcor}}
-\newcommand{\stdatt}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofatt}}
-\newcommand{\stdprb}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofprb}}
-\newcommand{\stdprp}[3][\relax]{\stdcmd{#1}{#2}{#3}{\prefixofprp}}
-\newcommand{\stdproof}[2][\relax]{\stdplain{証明}{#1}{#2}}
-\newcommand{\stdcompl}[2][\relax]{\stdplain{補足}{#1}{#2}}
 %
 %---下線つき----------------------------------------------------
 \newcommand{\ulcmd}[4]{
@@ -111,8 +116,8 @@
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
 \underline{\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
-  \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\empty%
+  \def\tempparam@gfndeco{#2}%
+  \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
     \enskip#2%
@@ -128,8 +133,8 @@
 \newcommand{\ulplain}[3]{
 \noindent
 \underline{\textsf{#1%
-  \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\empty%
+  \def\tempparam@gfndeco{#2}%
+  \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
     \enskip#2%
@@ -143,13 +148,6 @@
 \allowbreak
 \vblank
 }
-\newcommand{\uldef}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofdef}}
-\newcommand{\ulthm}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofthm}}
-\newcommand{\ullem}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixoflem}}
-\newcommand{\ulcor}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofcor}}
-\newcommand{\ulatt}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofatt}}
-\newcommand{\ulprb}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofprb}}
-\newcommand{\ulprp}[3][\relax]{\ulcmd{#1}{#2}{#3}{\prefixofprp}}
 %
 %---タイトル込み段落--------------------------------------------
 \newcommand{\topcmd}[4]{
@@ -157,8 +155,8 @@
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
 \textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
-  \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\empty%
+  \def\tempparam@gfndeco{#2}%
+  \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
     \enskip#2%
@@ -171,8 +169,8 @@
 \newcommand{\topplain}[3]{
 \noindent
 \textsf{#1%
-  \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\empty%
+  \def\tempparam@gfndeco{#2}%
+  \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
     \enskip#2%
@@ -182,15 +180,7 @@
 \allowbreak
 \vblank
 }
-\newcommand{\topdef}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofdef}}
-\newcommand{\topthm}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofthm}}
-\newcommand{\toplem}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixoflem}}
-\newcommand{\topcor}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofcor}}
-\newcommand{\topatt}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofatt}}
-\newcommand{\topprb}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofprb}}
-\newcommand{\topprp}[3][\relax]{\topcmd{#1}{#2}{#3}{\prefixofprp}}
-\newcommand{\topproof}[2][]{\topplain{証明}{#1}{#2}}
-\newcommand{\topcompl}[2][]{\topplain{補足}{#1}{#2}}
+%
 %---箱入り------------------------------------------------------
 \newcommand{\boxcmd}[4]{
 \noindent
@@ -198,8 +188,8 @@
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
 \arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
-  \def\tempparam@gfncmd{#2}%
-  \ifx\tempparam@gfncmd\empty%
+  \def\tempparam@gfndeco{#2}%
+  \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
     \enskip#2%
@@ -217,10 +207,3 @@
 \end{itembox}
 \par\vblank
 }
-\newcommand{\boxdef}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofdef}}
-\newcommand{\boxthm}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofthm}}
-\newcommand{\boxlem}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixoflem}}
-\newcommand{\boxcor}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofcor}}
-\newcommand{\boxatt}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofatt}}
-\newcommand{\boxprb}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofprb}}
-\newcommand{\boxprp}[3][\relax]{\boxcmd{#1}{#2}{#3}{\prefixofprp}}
