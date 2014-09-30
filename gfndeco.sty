@@ -117,7 +117,7 @@
 }
 \newcommand{\stdnonum@gfndeco}[3]{
 \noindent
-\textsf{#3\enskip#1}
+\textsf{#3\writenonemptytitle@gfndeco{#1}}
 \par
 \nopagebreak
 \indent
@@ -141,14 +141,7 @@
 }
 \newcommand{\ulnonum@gfndeco}[3]{
 \noindent
-\underline{\textsf{#3%
-  \def\tempparam@gfndeco{#1}%
-  \ifx\tempparam@gfndeco\empty%
-    \relax%
-  \else%
-    \enskip#1%
-  \fi%
-}}
+\underline{\textsf{#3\writenonemptytitle@gfndeco{#1}}}
 \par
 \nopagebreak
 \indent
@@ -170,14 +163,7 @@
 }
 \newcommand{\topnonum@gfndeco}[3]{
 \noindent
-\textsf{#3%
-  \def\tempparam@gfndeco{#1}%
-  \ifx\tempparam@gfndeco\empty%
-    \relax%
-  \else%
-    \enskip#1%
-  \fi%
-}\quad#2
+\textsf{#3\writenonemptytitle@gfndeco{#1}}\quad#2
 \par
 \allowbreak
 \vblank
@@ -198,14 +184,7 @@
 }
 \newcommand{\boxnonum@gfncmd}[3]{
 \noindent
-\begin{itembox}[l]{\textsf{#3%
-  \def\tempparam@gfndeco{#1}%
-  \ifx\tempparam@gfndeco\empty%
-    \relax%
-  \else%
-    \enskip#1%
-  \fi%
-}}
+\begin{itembox}[l]{\textsf{#3\writenonemptytitle@gfndeco{#1}}}
 #2
 \end{itembox}
 \par\vblank
