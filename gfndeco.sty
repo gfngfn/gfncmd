@@ -56,12 +56,17 @@
 }
 %==============================================================================
 \newcommand{\newdecoclass}[1]{%
-  \expandafter\newcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{\undefined@gfndeco}%
-  \expandafter\newcommand\expandafter{\csname setprefixof#1\endcsname}[1]{\expandafter\renewcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{##1}}%
-  \expandafter\newcommand\expandafter{\csname deco#1\endcsname}{\undefined@gfndeco}%
-  \expandafter\newcommand\expandafter{\csname setstyleof#1\endcsname}[1]{\expandafter\renewcommand\expandafter{\csname deco#1\endcsname}[3][\relax]{\csname##1cmd\endcsname{####1}{####2}{####3}{\csname prefixof#1@gfndeco\endcsname}}}%
+  \expandafter\newcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{}%
+  \expandafter\newcommand\expandafter{\csname setprefixof#1\endcsname}[1]{%
+    \expandafter\renewcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{##1}%
+  }%
+  \expandafter\newcommand\expandafter{\csname deco#1\endcsname}[3][\relax]{\stdcmd@gfndeco{##1}{##2}{##3}{\csname prefixof#1@gfndeco\endcsname}}%
+  \expandafter\newcommand\expandafter{\csname setstyleof#1\endcsname}[1]{%
+    \expandafter\renewcommand\expandafter{\csname deco#1\endcsname}[3][\relax]{%
+      \csname##1cmd@gfndeco\endcsname{####1}{####2}{####3}{\csname prefixof#1@gfndeco\endcsname}%
+    }%
+  }%
 }%
-%
 % \newdecoclass{●} により \setprefixof●，\setstyleof● がそれぞれつくられる
 % +--------------------------------------+
 % |  \newdecoclass{●}                   |
@@ -74,19 +79,35 @@
 \newdecoclass{thm}\setprefixofthm{定理}
 \newdecoclass{lem}\setprefixoflem{補題}
 \newdecoclass{cor}\setprefixofcor{系}
-%---基本----------------------------------------------------
-\newcommand{\stdcmd}[4]{
-\noindent
-\refstepcounter{subsubsection}%
-\if\relax#1\else\label{#1}\fi%
-\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
-  \def\tempparam@gfndeco{#2}%
+\newcommand{\newnonumdecoclass}[1]{
+  \expandafter\newcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{}%
+  \expandafter\newcommand\expandafter{\csname setprefixof#1\endcsname}[1]{%
+    \expandafter\renewcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{##1}%
+  }%
+  \expandafter\newcommand\expandafter{\csname deco#1\endcsname}[2]{\stdnonum@gfndeco{##1}{##2}{\csname prefixof#1@gfndeco\endcsname}}%
+  \expandafter\newcommand\expandafter{\csname setstyleof#1\endcsname}[1]{%
+    \expandafter\renewcommand\expandafter{\csname deco#1\endcsname}[3][\relax]{%
+      \csname##1nonum@gfndeco\endcsname{####1}{####2}{####3}{\csname prefixof#1@gfndeco\endcsname}%
+    }%
+  }%
+}%
+\newnonumdecoclass{proof}\setprefixofproof{証明}
+\newnonumdecoclass{compl}\setprefixofcompl{補足}
+\newcommand{\writenonemptytitle@gfndeco}[1]{%
+  \def\tempparam@gfndeco{#1}%
   \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
-    \enskip#2%
+    \enskip#1%
   \fi%
-}
+}%
+\newcommand{\writenumbering@gfndeco}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
+%---基本----------------------------------------------------
+\newcommand{\stdcmd@gfndeco}[4]{
+\noindent
+\refstepcounter{subsubsection}%
+\if\relax#1\else\label{#1}\fi%
+\textsf{#4\writenumbering@gfndeco\writenonemptytitle@gfndeco{#2}}
 \par\nopagebreak
 \indent
 #3
@@ -94,35 +115,23 @@
 \allowbreak
 \vblank
 }
-\newcommand{\stdplain}[3]{
+\newcommand{\stdnonum@gfndeco}[3]{
 \noindent
-\textsf{#1\enskip#2}
+\textsf{#3\enskip#1}
 \par
 \nopagebreak
 \indent
-#3
+#2
 \par
 \vblank
-}
-\newcommand{\stdplainsmall}[1]{
-\indent
-{\footnotesize #1}
-\par\vblank
 }
 %
 %---下線つき----------------------------------------------------
-\newcommand{\ulcmd}[4]{
+\newcommand{\ulcmd@gfndeco}[4]{
 \noindent
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
-\underline{\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
-  \def\tempparam@gfndeco{#2}%
-  \ifx\tempparam@gfndeco\empty%
-    \relax%
-  \else%
-    \enskip#2%
-  \fi%
-}}
+\underline{\textsf{#4\writenumbering@gfndeco\writenonemptytitle@gfndeco{#2}}}
 \par\nopagebreak
 \indent
 #3
@@ -130,80 +139,74 @@
 \allowbreak
 \vblank
 }
-\newcommand{\ulplain}[3]{
+\newcommand{\ulnonum@gfndeco}[3]{
 \noindent
-\underline{\textsf{#1%
-  \def\tempparam@gfndeco{#2}%
+\underline{\textsf{#3%
+  \def\tempparam@gfndeco{#1}%
   \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
-    \enskip#2%
+    \enskip#1%
   \fi%
 }}
 \par
 \nopagebreak
 \indent
-#3
+#2
 \par
 \allowbreak
 \vblank
 }
 %
 %---タイトル込み段落--------------------------------------------
-\newcommand{\topcmd}[4]{
+\newcommand{\topcmd@gfndeco}[4]{
 \noindent
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
-\textsf{#4\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
-  \def\tempparam@gfndeco{#2}%
-  \ifx\tempparam@gfndeco\empty%
-    \relax%
-  \else%
-    \enskip#2%
-  \fi%
-}\quad#3
+\textsf{#4\writenumbering@gfndeco\writenonemptytitle@gfndeco{#2}}\quad#3
 \par
 \allowbreak
 \vblank
 }
-\newcommand{\topplain}[3]{
+\newcommand{\topnonum@gfndeco}[3]{
 \noindent
-\textsf{#1%
-  \def\tempparam@gfndeco{#2}%
+\textsf{#3%
+  \def\tempparam@gfndeco{#1}%
   \ifx\tempparam@gfndeco\empty%
     \relax%
   \else%
-    \enskip#2%
+    \enskip#1%
   \fi%
-}\quad#3
+}\quad#2
 \par
 \allowbreak
 \vblank
 }
 %
 %---箱入り------------------------------------------------------
-\newcommand{\boxcmd}[4]{
+\newcommand{\boxcmd@gfndeco}[4]{
 \noindent
-\begin{itembox}[l]{\textsf{#4%
+\begin{itembox}[l]{%
 \refstepcounter{subsubsection}%
 \if\relax#1\else\label{#1}\fi%
-\arabic{section}.\arabic{subsection}.\arabic{subsubsection}%
-  \def\tempparam@gfndeco{#2}%
-  \ifx\tempparam@gfndeco\empty%
-    \relax%
-  \else%
-    \enskip#2%
-  \fi%
-}}
+\textsf{#4\writenumbering@gfndeco\writenonemptytitle@gfndeco{#2}}%
+}
 #3
 \end{itembox}
 \par
 \vblank
 }
-\newcommand{\boxplain}[3]{
+\newcommand{\boxnonum}[3]{
 \noindent
-\begin{itembox}[l]{\textsf{#1\enskip#2}}
-#3
+\begin{itembox}[l]{\textsf{#3%
+  \def\tempparam@gfndeco{#1}%
+  \ifx\tempparam@gfndeco\empty%
+    \relax%
+  \else%
+    \enskip#1%
+  \fi%
+}}
+#2
 \end{itembox}
 \par\vblank
 }
