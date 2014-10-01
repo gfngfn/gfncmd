@@ -2,54 +2,84 @@
 %    gfndeco.sty  (C) @bd_gfngfn on Twitter
 %
 %===============================================================================
+\newlength{\vblankheight@gfndeco}%
+\setlength{\vblankheight@gfndeco}{1zh}%
+\newcommand{\vblank}{\vspace{\vblankheight@gfndeco}}%
+\newcommand{\setintervalspace}[1]{\setlength{\vblankheight@gfndeco}{#1}}%
+%====章・節のテーマ=============================================================
 \newcommand{\setsectiontheme}[1]{%
   \expandafter\let\expandafter\decosection\csname#1section@gfndeco\endcsname%
   \expandafter\let\expandafter\decononumsection\csname#1nonumsection@gfndeco\endcsname%
   \expandafter\let\expandafter\decosubsection\csname#1subsection@gfndeco\endcsname%
   \expandafter\let\expandafter\decononumsubsection\csname#1nonumsubsection@gfndeco\endcsname%
-}
+}%
+\newcommand{\decosectionpunctu@gfndeco}{}%
+\newcommand{\decosectionpunctb@gfndeco}{}%
+\newcommand{\setdecosectionpunct}[2]{%
+  \renewcommand{\decosectionpunctu@gfndeco}{#1}%
+  \renewcommand{\decosectionpunctb@gfndeco}{#2}%
+}%
+\newcommand{\writenumberingofdecosection@gfndeco}{%
+  \decosectionpunctu@gfndeco\arabic{section}%
+  \decosectionpunctb@gfndeco%
+}%
+\newcommand{\decosubsectionpunctu@gfndeco}{}
+\newcommand{\decosubsectionpunctb@gfndeco}{.}
+\newcommand{\decosubsectionpunctt@gfndeco}{}
+\newcommand{\setdecosubsectionpunct}[3]{%
+  \renewcommand{\decosubsectionpunctu@gfndeco}{#1}%
+  \renewcommand{\decosubsectionpunctb@gfndeco}{#2}%
+  \renewcommand{\decosubsectionpunctt@gfndeco}{#3}%
+}%
+\newcommand{\writenumberingofdecosubsection@gfndeco}{%
+  \decosubsectionpunctu@gfndeco\arabic{section}%
+  \decosubsectionpunctb@gfndeco\arabic{subsection}%
+  \decosubsectionpunctt@gfndeco%
+}%
+%--line------------------------------------------------------------------------
 \newcommand{\linesection@gfndeco}[1]{%
-\clearpage
-\noindent
-\samepage
-\begin{tikzpicture}
-\draw[line width=2pt] (0,0) -- (\textwidth,0);
-\draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
-\end{tikzpicture}
-\refstepcounter{section}
-\parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE \arabic{section} #1}}
-\addcontentsline{toc}{section}{#1}
-\begin{tikzpicture}
-\draw[line width=1pt] (0,0) -- (\textwidth,0);
-\draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
-\end{tikzpicture}
-\par
-\nopagebreak
-\vblank
+  \clearpage
+  \refstepcounter{section}
+  \addcontentsline{toc}{section}{#1}
+  \samepage
+  \noindent
+  \begin{tikzpicture}
+    \draw[line width=2pt] (0,0) -- (\textwidth,0);
+    \draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
+  \end{tikzpicture}
+  \parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE \writenumberingofdecosection@gfndeco\enskip#1}}
+  \begin{tikzpicture}
+    \draw[line width=1pt] (0,0) -- (\textwidth,0);
+    \draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
+  \end{tikzpicture}
+  \par
+  \nopagebreak
+  \vblank
 }
 %
 \newcommand{\linenonumsection@gfndeco}[1]{%
-\clearpage
-\noindent
-\begin{tikzpicture}
-\draw[line width=2pt] (0,0) -- (\textwidth,0);
-\draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
-\end{tikzpicture}
-\parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE #1}}
-\begin{tikzpicture}
-\draw[line width=1pt] (0,0) -- (\textwidth,0);
-\draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
-\end{tikzpicture}
-\par
-\nopagebreak
-\vblank
+  \clearpage
+  \samepage
+  \noindent
+  \begin{tikzpicture}
+    \draw[line width=2pt] (0,0) -- (\textwidth,0);
+    \draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
+  \end{tikzpicture}
+  \parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE #1}}
+  \begin{tikzpicture}
+    \draw[line width=1pt] (0,0) -- (\textwidth,0);
+    \draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
+  \end{tikzpicture}
+  \par
+  \nopagebreak
+  \vblank
 }
 %
 \newcommand{\linesubsection@gfndeco}[1]{%
   \noindent
   \samepage
   \refstepcounter{subsection}
-  \parbox[c][1.25zw][c]{\textwidth}{\textsf{\large \arabic{section}.\arabic{subsection} #1}}
+  \parbox[c][1.25zw][c]{\textwidth}{\textsf{\large \writenumberingofdecosubsection@gfndeco\enskip#1}}
   \addcontentsline{toc}{subsection}{#1}%
   \parbox[c][1zw][t]{\textwidth}{%
     \begin{tikzpicture}
