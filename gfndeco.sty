@@ -2,7 +2,13 @@
 %    gfndeco.sty  (C) @bd_gfngfn on Twitter
 %
 %===============================================================================
-\newcommand{\thicksection}[1]{
+\newcommand{\setsectiontheme}[1]{%
+  \expandafter\let\expandafter\decosection\csname#1section@gfndeco\endcsname%
+  \expandafter\let\expandafter\decononumsection\csname#1nonumsection@gfndeco\endcsname%
+  \expandafter\let\expandafter\decosubsection\csname#1subsection@gfndeco\endcsname%
+  \expandafter\let\expandafter\decononumsubsection\csname#1nonumsubsection@gfndeco\endcsname%
+}
+\newcommand{\linesection@gfndeco}[1]{%
 \clearpage
 \noindent
 \samepage
@@ -22,14 +28,14 @@
 \vblank
 }
 %
-\newcommand{\thicksectionnonum}[1]{
+\newcommand{\linenonumsection@gfndeco}[1]{%
 \clearpage
 \noindent
 \begin{tikzpicture}
 \draw[line width=2pt] (0,0) -- (\textwidth,0);
 \draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
 \end{tikzpicture}
-\parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE \enskip#1}}
+\parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE #1}}
 \begin{tikzpicture}
 \draw[line width=1pt] (0,0) -- (\textwidth,0);
 \draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
@@ -39,12 +45,26 @@
 \vblank
 }
 %
-\newcommand{\thicksubsection}[1]{%
+\newcommand{\linesubsection@gfndeco}[1]{%
   \noindent
   \samepage
   \refstepcounter{subsection}
   \parbox[c][1.25zw][c]{\textwidth}{\textsf{\large \arabic{section}.\arabic{subsection} #1}}
   \addcontentsline{toc}{subsection}{#1}%
+  \parbox[c][1zw][t]{\textwidth}{%
+    \begin{tikzpicture}
+      \draw[line width=1pt] (0,0)--(\textwidth,0);
+    \end{tikzpicture}
+  }
+  \par
+  \nopagebreak
+  \vblank
+}%
+%
+\newcommand{\linenonumsubsection@gfndeco}[1]{%
+  \noindent
+  \samepage
+  \parbox[c][1.25zw][c]{\textwidth}{\textsf{#1}}
   \parbox[c][1zw][t]{\textwidth}{%
     \begin{tikzpicture}
       \draw[line width=1pt] (0,0)--(\textwidth,0);
