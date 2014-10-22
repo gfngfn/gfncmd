@@ -6,6 +6,14 @@
 \setlength{\vblankheight@gfndeco}{1zh}%
 \newcommand{\vblank}{\vspace{\vblankheight@gfndeco}}%
 \newcommand{\setintervalspace}[1]{\setlength{\vblankheight@gfndeco}{#1}}%
+\newcommand{\ifempty@gfndeco}[3]{%
+  \edef\tempparam@gfndeco{#1}%
+  \ifx\tempparam@gfndeco\empty%
+    #2%
+  \else%
+    #3%
+  \fi%
+}%
 %====章・節のテーマ=============================================================
 \newcommand{\setsectiontheme}[1]{%
   \expandafter\let\expandafter\decosection\csname#1section@gfndeco\endcsname%
@@ -23,6 +31,10 @@
   \decosectionpunctu@gfndeco\arabic{section}%
   \decosectionpunctb@gfndeco%
 }%
+\newif\ifpagebreakbeforedecosection@gfndeco%
+\pagebreakbeforedecosection@gfndecotrue%
+\newcommand{\enablepagebreakbeforedecosection}{\pagebreakbeforedecosection@gfndecotrue}
+\newcommand{\disablepagebreakbeforedecosection}{\pagebreakbeforedecosection@gfndecofalse}
 \newcommand{\decosubsectionpunctu@gfndeco}{}
 \newcommand{\decosubsectionpunctb@gfndeco}{.}
 \newcommand{\decosubsectionpunctt@gfndeco}{}
@@ -38,46 +50,48 @@
 }%
 %--line------------------------------------------------------------------------
 \newcommand{\linesection@gfndeco}[1]{%
-  \clearpage
-  \refstepcounter{section}
-  \addcontentsline{toc}{section}{#1}
-  \samepage
-  \noindent
-  \begin{tikzpicture}
-    \draw[line width=2pt] (0,0) -- (\textwidth,0);
-    \draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
-  \end{tikzpicture}
-  \parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE \writenumberingofdecosection@gfndeco\enskip#1}}
-  \begin{tikzpicture}
-    \draw[line width=1pt] (0,0) -- (\textwidth,0);
-    \draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
-  \end{tikzpicture}
-  \par
+  \ifpagebreakbeforedecosection@gfndeco\clearpage\fi%
+  \refstepcounter{section}%
+  \addcontentsline{toc}{section}{#1}%
+  {\samepage
+    \noindent
+    \begin{tikzpicture}
+      \draw[line width=2pt] (0,0) -- (\textwidth,0);
+      \draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
+    \end{tikzpicture}
+    \parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE \writenumberingofdecosection@gfndeco\enskip#1}}
+    \begin{tikzpicture}
+      \draw[line width=1pt] (0,0) -- (\textwidth,0);
+      \draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
+    \end{tikzpicture}
+    \par
+  }
   \nopagebreak
   \vblank
 }
 %
 \newcommand{\linenonumsection@gfndeco}[1]{%
   \clearpage
-  \samepage
-  \noindent
-  \begin{tikzpicture}
-    \draw[line width=2pt] (0,0) -- (\textwidth,0);
-    \draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
-  \end{tikzpicture}
-  \parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE #1}}
-  \begin{tikzpicture}
-    \draw[line width=1pt] (0,0) -- (\textwidth,0);
-    \draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
-  \end{tikzpicture}
-  \par
+  {\samepage
+    \noindent
+    \begin{tikzpicture}
+      \draw[line width=2pt] (0,0) -- (\textwidth,0);
+      \draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
+    \end{tikzpicture}
+    \parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE #1}}
+    \begin{tikzpicture}
+      \draw[line width=1pt] (0,0) -- (\textwidth,0);
+      \draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
+    \end{tikzpicture}
+    \par
+  }
   \nopagebreak
   \vblank
 }
 %
 \newcommand{\linesubsection@gfndeco}[1]{%
+  %{\samepage
   \noindent
-  \samepage
   \refstepcounter{subsection}
   \parbox[c][1.25zw][c]{\textwidth}{\textsf{\large \writenumberingofdecosubsection@gfndeco\enskip#1}}
   \addcontentsline{toc}{subsection}{#1}%
@@ -87,6 +101,7 @@
     \end{tikzpicture}
   }
   \par
+  %}
   \nopagebreak
   \vblank
 }%
@@ -104,7 +119,7 @@
   \nopagebreak
   \vblank
 }%
-%==============================================================================
+%====分類のスタイル=============================================================
 \newcommand{\newdecoclass}[1]{%
   \expandafter\newcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{}%
   \expandafter\newcommand\expandafter{\csname setprefixof#1\endcsname}[1]{%
@@ -165,12 +180,7 @@
   \renewcommand{\decopunctq@gfndeco}{#4}%
 }%
 \newcommand{\writenonemptytitle@gfndeco}[1]{%
-  \edef\tempparam@gfndeco{#1}%
-  \ifx\tempparam@gfndeco\empty%
-    \relax%
-  \else%
-    \enskip#1%
-  \fi%
+  \ifempty@gfndeco{#1}{}{\enskip#1}%
 }%
 \newcommand{\writenumbering@gfndeco}{%
   \decopunctu@gfndeco\arabic{section}%
@@ -186,19 +196,17 @@
   \fi%
 }%
 \newcommand{\writenonumtitle@gfndeco}[2]{%
-  \edef\tempparam@gfndeco{#1}%
-  \ifx\tempparam@gfndeco\empty%
+  \ifempty@gfndeco{#1}{%
     #2%
-  \else%
-    \edef\tempparam@gfndeco{#2}%
-    \ifx\tempparam@gfndeco\empty%
+  }{%
+    \ifempty@gfndeco{#2}{%
       #1%
-    \else%
+    }{%
       #1\enskip#2%
-    \fi%
-  \fi%
-}
-%---基本----------------------------------------------------
+    }%
+  }%
+}%
+%----std（基本）--------------------------------------------
 \newcommand{\stdcmd@gfndeco}[4]{%
   \dealwithcounter@gfndeco{#1}%
   \noindent
@@ -207,7 +215,7 @@
   \indent
   #3
   \par
-  \allowbreak
+  %\allowbreak
   \vblank
 }%
 \newcommand{\stdnonum@gfndeco}[3]{%
@@ -220,7 +228,7 @@
   \vblank
 }%
 %
-%---下線つき----------------------------------------------------
+%----ul（下線つき）-----------------------------------------
 \newcommand{\ulcmd@gfndeco}[4]{%
   \dealwithcounter@gfndeco{#1}%
   \noindent
@@ -243,7 +251,7 @@
   \vblank
 }%
 %
-%---タイトル込み段落--------------------------------------------
+%---top（タイトル込み段落）---------------------------------
 \newcommand{\topcmd@gfndeco}[4]{%
   \dealwithcounter@gfndeco{#1}%
   \noindent
@@ -253,14 +261,14 @@
   \vblank
 }%
 \newcommand{\topnonum@gfndeco}[3]{%
-\noindent
-\textsf{\writenonumtitle@gfndeco{#3}{#1}}\quad#2
-\par
-\allowbreak
-\vblank
+  \noindent
+  \textsf{\writenonumtitle@gfndeco{#3}{#1}}\quad#2
+  \par
+  \allowbreak
+  \vblank
 }%
 %
-%---箱入り------------------------------------------------------
+%----box（箱入り）------------------------------------------
 \newcommand{\boxcmd@gfndeco}[4]{%
   \dealwithcounter@gfndeco{#1}%
   \noindent
@@ -271,9 +279,15 @@
   \vblank
 }%
 \newcommand{\boxnonum@gfndeco}[3]{%
-\noindent
-\begin{itembox}[l]{\textsf{\writenonumtitle@gfndeco{#3}{#1}}}
-#2
-\end{itembox}
-\par\vblank
+  \noindent
+  \begin{itembox}[l]{\textsf{\writenonumtitle@gfndeco{#3}{#1}}}
+    #2
+  \end{itembox}
+  \par\vblank
+}%
+%----mdfcyan------------------------------------------------
+\newcommand{\mdfcyancmd@gfndeco}[4]{%
+  \dealwithcounter@gfndeco{#1}%
+  \allowbreak
+  \vblank
 }%
