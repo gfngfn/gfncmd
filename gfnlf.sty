@@ -1,0 +1,195 @@
+% +-----------------------------------------------------+
+% | gfnlf.sty ver. 0.01                                 |
+% |   (C) @bd_gfngfn on Twitter                         |
+% +-----------------------------------------------------+
+\newcount\styleofqtfr@case%
+\styleofqtfr@case=0\relax%
+\def\usepluralqtfr{\styleofqtfr@case=0\relax}%
+\def\usesingleqtfr{\styleofqtfr@case=1\relax}%
+\def\usedotpluralqtfr{\styleofqtfr@case=2\relax}%
+\def\usedotsingleqtfr{\styleofqtfr@case=3\relax}%
+\def\useparenpluralqtfr{\styleofqtfr@case=4\relax}%
+\def\useparensingleqtfr{\styleofqtfr@case=5\relax}%
+%
+\def\forallinsub@gfnlf{\forallin}%
+\def\existsinsub@gfnlf{\existsin}%
+\newif\ifreadtermsofqtfr@bool%
+\newif\ifreadsetofqtfr@bool%
+\newif\ifdealwithqtfr@bool%
+\newif\ifafterdeal@bool%
+\newif\iftempbeginning@bool%
+\def\lfqtfr#1#2{%
+  \afterdeal@boolfalse%
+  \@tfor\tok@tforcs:=#1\do{%
+    \expandafter\def\expandafter\tempparam@gfnlf\expandafter{\tok@tforcs}%
+    \ifafterdeal@bool%
+      \afterdeal@boolfalse%
+      \ifcase\styleofqtfr@case%
+      %%%%(0: \usepluralqtfr)
+        ,\ %
+      \or%(1: \usesingleqtfr)
+        ,\ %
+      \or%(2: \usedotpluralqtfr)
+        .\ %
+      \or%(3: \usedotsingleqtfr)
+        .\ %
+      \or%(4: \useparenpluralqtfr)
+        ,\ %
+      \or%(5: \useparensingleqtfr)
+        ,\ %
+      \fi%
+    \fi%
+    \ifreadtermsofqtfr@bool%
+      \readtermsofqtfr@boolfalse%
+      \expandafter\def\expandafter\termsofqtfr@defcs\expandafter{\tok@tforcs}%
+      \readsetofqtfr@booltrue%
+    \else%
+      \ifreadsetofqtfr@bool%
+        \readsetofqtfr@boolfalse%
+        \expandafter\def\expandafter\setofqtfr@defcs\expandafter{\tok@tforcs}%
+        % ---- main process for displaying a quantifier, terms and a set
+        \ifcase\styleofqtfr@case%
+        %%%%(0: \usepluralqtfr)
+          \pluralqtfr@subroutine%
+        \or%(1: \usesingleqtfr)
+          \singleqtfr@subroutine%
+        \or%(2: \usedotpluralqtfr)
+          \pluralqtfr@subroutine%
+        \or%(3: \usesingleqtfr)
+          \singleqtfr@subroutine%
+        \or%(4: \useparenpluralqtfr)
+          \pluralqtfr@subroutine%
+        \or%(5: \useparensingleqtfr)
+          \singleqtfr@subroutine%
+        \fi%
+        % /---
+        \afterdeal@booltrue%
+      \else%
+        \ifx\forallinsub@gfnlf\tempparam@gfnlf%
+          \let\quantifier@letcs=\forall%
+          \readtermsofqtfr@booltrue%
+        \else%
+          \ifx\existsinsub@gfnlf\tempparam@gfnlf%
+            \let\quantifier@letcs=\exists%
+            \readtermsofqtfr@booltrue%
+          \fi%
+        \fi%
+      \fi%
+    \fi%
+  }%
+  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
+  \ifcase\styleofqtfr@case%
+  %%%%(0: \usepluralqtfr)
+    \iffoundinlist{\lfparamR@defcs}{\listRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}%
+  \or%(1: \usesingleqtfr)
+    \iffoundinlist{\lfparamR@defcs}{\listRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}%
+  \or%(2: \usedotpluralqtfr)
+    \iffoundinlist{\lfparamR@defcs}{\listRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}%
+  \or%(3: \usedotsingleqtfr)
+    \iffoundinlist{\lfparamR@defcs}{\listRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}%
+  \or%(4: \useparenpluralqtfr)
+    \ \paren{#2}%
+  \or%(5: \useparensingleqtfr)
+    \ \paren{#2}%
+  \fi%
+}%
+%
+\def\pluralqtfr@subroutine{%
+  \expandafter\@tfor\expandafter\term@tforcs\expandafter:\expandafter=\termsofqtfr@defcs\do{%
+    \quantifier@letcs\term@tforcs%
+  }%
+  \in\setofqtfr@defcs%
+}%
+\def\singleqtfr@subroutine{%
+  \tempbeginning@booltrue%
+  \expandafter\@tfor\expandafter\term@tforcs\expandafter:\expandafter=\termsofqtfr@defcs\do{%
+    \iftempbeginning@bool%
+      \tempbeginning@boolfalse%
+      \quantifier@letcs%
+    \else%
+      ,%
+    \fi%
+    \term@tforcs%
+  }%
+  \in\setofqtfr@defcs%
+}%
+% define when paren is omittable
+\def\listLlfland@defcs{\lffml\lfpv\lflnot\lfland}%
+\def\listLlflor@defcs{\lffml\lfpv\lflnot\lflor}%
+\def\listLlflimpl@defcs{\lffml\lfpv\lflnot\lfland\lflor}%
+\def\listLlflimpleqv@defcs{\lffml\lfpv\lflnot\lfland\lflor}%
+%
+\def\listRlfqtfr@defcs{\lffml\lfpv\lflnot}%
+\def\listRlflnot@defcs{\lfpv\lflnot\lfqtfr}%
+\def\listRlfland@defcs{\lffml\lfpv\lflnot\lfland}%
+\def\listRlflor@defcs{\lffml\lfpv\lflnot\lflor}%
+\def\listRlflimpl@defcs{\lffml\lfpv\lflnot\lfland\lflor\lflimpl}%
+\def\listRlflimpleqv@defcs{\lffml\lfpv\lflnot\lfland\lflor}%
+%
+\newif\iffoundinlist@bool%
+\def\iffoundinlist#1#2#3#4{%
+  \foundinlist@boolfalse%
+  \expandafter\@tfor\expandafter\tk@tforcs\expandafter:\expandafter=#2\do{%
+    \ifx#1\tk@tforcs%
+      \foundinlist@booltrue%
+    \fi%
+  }%
+  \iffoundinlist@bool%
+    #3%
+  \else%
+    #4%
+  \fi%
+}%
+\newif\ifgft@bool%
+\def\getfirsttoken@gfnlf#1#2{%
+  \gft@booltrue%
+  \@tfor\gft@tforcs:=#1\do{%
+    \ifgft@bool%
+      \gft@boolfalse%
+      \expandafter\def\expandafter#2\expandafter{\gft@tforcs}%
+    \fi%
+  }%
+}
+\def\lfpv#1{#1}%(predicate variables)
+\def\lffml#1{#1}%(formulae)
+\def\lflnot#1{%
+  \getfirsttoken@gfnlf{#1}{\lfparamR@defcs}%
+  \lnot%
+  \iffoundinlist{\lfparamR@defcs}{\listRlflnot@defcs}{#1}{\paren{#1}}%
+}%
+\def\lfland#1#2{%
+  \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
+  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
+  \iffoundinlist{\lfparamL@defcs}{\listLlfland@defcs}{%
+    \iffoundinlist{\lfparamR@defcs}{\listRlfland@defcs}{#1\land#2}{#1\land\paren{#2}}%
+  }{%
+    \iffoundinlist{\lfparamR@defcs}{\listRlfland@defcs}{\paren{#1}\land#2}{\paren{#1}\land\paren{#2}}%
+  }%
+}%
+\def\lflor#1#2{%
+  \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
+  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
+  \iffoundinlist{\lfparamL@defcs}{\listLlflor@defcs}{%
+    \iffoundinlist{\lfparamR@defcs}{\listRlflor@defcs}{#1\lor#2}{#1\lor\paren{#2}}%
+  }{%
+    \iffoundinlist{\lfparamR@defcs}{\listRlflor@defcs}{\paren{#1}\lor#2}{\paren{#1}\lor\paren{#2}}%
+  }%
+}%
+\def\lflimpl#1#2{%
+  \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
+  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
+  \iffoundinlist{\lfparamL@defcs}{\listLlflimpl@defcs}{%
+    \iffoundinlist{\lfparamR@defcs}{\listRlflimpl@defcs}{#1\limpl#2}{#1\limpl\paren{#2}}%
+  }{%
+    \iffoundinlist{\lfparamR@defcs}{\listRlflimpl@defcs}{\paren{#1}\limpl#2}{\paren{#1}\limpl\paren{#2}}%
+  }%
+}%
+\def\lflimpleqv#1#2{%
+  \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
+  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
+  \iffoundinlist{\lfparamL@defcs}{\listLlflimpleqv@defcs}{%
+    \iffoundinlist{\lfparamR@defcs}{\listRlflimpleqv@defcs}{#1\limpleqv#2}{#1\limpleqv\paren{#2}}%
+  }{%
+    \iffoundinlist{\lfparamR@defcs}{\listRlflimpleqv@defcs}{\paren{#1}\limpleqv#2}{\paren{#1}\limpleqv\paren{#2}}%
+  }%
+}%

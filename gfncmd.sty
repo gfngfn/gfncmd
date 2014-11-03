@@ -1,21 +1,72 @@
 %This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
 %
 %---括弧類------------------------------
-\newcounter{caseparen@gfncmd}\setcounter{caseparen@gfncmd}{0}
+\newcounter{caseparen@gfncmd}
+\setcounter{caseparen@gfncmd}{0}
 \newcommand{\usenormalparen}{\setcounter{caseparen@gfncmd}{0}}
 \newcommand{\useexpandingparen}{\setcounter{caseparen@gfncmd}{1}}
-\newlength{\parenheight}
-\newlength{\parendepth}
+%\newdimen\parenheight
+%\newdimen\parendepth
+%\newdimen\dimensum
+%\newcount\depthofstruct
+%\depthofstruct=0\relax%
+\newcount\depthofparen@count%
+\depthofparen@count=0\relax%
+\newdimen\tempdepth%
+\newdimen\tempsum%
 \newcommand{\paren}[1]{%
   \ifcase\value{caseparen@gfncmd}%
     \left(#1\right)%
   \or%
-    \left(#1\right)
-    \settoheight{\parenheight}{$\displaystyle #1$}
-    \addtolength{\parenheight}{0.2zw}
-    \settodepth{\parendepth}{$\displaystyle #1$}
-    \addtolength{\parendepth}{0.1zw}
-    \rule[-\parendepth]{0zw}{\parenheight}%
+%    \iffalse
+%    \expandafter\expandafter\expandafter\settoheight\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofstruct parenheight\endcsname}{$\displaystyle #1$}%
+%    \expandafter\expandafter\expandafter\settodepth\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofstruct parendepth\endcsname}{$\displaystyle #1$}%
+%    %\dimensum=0pt\relax%
+%    %\advance\dimensum by\parenheight\relax%
+%    %\advance\dimensum by\parendepth\relax%
+%    \expandafter\expandafter\expandafter\text\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\fontsize\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofstruct parenheight\endcsname}{0pt}\selectfont$($}%
+%    %\text{\fbox{$\displaystyle #1$}}%
+%    \advance\depthofstruct by1\relax%
+%    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofstruct parenheight\endcsname
+%    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofstruct parendepth\endcsname
+%    #1
+%    \advance\depthofstruct by-1\relax%
+%    \expandafter\expandafter\expandafter\text\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\fontsize\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofstruct parenheight\endcsname}{0pt}\selectfont$)$}%
+%    %\addtolength{\parenheight}{0.2zw}%
+%    %\addtolength{\parendepth}{0.1zw}%
+%    %\expandafter\expandafter\expandafter\rule\expandafter\expandafter\expandafter[\expandafter\expandafter\expandafter-\expandafter\the\expandafter\parendepth\expandafter]\expandafter{\expandafter0\expandafter z\expandafter w\expandafter}\expandafter{\the\parenheight}%
+%    \settoheight{\parenheight}{$\displaystyle #1$}
+%    \settodepth{\parendepth}{$\displaystyle #1$}
+%    \text{\fontsize{\parenheight}{0pt}$(\text{\normalsize$#1$})$}
+%    \fi
+    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count height\endcsname%
+    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count depth\endcsname%
+    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count sum\endcsname%
+    \expandafter\expandafter\expandafter\settoheight\expandafter\csname\the\depthofparen@count height\endcsname{%
+      \advance\depthofparen@count by1\relax%
+      $\displaystyle #1$%
+      \rule[0pt]{0pt}{1em}%
+      \advance\depthofparen@count by-1\relax%
+    }%
+    \expandafter\expandafter\expandafter\settodepth\expandafter\csname\the\depthofparen@count depth\endcsname{%
+      \advance\depthofparen@count by1\relax%
+      $\displaystyle #1$%
+      \rule[0pt]{0pt}{1em}%
+      \advance\depthofparen@count by-1\relax%
+    }%
+    \expandafter\csname\the\depthofparen@count sum\endcsname=0pt\relax%
+    \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\advance\expandafter\expandafter\expandafter\csname\expandafter\the\expandafter\depthofparen@count\expandafter s\expandafter u\expandafter m\expandafter\endcsname\expandafter b\expandafter y\expandafter\csname\the\depthofparen@count height\endcsname\relax%
+    \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\advance\expandafter\expandafter\expandafter\csname\expandafter\the\expandafter\depthofparen@count\expandafter s\expandafter u\expandafter m\expandafter\endcsname\expandafter b\expandafter y\expandafter\csname\the\depthofparen@count depth\endcsname\relax%
+%
+    \expandafter\expandafter\expandafter\raise\expandafter\expandafter\expandafter-\expandafter\expandafter\expandafter0\expandafter\expandafter\expandafter.\expandafter\expandafter\expandafter3\expandafter\csname\the\depthofparen@count depth\endcsname\hbox{\expandafter\expandafter\expandafter\text\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\fontsize\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofparen@count sum\endcsname}{0pt}\selectfont $($}}%
+    \advance\depthofparen@count by1\relax%
+    \ifmmode #1\else\displaystyle #1\fi%
+    \advance\depthofparen@count by-1\relax%
+    \expandafter\expandafter\expandafter\raise\expandafter\expandafter\expandafter-\expandafter\expandafter\expandafter0\expandafter\expandafter\expandafter.\expandafter\expandafter\expandafter3\expandafter\csname\the\depthofparen@count depth\endcsname\hbox{\expandafter\expandafter\expandafter\text\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\fontsize\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofparen@count sum\endcsname}{0pt}\selectfont $)$}}%
+    \expandafter\expandafter\expandafter\tempsum\expandafter\expandafter\expandafter=\expandafter\csname\the\depthofparen@count sum\endcsname%
+    \expandafter\expandafter\expandafter\tempdepth\expandafter\expandafter\expandafter=\expandafter\csname\the\depthofparen@count depth\endcsname%
+    \advance\tempsum by0.1zw\relax%
+    \rule[-\tempdepth]{0pt}{\tempsum}%
   \fi%
 }
 \newcommand{\sqbrc}[1]{\left[#1\right]}
@@ -46,7 +97,8 @@
 %
 %===集合========================================================================
 %---有名な集合--------------------------
-\newcounter{caseset@gfncmd} \setcounter{caseset@gfncmd}{0}
+\newcounter{caseset@gfncmd}
+\setcounter{caseset@gfncmd}{0}
 \newcommand{\usemathbfset}{\setcounter{caseset@gfncmd}{0}}
 \newcommand{\usebmset}{\setcounter{caseset@gfncmd}{1}}
 \newcommand{\usemathbbset}{\setcounter{caseset@gfncmd}{2}}
@@ -92,7 +144,8 @@
   }%
 }
 %---冪集合------------------------------
-\newcounter{casePowerset@gfncmd}\setcounter{casePowerset@gfncmd}{0}
+\newcounter{casePowerset@gfncmd}
+\setcounter{casePowerset@gfncmd}{0}
 \newcommand{\useromanPowerset}{\setcounter{casePowerset@gfncmd}{0}}
 \newcommand{\usebinaryPowerset}{\setcounter{casePowerset@gfncmd}{1}}
 \newcommand{\usefrakPowerset}{\setcounter{casePowerset@gfncmd}{2}}
@@ -137,13 +190,13 @@
 \newcommand{\deductright}{\enskip \dashv \enskip}
 \newcommand{\deductleftright}{\enskip \vdash \dashv \enskip}
 %---論理包含 (implimentation) ----------
-\newcounter{caseimpl@gfncmd}\setcounter{caseimpl@gfncmd}{0}
-\newcommand{\userightarrowasimpl}{\setcounter{caseimpl@gfncmd}{0}}
-\newcommand{\useRightarrowasimpl}{\setcounter{caseimpl@gfncmd}{1}}
-\newcommand{\useinvertedCasimpl}{\setcounter{caseimpl@gfncmd}{2}}
-\newcommand{\impl}{%
+\newcounter{caselimpl@gfncmd}\setcounter{caselimpl@gfncmd}{0}
+\newcommand{\userightarrowaslimpl}{\setcounter{caselimpl@gfncmd}{0}}
+\newcommand{\useRightarrowaslimpl}{\setcounter{caselimpl@gfncmd}{1}}
+\newcommand{\useinvertedCaslimpl}{\setcounter{caselimpl@gfncmd}{2}}
+\newcommand{\limpl}{%
   \mathrel{%
-    \ifcase\value{caseimpl@gfncmd}%
+    \ifcase\value{caselimpl@gfncmd}%
       \rightarrow%
     \or%
       \Rightarrow%
@@ -153,13 +206,14 @@
   }%
 }
 %---相互論理包含（同値）----------------
-\newcounter{caseimplequiv@gfncmd}\setcounter{caseimplequiv@gfncmd}{0}
-\newcommand{\useleftrightarrowasimplequiv}{\setcounter{caseimplequiv@gfncmd}{0}}
-\newcommand{\userightleftarrowsasimplequiv}{\setcounter{caseimplequiv@gfncmd}{1}}
-\newcommand{\useLeftrightarrowasimplequiv}{\setcounter{caseimplequiv@gfncmd}{2}}
-\newcommand{\implequiv}{%
+\newcounter{caselimpleqv@gfncmd}
+\setcounter{caselimpleqv@gfncmd}{0}
+\newcommand{\useleftrightarrowaslimpleqv}{\setcounter{caselimpleqv@gfncmd}{0}}
+\newcommand{\userightleftarrowsaslimpleqv}{\setcounter{caselimpleqv@gfncmd}{1}}
+\newcommand{\useLeftrightarrowaslimpleqv}{\setcounter{caselimpleqv@gfncmd}{2}}
+\newcommand{\limpleqv}{%
   \mathrel{%
-    \ifcase\value{caseimplequiv@gfncmd}%
+    \ifcase\value{caselimpleqv@gfncmd}%
       \leftrightarrow%
     \or%
       \rightleftarrows% (amssymb.sty)
