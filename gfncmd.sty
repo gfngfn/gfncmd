@@ -5,40 +5,16 @@
 \setcounter{caseparen@gfncmd}{0}
 \newcommand{\usenormalparen}{\setcounter{caseparen@gfncmd}{0}}
 \newcommand{\useexpandingparen}{\setcounter{caseparen@gfncmd}{1}}
-%\newdimen\parenheight
-%\newdimen\parendepth
-%\newdimen\dimensum
-%\newcount\depthofstruct
-%\depthofstruct=0\relax%
 \newcount\depthofparen@count%
 \depthofparen@count=0\relax%
 \newdimen\tempdepth%
 \newdimen\tempsum%
 \newcommand{\paren}[1]{%
   \ifcase\value{caseparen@gfncmd}%
+  %%%%(0: \usenormalparen)
     \left(#1\right)%
-  \or%
-%    \iffalse
-%    \expandafter\expandafter\expandafter\settoheight\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofstruct parenheight\endcsname}{$\displaystyle #1$}%
-%    \expandafter\expandafter\expandafter\settodepth\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofstruct parendepth\endcsname}{$\displaystyle #1$}%
-%    %\dimensum=0pt\relax%
-%    %\advance\dimensum by\parenheight\relax%
-%    %\advance\dimensum by\parendepth\relax%
-%    \expandafter\expandafter\expandafter\text\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\fontsize\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofstruct parenheight\endcsname}{0pt}\selectfont$($}%
-%    %\text{\fbox{$\displaystyle #1$}}%
-%    \advance\depthofstruct by1\relax%
-%    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofstruct parenheight\endcsname
-%    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofstruct parendepth\endcsname
-%    #1
-%    \advance\depthofstruct by-1\relax%
-%    \expandafter\expandafter\expandafter\text\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\fontsize\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofstruct parenheight\endcsname}{0pt}\selectfont$)$}%
-%    %\addtolength{\parenheight}{0.2zw}%
-%    %\addtolength{\parendepth}{0.1zw}%
-%    %\expandafter\expandafter\expandafter\rule\expandafter\expandafter\expandafter[\expandafter\expandafter\expandafter-\expandafter\the\expandafter\parendepth\expandafter]\expandafter{\expandafter0\expandafter z\expandafter w\expandafter}\expandafter{\the\parenheight}%
-%    \settoheight{\parenheight}{$\displaystyle #1$}
-%    \settodepth{\parendepth}{$\displaystyle #1$}
-%    \text{\fontsize{\parenheight}{0pt}$(\text{\normalsize$#1$})$}
-%    \fi
+  \or%(1: \useexpandingparen)
+  %(needs 'etex', 'lmodern', '[T1]fontenc'.)
     \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count height\endcsname%
     \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count depth\endcsname%
     \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count sum\endcsname%
@@ -77,7 +53,7 @@
     %集合用の括弧
 \newcommand{\seqprn}[1]{\left(#1\right)}
     %直積の元の括弧
-\newcommand{\setprnsep}[2]{\setprn{{\:}#1{\:}|{\:}#2{\:}}}
+\newcommand{\setprnsep}[2]{\setprn{\:#1\:|\:#2\:}}
     %分出公理に基づいて定義される集合用の括弧
 %---函数引数用括弧----------------------
 \newcounter{casefprn@gfncmd}
@@ -181,8 +157,9 @@
 %
 %論理類
 \newcommand{\Defarrow}{\stackrel{\mathrm{def.}}{\Leftrightarrow}}
-\newcommand{\suchthat}{\quad \mathrm{s.t.} \quad}
-\newcommand{\qed}{\hfill ■}
+%\newcommand{\suchthat}{\quad \mathrm{s.t.} \quad}
+\providecommand{\qed}{}
+\renewcommand{\qed}{\hfill ■}
 %
 %===記号論理====================================================================
 \newcommand{\deductleft}{\enskip \vdash \enskip}
@@ -211,6 +188,7 @@
 \newcommand{\useleftrightarrowaslimpleqv}{\setcounter{caselimpleqv@gfncmd}{0}}
 \newcommand{\userightleftarrowsaslimpleqv}{\setcounter{caselimpleqv@gfncmd}{1}}
 \newcommand{\useLeftrightarrowaslimpleqv}{\setcounter{caselimpleqv@gfncmd}{2}}
+\newcommand{\usesupsetaslimpleqv}{\setcounter{caselimpleqv@gfncmd}{3}}
 \newcommand{\limpleqv}{%
   \mathrel{%
     \ifcase\value{caselimpleqv@gfncmd}%
@@ -219,6 +197,8 @@
       \rightleftarrows% (amssymb.sty)
     \or%
       \Leftrightarrow%
+    \or%
+      \supset%
     \fi%
   }%
 }

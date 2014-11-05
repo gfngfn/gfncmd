@@ -126,6 +126,110 @@
 \def\listRlflimpl@defcs{\lffml\lfpv\lflnot\lfland\lflor\lflimpl}%
 \def\listRlflimpleqv@defcs{\lffml\lfpv\lflnot\lfland\lflor}%
 %
+\newif\iffoundmpo@bool%
+\def\makerightparenomittable#1#2{%
+  \foundmpo@boolfalse%
+  \expandafter\def\expandafter\tempmposub@defcs\expandafter{\csname#2\endcsname}%
+  \expandafter\let\expandafter\templist@letcs\expandafter=\csname listR#1@defcs\endcsname%
+  \expandafter\@tfor\expandafter\tkmpo@tforcs\expandafter:\expandafter=\templist@letcs\do{%
+    \ifx\tkmpo@tforcs\tempmposub@defcs%
+      \foundmpo@booltrue%
+    \fi%
+  }%
+  %\typeout{(TYPEOUT1)}\expandafter\show\csname listR#1@defcs\endcsname%<test>
+  \iffoundmpo@bool%
+  \else%
+%    \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\def
+%      \expandafter\expandafter\expandafter\csname
+%      \expandafter\expandafter\expandafter l%
+%      \expandafter\expandafter\expandafter i%
+%      \expandafter\expandafter\expandafter s%
+%      \expandafter\expandafter\expandafter t%
+%      \expandafter\expandafter\expandafter L%
+%      \expandafter\expandafter\expandafter#1%
+%      \expandafter\expandafter\expandafter @%
+%      \expandafter\expandafter\expandafter d%
+%      \expandafter\expandafter\expandafter e%
+%      \expandafter\expandafter\expandafter f%
+%      \expandafter\expandafter\expandafter c%
+%      \expandafter\expandafter\expandafter s%
+%      \expandafter\expandafter\expandafter\endcsname
+%      \expandafter\expandafter\expandafter{\expandafter\templist@letcs\csname#2\endcsname}%
+    \expandafter\expandafter\expandafter\def%
+      \expandafter\expandafter\expandafter\templist@letcs%
+      \expandafter\expandafter\expandafter{%
+      \expandafter\templist@letcs\csname#2\endcsname}%
+    \expandafter\let\csname listR#1@defcs\endcsname=\templist@letcs%
+  \fi%
+  %\typeout{(TYPEOUT2)}\expandafter\show\csname listR#1@defcs\endcsname%<test>
+}%
+\def\makeleftparenomittable#1#2{%
+  \foundmpo@boolfalse%
+  \expandafter\def\expandafter\tempmposub@defcs\expandafter{\csname#2\endcsname}%
+  \expandafter\let\expandafter\templist@letcs\expandafter=\csname listL#1@defcs\endcsname%
+  \expandafter\@tfor\expandafter\tkmpo@tforcs\expandafter:\expandafter=\templist@letcs\do{%
+    \ifx\tkmpo@tforcs\tempmposub@defcs%
+      \foundmpo@booltrue%
+    \fi%
+  }%
+  %\typeout{(TYPEOUT3)}\expandafter\show\csname listR#1@defcs\endcsname%<test>
+  \iffoundmpo@bool%
+  \else%
+%    \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\def
+%      \expandafter\expandafter\expandafter\csname
+%      \expandafter\expandafter\expandafter l%
+%      \expandafter\expandafter\expandafter i%
+%      \expandafter\expandafter\expandafter s%
+%      \expandafter\expandafter\expandafter t%
+%      \expandafter\expandafter\expandafter L%
+%      \expandafter\expandafter\expandafter#1%
+%      \expandafter\expandafter\expandafter @%
+%      \expandafter\expandafter\expandafter d%
+%      \expandafter\expandafter\expandafter e%
+%      \expandafter\expandafter\expandafter f%
+%      \expandafter\expandafter\expandafter c%
+%      \expandafter\expandafter\expandafter s%
+%      \expandafter\expandafter\expandafter\endcsname
+%      \expandafter\expandafter\expandafter{\expandafter\templist@letcs\csname#2\endcsname}%
+    \expandafter\expandafter\expandafter\def%
+      \expandafter\expandafter\expandafter\templist@letcs%
+      \expandafter\expandafter\expandafter{%
+      \expandafter\templist@letcs\csname#2\endcsname}%
+    \expandafter\let\csname listL#1@defcs\endcsname=\templist@letcs%
+  \fi%
+  %\typeout{(TYPEOUT4)}\expandafter\show\csname listR#1@defcs\endcsname%<test>
+}%
+\def\makerightparenmandatory#1#2{%
+  \def\tempmpo@defcs{}%
+  \expandafter\def\expandafter\tempmposub@defcs\expandafter{\csname#2\endcsname}%
+  \expandafter\let\expandafter\templist@letcs\expandafter=\csname listR#1@defcs\endcsname%
+  \expandafter\@tfor\expandafter\tkmpo@tforcs\expandafter:\expandafter=\templist@letcs\do{%
+    \ifx\tkmpo@tforcs\tempmposub@defcs%
+    \else%
+      \expandafter\expandafter\expandafter\def%
+        \expandafter\expandafter\expandafter\tempmpo@defcs%
+        \expandafter\expandafter\expandafter{\expandafter\tempmpo@defcs\tkmpo@tforcs}%
+    \fi%
+    %\typeout{(TYPEOUT-)}\show\tempmpo@defcs%<test>
+  }%
+  \expandafter\let\csname listR#1@defcs\endcsname=\tempmpo@defcs%
+}
+\def\makeleftparenmandatory#1#2{%
+  \def\tempmpo@defcs{}%
+  \expandafter\def\expandafter\tempmposub@defcs\expandafter{\csname#2\endcsname}%
+  \expandafter\let\expandafter\templist@letcs\expandafter=\csname listL#1@defcs\endcsname%
+  \expandafter\@tfor\expandafter\tkmpo@tforcs\expandafter:\expandafter=\templist@letcs\do{%
+    \ifx\tkmpo@tforcs\tempmposub@defcs%
+    \else%
+      \expandafter\expandafter\expandafter\def%
+        \expandafter\expandafter\expandafter\tempmpo@defcs%
+        \expandafter\expandafter\expandafter{\expandafter\tempmpo@defcs\tkmpo@tforcs}%
+    \fi%
+    %\typeout{(TYPEOUT-)}\show\tempmpo@defcs%<test>
+  }%
+  \expandafter\let\csname listL#1@defcs\endcsname=\tempmpo@defcs%
+}
+%
 \newif\iffoundinlist@bool%
 \def\iffoundinlist#1#2#3#4{%
   \foundinlist@boolfalse%
