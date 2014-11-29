@@ -5,45 +5,52 @@
 \setcounter{caseparen@gfncmd}{0}
 \newcommand{\usenormalparen}{\setcounter{caseparen@gfncmd}{0}}
 \newcommand{\useexpandingparen}{\setcounter{caseparen@gfncmd}{1}}
-\newcount\depthofparen@count%
-\depthofparen@count=0\relax%
-\newdimen\tempdepth%
-\newdimen\tempsum%
+\newcount\depthofparen@count
+\depthofparen@count=0\relax
+\newdimen\tempdimenA
+\newdimen\tempdimenB
 \newcommand{\paren}[1]{%
   \ifcase\value{caseparen@gfncmd}%
   %%%%(0: \usenormalparen)
     \left(#1\right)%
   \or%(1: \useexpandingparen)
-  %(needs 'etex', 'lmodern', '[T1]fontenc'.)
-    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count height\endcsname%
-    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count depth\endcsname%
-    \expandafter\expandafter\expandafter\newdimen\expandafter\csname\the\depthofparen@count sum\endcsname%
-    \expandafter\expandafter\expandafter\settoheight\expandafter\csname\the\depthofparen@count height\endcsname{%
-      \advance\depthofparen@count by1\relax%
-      $\displaystyle #1$%
-      \rule[0pt]{0pt}{1em}%
-      \advance\depthofparen@count by-1\relax%
+  %(needs 'lmodern', '[T1]fontenc'.)
+    \settoheight\tempdimenA{%
+      \advance\depthofparen@count by1\relax
+      $\displaystyle #1$\rule[0pt]{0pt}{1em}%
+      \advance\depthofparen@count by-1\relax
     }%
-    \expandafter\expandafter\expandafter\settodepth\expandafter\csname\the\depthofparen@count depth\endcsname{%
-      \advance\depthofparen@count by1\relax%
-      $\displaystyle #1$%
-      \rule[0pt]{0pt}{1em}%
-      \advance\depthofparen@count by-1\relax%
-    }%
-    \expandafter\csname\the\depthofparen@count sum\endcsname=0pt\relax%
-    \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\advance\expandafter\expandafter\expandafter\csname\expandafter\the\expandafter\depthofparen@count\expandafter s\expandafter u\expandafter m\expandafter\endcsname\expandafter b\expandafter y\expandafter\csname\the\depthofparen@count height\endcsname\relax%
-    \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\advance\expandafter\expandafter\expandafter\csname\expandafter\the\expandafter\depthofparen@count\expandafter s\expandafter u\expandafter m\expandafter\endcsname\expandafter b\expandafter y\expandafter\csname\the\depthofparen@count depth\endcsname\relax%
+    \expandafter\def\expandafter\tempcsH\expandafter{\the\tempdimenA}%
+    \expandafter\let\csname height[\the\depthofparen@count]\endcsname=\tempcsH
 %
-    \expandafter\expandafter\expandafter\raise\expandafter\expandafter\expandafter-\expandafter\expandafter\expandafter0\expandafter\expandafter\expandafter.\expandafter\expandafter\expandafter3\expandafter\csname\the\depthofparen@count depth\endcsname\hbox{\expandafter\expandafter\expandafter\text\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\fontsize\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofparen@count sum\endcsname}{0pt}\selectfont $($}}%
-    \advance\depthofparen@count by1\relax%
-    \ifmmode #1\else\displaystyle #1\fi%
-    \advance\depthofparen@count by-1\relax%
-    \expandafter\expandafter\expandafter\raise\expandafter\expandafter\expandafter-\expandafter\expandafter\expandafter0\expandafter\expandafter\expandafter.\expandafter\expandafter\expandafter3\expandafter\csname\the\depthofparen@count depth\endcsname\hbox{\expandafter\expandafter\expandafter\text\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\fontsize\expandafter\expandafter\expandafter{\expandafter\csname\the\depthofparen@count sum\endcsname}{0pt}\selectfont $)$}}%
-    \expandafter\expandafter\expandafter\tempsum\expandafter\expandafter\expandafter=\expandafter\csname\the\depthofparen@count sum\endcsname%
-    \expandafter\expandafter\expandafter\tempdepth\expandafter\expandafter\expandafter=\expandafter\csname\the\depthofparen@count depth\endcsname%
-    \advance\tempsum by0.1zw\relax%
-    \rule[-\tempdepth]{0pt}{\tempsum}%
-  \fi%
+    \settodepth\tempdimenB{%
+      \advance\depthofparen@count by1\relax
+      $\displaystyle #1$\rule[0pt]{0pt}{1em}%
+      \advance\depthofparen@count by-1\relax
+    }%
+    \expandafter\def\expandafter\tempcsD\expandafter{\the\tempdimenB}%
+    \expandafter\let\csname depth[\the\depthofparen@count]\endcsname=\tempcsD
+%
+    \advance\tempdimenA by\tempdimenB\relax
+    \expandafter\def\expandafter\tempcsS\expandafter{\the\tempdimenA}%
+    \expandafter\let\csname sum[\the\depthofparen@count]\endcsname=\tempcsS
+%
+    \raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $($}}%
+%
+    \advance\depthofparen@count by1\relax
+    \ifmmode #1\else\displaystyle #1\fi
+    \advance\depthofparen@count by-1\relax
+%
+    \expandafter\let\expandafter\tempcsD\expandafter=\csname depth[\the\depthofparen@count]\endcsname
+    \expandafter\let\expandafter\tempcsS\expandafter=\csname sum[\the\depthofparen@count]\endcsname
+    \expandafter\tempdimenB\expandafter=\tempcsD\relax
+    \expandafter\tempdimenA\expandafter=\tempcsS\relax
+%
+    \raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $)$}}%
+%
+    \advance\tempdimenA by0.1zw\relax
+    \rule[-\tempdimenB]{0pt}{\tempdimenA}%
+  \fi
 }
 \newcommand{\sqbrc}[1]{\left[#1\right]}
 \newcommand{\curlybrc}[1]{\left\{#1\right\}}
@@ -63,7 +70,7 @@
 \newcommand{\usesmallfprn}{\setcounter{casefprn@gfncmd}{2}}
 \newcommand{\fprn}[1]{%
   \ifcase\value{casefprn@gfncmd}%
-    \paren{#1}%
+    \!\paren{#1}%
   \or%
     {\scriptstyle\paren{#1}}%
   \or%
