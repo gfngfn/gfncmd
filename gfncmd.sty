@@ -242,14 +242,15 @@
 \def\ndif#1#2#3{\frac{{\ordd}^{#1}#2}{{\ordd}#3^{#1}}}
 \def\pdif#1#2{\frac{{\partial}#1}{{\partial}#2}}
 \def\pddif#1#2{{\pndif{2}{#1}{#2}}}
-\def\pndif#1#2#3{%
-  \frac{{\partial}^{#1} #2}{\pndif@sub#3|\@endpndif@sub}%
+\def\pndif#1#2#3{\frac{{\partial}^{#1} #2}{{\partial}#3^{#1}}}
+\def\plpdif#1#2#3{%
+  \frac{{\partial}^{#1} #2}{\plpdif@sub#3|\@endplpdif@sub}%
 }
-\def\pndif@sub#1|#2\@endpndif@sub{%
+\def\plpdif@sub#1|#2\@endplpdif@sub{%
   \partial #1 %
   \ifx\relax#2\relax
   \else
-    \pndif@sub#2\@endpndif@sub
+    \plpdif@sub#2\@endplpdif@sub
   \fi
 }
 \def\thmpdif#1#2#3{\paren{\frac{{\partial}#1}{{\partial}#2}}_{#3}}
