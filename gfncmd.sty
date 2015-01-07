@@ -1,6 +1,6 @@
 %This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
 %
-%---Š‡ŒÊ—Ş------------------------------
+%---æ‹¬å¼§é¡------------------------------
 \newcount\caseparen@gfncmd
 \caseparen@gfncmd=0\relax
 \def\usenormalparen{\caseparen@gfncmd=0\relax}
@@ -57,12 +57,12 @@
 \def\absprn#1{\left|#1\right|}
 \def\dist#1{\left\|#1\right\|}
 \def\setprn#1{\left\{#1\right\}}
-    %W‡—p‚ÌŠ‡ŒÊ
+    %é›†åˆç”¨ã®æ‹¬å¼§
 \def\seqprn#1{\left(#1\right)}
-    %’¼Ï‚ÌŒ³‚ÌŠ‡ŒÊ
+    %ç›´ç©ã®å…ƒã®æ‹¬å¼§
 \def\setprnsep#1#2{\setprn{\:#1\:|\:#2\:}}
-    %•ªoŒö—‚ÉŠî‚Ã‚¢‚Ä’è‹`‚³‚ê‚éW‡—p‚ÌŠ‡ŒÊ
-%---”Ÿ”ˆø”—pŠ‡ŒÊ----------------------
+    %åˆ†å‡ºå…¬ç†ã«åŸºã¥ã„ã¦å®šç¾©ã•ã‚Œã‚‹é›†åˆç”¨ã®æ‹¬å¼§
+%---å‡½æ•°å¼•æ•°ç”¨æ‹¬å¼§----------------------
 \newcount\casefprn@gfncmd
 \casefprn@gfncmd=0\relax
 \def\usenormalfprn{\casefprn@gfncmd=0\relax}
@@ -78,8 +78,8 @@
   \fi
 }
 %
-%===W‡========================================================================
-%---—L–¼‚ÈW‡--------------------------
+%===é›†åˆ========================================================================
+%---æœ‰åãªé›†åˆ--------------------------
 \newcount\caseset@gfncmd
 \caseset@gfncmd=0\relax
 \def\usemathbfset{\caseset@gfncmd=0\relax}
@@ -87,13 +87,13 @@
 \def\usemathbbset{\caseset@gfncmd=2\relax}
 \def\setcapital#1{%
   {%
-    \ifcase\caseset@gfncmd%
+    \ifcase\caseset@gfncmd
       \mathbf{#1}%
-    \or%
+    \or
       \bm{#1}%
-    \or%
+    \or
       \mathbb{#1}%
-    \fi%
+    \fi
   }%
 }
 \def\setZ{\setcapital{Z}}
@@ -104,7 +104,7 @@
 \def\setH{\setcapital{H}}
 \def\setP{\setcapital{P}}
 \def\setNp{\setcapital{N}^{+}}
-%---s—ñ‚ÌW‡--------------------------
+%---è¡Œåˆ—ã®é›†åˆ--------------------------
 \newcount\casesetMatrix@gfncmd
 \casesetMatrix@gfncmd=0\relax
 \def\usemathbfsetMatrix{\casesetMatrix@gfncmd=0\relax}
@@ -127,7 +127,7 @@
     \fi%
   }%
 }
-%---™pW‡------------------------------
+%---å†ªé›†åˆ------------------------------
 \newcount\casePowerset@gfncmd
 \casePowerset@gfncmd=0\relax
 \def\useromanPowerset{\casePowerset@gfncmd=0\relax}
@@ -155,25 +155,25 @@
     \fi
   }%
 }
-% ---- ŠJ‹æŠÔE•Â‹æŠÔ ----
+% ---- é–‹åŒºé–“ãƒ»é–‰åŒºé–“ ----
 \def\openinterval#1#2{\left(#1, #2\right)}
 \def\closedinterval#1#2{\left[#1, #2\right]}
 \def\openclosedinterval#1#2{\left(#1, #2\right]}
 \def\closedopeninterval#1#2{\left[#1, #2\right)}
-% ---- ”Ÿ”‚Ì’è‹`ˆæ‚Æ’lˆæ ----
+% ---- å‡½æ•°ã®å®šç¾©åŸŸã¨å€¤åŸŸ ----
 \def\funcdoms#1#2#3{#1:{\:}#2\to#3}
 %
-% ---- ˜_——Ş ----
-\def\Defarrow{\stackrel{\mathrm{def.}}{\Leftrightarrow}}
+% ---- è«–ç†é¡ ----
+%\def\Defarrow{\stackrel{\mathrm{def.}}{\Leftrightarrow}}
 %\newcommand{\suchthat}{\quad \mathrm{s.t.} \quad}
-\def\qed{\hfill ¡}
+\def\qed{\hfill â– }
 %
-%===‹L†˜_—====================================================================
+%===è¨˜å·è«–ç†====================================================================
 \def\rightdeduct{\mathrel{\enskip\vdash\enskip}}
 \def\rightdeductnoassump{{}\rightdeduct}
 \def\leftdeduct{\enskip \dashv \enskip}
 \def\leftrightdeduct{\mathrel{\enskip\vdash\dashv\enskip}}
-%---˜_—•ïŠÜ (implimentation) ----------
+%---è«–ç†åŒ…å« (implimentation) ----------
 \newcount\caselimpl@gfncmd
 \caselimpl@gfncmd=0\relax
 \def\userightarrowaslimpl{\caselimpl@gfncmd=0\relax}
@@ -190,7 +190,7 @@
     \fi
   }%
 }
-%---‘ŠŒİ˜_—•ïŠÜi“¯’lj----------------
+%---ç›¸äº’è«–ç†åŒ…å«ï¼ˆåŒå€¤ï¼‰----------------
 \newcount\caselimpleqv@gfncmd
 \caselimpleqv@gfncmd=0\relax
 \def\useleftrightarrowaslimpleqv{\caselimpleqv@gfncmd=0\relax}
@@ -211,8 +211,8 @@
     \fi
   }%
 }
-%===‘©˜_========================================================================
-%---”¼‡˜ (partial order) -------------
+%===æŸè«–========================================================================
+%---åŠé †åº (partial order) -------------
 \newcount\casepord@gfncmd
 \casepord@gfncmd=0\relax
 \def\usepreccurlyeqaspord{\casepord@gfncmd=0\relax}
@@ -236,15 +236,25 @@
 \def\join{\mathbin{\scriptstyle \!\mathord{\lor}\!}} % join
 \def\meet{\mathbin{\scriptstyle \!\mathord{\land}\!}} % meet
 %
-% ==== ”÷Ï•ª ====
+% ==== å¾®ç©åˆ† ====
 \def\dif#1#2{\frac{{\ordd}#1}{{\ordd}#2}}
 \def\ddif#1#2{\frac{{\ordd}^{2}#1}{{\ordd}#2^{2}}}
 \def\ndif#1#2#3{\frac{{\ordd}^{#1}#2}{{\ordd}#3^{#1}}}
 \def\pdif#1#2{\frac{{\partial}#1}{{\partial}#2}}
-\def\pddif#1#2{\frac{{\partial}^{2}#1}{{\partial}#2^{2}}}
-\def\pndif#1#2#3{\frac{{\partial}^{#1}#2}{{\partial}#3^{#1}}}
+\def\pddif#1#2{{\pndif{2}{#1}{#2}}}
+\def\pndif#1#2#3{\frac{{\partial}^{#1} #2}{{\partial}#3^{#1}}}
+\def\plpdif#1#2#3{%
+  \frac{{\partial}^{#1} #2}{\plpdif@sub#3|\@endplpdif@sub}%
+}
+\def\plpdif@sub#1|#2\@endplpdif@sub{%
+  \partial #1 %
+  \ifx\relax#2\relax
+  \else
+    \plpdif@sub#2\@endplpdif@sub
+  \fi
+}
 \def\thmpdif#1#2#3{\paren{\frac{{\partial}#1}{{\partial}#2}}_{#3}}
-% ---- ”÷•ª‰‰Zq ----
+% ---- å¾®åˆ†æ¼”ç®—å­ ----
 \newcount\caseordd@gfncmd
 \caseordd@gfncmd=0\relax
 \def\useromanordd{\caseordd@gfncmd=0\relax}
@@ -259,8 +269,8 @@
   }%
 }
 %
-%===•¶š—Ş======================================================================
-%---ƒCƒvƒVƒƒ“‚ÌÄ’è‹`------------------
+%===æ–‡å­—é¡======================================================================
+%---ã‚¤ãƒ—ã‚·ãƒ­ãƒ³ã®å†å®šç¾©------------------
 \newcount\casemakeepsilonsdifferent@gfncmd
 \casemakeepsilonsdifferent@gfncmd=0\relax
 \def\makeepsilonssame{\casemakeepsilonsdifferent@gfncmd=0\relax}
@@ -293,7 +303,7 @@
     \fi
   }%
 }
-%---ƒtƒ@ƒC‚ÌÄ’è‹`----------------------
+%---ãƒ•ã‚¡ã‚¤ã®å†å®šç¾©----------------------
 \newcount\casemakephisdifferent@gfncmd
 \casemakephisdifferent@gfncmd=0\relax
 \def\makephissame{\casemakephisdifferent@gfncmd=0\relax}
@@ -326,7 +336,7 @@
     \fi
   }%
 }
-%---ƒMƒŠƒVƒA‘å•¶š‚ÌÄ’è‹`--------------
+%---ã‚®ãƒªã‚·ã‚¢å¤§æ–‡å­—ã®å†å®šç¾©--------------
 \newcount\casegreekcapital@gfncmd
 \casegreekcapital@gfncmd=0\relax
 \def\useitalicgreekcapital{\casegreekcapital@gfncmd=0\relax}
@@ -427,11 +437,11 @@
 \def\Omega{\ifcase\casegreekcapital@gfncmd \varOmega@gfncmd\or\rmOmega\fi}
 \def\varOmega{\undefined@gfncmd}
 %---------------------------------------
-%Å“K‰»
+%æœ€é©åŒ–
 %\newcommand{\minimize}{\quad\mathrm{Minimize}\quad}
 %\newcommand{\subjectto}{\quad\mathrm{subject to}\quad}
 %
-%transposedi“]’uj
+%transposedï¼ˆè»¢ç½®ï¼‰
 \newcount\casetransposed@gfncmd
 \casetransposed@gfncmd=0\relax
 \def\usetoptransposed{\casetransposed@gfncmd=0\relax}
@@ -456,7 +466,7 @@
     \index{#1}%
   \fi
 }
-% ---- Œ—˜_ ----
+% ---- åœè«– ----
 \def\mathcat#1{\mathbf{#1}}
 \def\catMatr{\mathcat{Matr}}
 \def\catEns{\mathcat{Ens}}
