@@ -1,6 +1,6 @@
 % +-----------------------------------------------------+
-% | gfnlf.sty ver. 0.01                                 |
-% |   (C) @bd_gfngfn on Twitter                         |
+% | gfnlf.sty ver. 0.05                                 |
+% |   (C) @bd_gfngfn on Twitter, gfngfn on GitHub       |
 % +-----------------------------------------------------+
 \newcount\styleofqtfr@case
 \styleofqtfr@case=0\relax
@@ -80,13 +80,13 @@
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
   \ifcase\styleofqtfr@case
   %%%%(0: \usepluralqtfr)
-    \iffoundinlist{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}{;\ #2}%
   \or%(1: \usesingleqtfr)
-    \iffoundinlist{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}{;\ #2}%
   \or%(2: \usedotpluralqtfr)
-    \iffoundinlist{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}{.\ #2}%
   \or%(3: \usedotsingleqtfr)
-    \iffoundinlist{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}{.\ #2}%
   \or%(4: \useparenpluralqtfr)
     \ \paren{#2}%
   \or%(5: \useparensingleqtfr)
@@ -101,19 +101,21 @@
   \in\setofqtfr@defcs
 }
 \def\singleqtfr@subroutine{%
-  \tempbeginning@booltrue%
+  \tempbeginning@booltrue
   \expandafter\@tfor\expandafter\term@tforcs\expandafter:\expandafter=\termsofqtfr@defcs\do{%
     \iftempbeginning@bool
       \tempbeginning@boolfalse
       \quantifier@letcs
     \else%
-      ,
+      , %
     \fi
     \term@tforcs
   }%
   \in\setofqtfr@defcs
 }
-% define when paren is omittable
+% define when paren is omittable or mandatory
+%   if neigher \omitlist.. nor \mndtlist.. contains \HOGE,
+%   the token list whose head is \HOGE is regarded as formula
 \def\omitlistLlfland@defcs{\lfpv\lflnot\lfland}
 \def\mndtlistLlfland@defcs{\lfqtfr\lflor\lflimpl\lflimpleqv}
 \def\omitlistLlflor@defcs{\lfpv\lflnot\lflor}
