@@ -2,18 +2,19 @@
 %    gfndeco.sty  (C) @bd_gfngfn on Twitter
 %
 %===============================================================================
-\newlength{\vblankheight@gfndeco}%
-\setlength{\vblankheight@gfndeco}{1zh}%
-\newcommand{\vblank}{\vspace{\vblankheight@gfndeco}}%
-\newcommand{\setintervalspace}[1]{\setlength{\vblankheight@gfndeco}{#1}}%
+\newlength{\vblankheight@gfndeco}
+\setlength{\vblankheight@gfndeco}{1zh}
+\newcommand{\vblank}{\vspace{\vblankheight@gfndeco}}
+\newcommand{\setintervalspace}[1]{\setlength{\vblankheight@gfndeco}{#1}}
 \newcommand{\ifempty@gfndeco}[3]{%
   \edef\tempparam@gfndeco{#1}%
-  \ifx\tempparam@gfndeco\empty%
+  \ifx\tempparam@gfndeco\empty
     #2%
-  \else%
+  \else
     #3%
-  \fi%
-}%
+  \fi
+}
+\newcommand{\decosep}{\par\vblank\indent}
 \newcommand{\binnerv}{\par}
 \newcommand{\einnerv}{\noindent}
 \newcommand{\binnervb}{\par\vblank}

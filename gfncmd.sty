@@ -9,33 +9,36 @@
 \depthofparen@count=0\relax
 \newdimen\tempdimenA
 \newdimen\tempdimenB
-\def\paren#1{%
+\def\genparen#1#2#3#4#5{%
   \ifcase\caseparen@gfncmd
   %%%%(0: \usenormalparen)
-    \left(#1\right)%
+    \left#2 #1 \right#3%
   \or%(1: \useexpandingparen)
   %(needs 'lmodern', '[T1]fontenc'.)
-    \settoheight\tempdimenA{%
-      \advance\depthofparen@count by1\relax
-      $\displaystyle #1$\rule[0pt]{0pt}{1em}%
-      \advance\depthofparen@count by-1\relax
-    }%
-    \expandafter\def\expandafter\tempcsH\expandafter{\the\tempdimenA}%
-    \expandafter\let\csname height[\the\depthofparen@count]\endcsname=\tempcsH
-%
-    \settodepth\tempdimenB{%
-      \advance\depthofparen@count by1\relax
-      $\displaystyle #1$\rule[0pt]{0pt}{1em}%
-      \advance\depthofparen@count by-1\relax
-    }%
+    \def\tempparam@defcs{#4}%
+    \ifx\tempparam@defcs\empty
+      \settoheight\tempdimenA{%
+        \advance\depthofparen@count by1\relax
+        $\displaystyle #1$\rule[0pt]{0pt}{1em}%
+        \advance\depthofparen@count by-1\relax
+      }%
+      \settodepth\tempdimenB{%
+        \advance\depthofparen@count by1\relax
+        $\displaystyle #1$\rule[0pt]{0pt}{1em}%
+        \advance\depthofparen@count by-1\relax
+      }%
+    \else
+      \tempdimenA=#4\relax
+      \tempdimenB=#5\relax
+    \fi
     \expandafter\def\expandafter\tempcsD\expandafter{\the\tempdimenB}%
     \expandafter\let\csname depth[\the\depthofparen@count]\endcsname=\tempcsD
-%
+  %
     \advance\tempdimenA by\tempdimenB\relax
     \expandafter\def\expandafter\tempcsS\expandafter{\the\tempdimenA}%
     \expandafter\let\csname sum[\the\depthofparen@count]\endcsname=\tempcsS
 %
-    \raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $($}}%
+    \mathopen{\raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#2$}}}%
 %
     \advance\depthofparen@count by1\relax
     \ifmmode #1\else\displaystyle #1\fi
@@ -46,21 +49,85 @@
     \expandafter\tempdimenB\expandafter=\tempcsD\relax
     \expandafter\tempdimenA\expandafter=\tempcsS\relax
 %
-    \raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $)$}}%
+    \mathclose{\raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#3$}}}%
 %
     \advance\tempdimenA by0.1zw\relax
     \rule[-\tempdimenB]{0pt}{\tempdimenA}%
   \fi
 }
-\def\sqbrc#1{\left[#1\right]}
-\def\curlybrc#1{\left\{#1\right\}}
+\def\genparenwithmiddle#1#2#3#4#5{%
+  \def\leftcontent@defcs{#1}%
+  \def\rightcontent@defcs{#2}%
+  \def\middlesign@defcs{#3}%
+  \def\openparen@defcs{#4}%
+  \def\closeparen@defcs{#5}%
+  \settoheight\tempdimenA{$\displaystyle #1$}%
+  \settoheight\tempdimenB{$\displaystyle #2$}%
+  \ifdim\tempdimenA>\tempdimenB
+    \expandafter\def\expandafter\largerheight\expandafter{\the\tempdimenA}%
+  \else
+    \expandafter\def\expandafter\largerheight\expandafter{\the\tempdimenB}%
+  \fi
+  \settodepth\tempdimenA{$\displaystyle #1$}%
+  \settodepth\tempdimenB{$\displaystyle #2$}%
+  \ifdim\tempdimenA>\tempdimenB
+    \expandafter\def\expandafter\largerdepth\expandafter{\the\tempdimenA}%
+  \else
+    \expandafter\def\expandafter\largerdepth\expandafter{\the\tempdimenB}%
+  \fi
+  \expandafter\let\csname lcnt[\the\depthofparen@count]\endcsname=\leftcontent@defcs
+  \expandafter\let\csname rcnt[\the\depthofparen@count]\endcsname=\rightcontent@defcs
+  \expandafter\let\csname msgn[\the\depthofparen@count]\endcsname=\middlesign@defcs
+  \expandafter\let\csname opn[\the\depthofparen@count]\endcsname=\openparen@defcs
+  \expandafter\let\csname cls[\the\depthofparen@count]\endcsname=\closeparen@defcs
+  \expandafter\let\csname lgrhgt[\the\depthofparen@count]\endcsname=\largerheight
+  \expandafter\let\csname lgrdpt[\the\depthofparen@count]\endcsname=\largerdepth
+  %
+  \expandafter\expandafter\expandafter\genparen
+    \expandafter\expandafter\expandafter{%
+    \expandafter\expandafter\expandafter\leftcontent@defcs
+    \expandafter\expandafter\expandafter}%
+    \expandafter\expandafter\expandafter{%
+    \expandafter\expandafter\expandafter\openparen@defcs
+    \expandafter\expandafter\expandafter}%
+    \expandafter\expandafter\expandafter{%
+    \expandafter\expandafter\expandafter\middlesign@defcs
+    \expandafter\expandafter\expandafter}%
+    \expandafter\expandafter\expandafter{%
+    \expandafter\largerheight\expandafter}\expandafter{\largerdepth}%
+  %
+  \expandafter\let\expandafter\leftcontent@defcs\expandafter=\csname lcnt[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\rightcontent@defcs\expandafter=\csname rcnt[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\middlesign@defcs\expandafter=\csname msgn[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\openparen@defcs\expandafter=\csname opn[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\closeparen@defcs\expandafter=\csname cls[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\largerheight\expandafter=\csname lgrhgt[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\largerdepth\expandafter=\csname lgrdpt[\the\depthofparen@count]\endcsname
+  %
+  \expandafter\expandafter\expandafter\genparen
+    \expandafter\expandafter\expandafter{%
+    \expandafter\expandafter\expandafter\rightcontent@defcs
+    \expandafter\expandafter\expandafter}%
+    \expandafter\expandafter\expandafter{%
+    \expandafter\expandafter\expandafter\empty
+    \expandafter\expandafter\expandafter}%
+    \expandafter\expandafter\expandafter{%
+    \expandafter\expandafter\expandafter\closeparen@defcs
+    \expandafter\expandafter\expandafter}%
+    \expandafter\expandafter\expandafter{%
+    \expandafter\largerheight\expandafter}\expandafter{\largerdepth}%
+}
+\def\paren#1{\genparen{#1}{(}{)}{}{}}
+\def\sqbrc#1{\genparen{#1}{[}{]}{}{}}
+\def\curlybrc#1{\genparen{#1}{\{}{\}}{}{}}
 \def\absprn#1{\left|#1\right|}
 \def\dist#1{\left\|#1\right\|}
-\def\setprn#1{\left\{#1\right\}}
+\def\setprn#1{\genparen{#1}{\{}{\}}{}{}}
     %集合用の括弧
-\def\seqprn#1{\left(#1\right)}
+\def\seqprn#1{\genparen{#1}{(}{)}{}{}}
     %直積の元の括弧
-\def\setprnsep#1#2{\setprn{\:#1\:|\:#2\:}}
+%\def\setprnsep#1#2{\setprn{\:#1\:|\:#2\:}}
+\def\setprnsep#1#2{\genparenwithmiddle{#1\:}{\:#2}{|}{\{}{\}}}
     %分出公理に基づいて定義される集合用の括弧
 %---函数引数用括弧----------------------
 \newcount\casefprn@gfncmd
@@ -70,13 +137,14 @@
 \def\usesmallfprn{\casefprn@gfncmd=2\relax}
 \def\fprn#1{%
   \ifcase\casefprn@gfncmd
-    \!\paren{#1}%
+    \paren{#1}%
   \or
     {\scriptstyle\paren{#1}}%
   \or
     \text{\small$\displaystyle\paren{#1}$}%
   \fi
 }
+\def\apply#1#2{#1\fprn{#2}}
 %
 %===集合========================================================================
 %---有名な集合--------------------------
@@ -155,17 +223,26 @@
     \fi
   }%
 }
-% ---- 開区間・閉区間 ----
-\def\openinterval#1#2{\left(#1, #2\right)}
-\def\closedinterval#1#2{\left[#1, #2\right]}
-\def\openclosedinterval#1#2{\left(#1, #2\right]}
-\def\closedopeninterval#1#2{\left[#1, #2\right)}
-% ---- 函数の定義域と値域 ----
-\def\funcdoms#1#2#3{#1:{\:}#2\to#3}
+% ---- interval ----
+\def\openinterval#1#2{\genparen{#1, #2}{(}{)}{}{}}
+\def\closedinterval#1#2{\genparen{#1, #2}{[}{]}{}{}}
+\def\openclosedinterval#1#2{\genparen{#1, #2}{(}{]}{}{}}
+\def\closedopeninterval#1#2{\genparen{#1, #2}{[}{)}{}{}}
+% ---- the display of domain and codomain of a function ----
+\def\funcdoms#1#2#3{#1:{\:}#2 \to #3}
+\def\funcdomswidebox#1#2#3#4#5{%
+  \begin{center}
+    \begin{tabular}{lccc}
+      $\displaystyle #1:$ & $\displaystyle #2$ & $\longrightarrow$ & $\displaystyle #3$
+    \\
+       & \rotatebox[origin=c]{90}{$\in$} & & \rotatebox[origin=c]{90}{$\in$}
+    \\
+       & $\displaystyle #4$ & $\longmapsto$ & $\displaystyle #5$
+    \end{tabular}
+  \end{center}
+}
 %
-% ---- 論理類 ----
-%\def\Defarrow{\stackrel{\mathrm{def.}}{\Leftrightarrow}}
-%\newcommand{\suchthat}{\quad \mathrm{s.t.} \quad}
+% ---- end of proof ----
 \def\qed{\hfill ■}
 %
 %===記号論理====================================================================
