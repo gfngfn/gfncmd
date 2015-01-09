@@ -80,13 +80,13 @@
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
   \ifcase\styleofqtfr@case
   %%%%(0: \usepluralqtfr)
-    \iffoundinlist{\lfparamR@defcs}{\listRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}%
+    \iffoundinlist{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}%
   \or%(1: \usesingleqtfr)
-    \iffoundinlist{\lfparamR@defcs}{\listRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}%
+    \iffoundinlist{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{;\ #2}{;\ \paren{#2}}%
   \or%(2: \usedotpluralqtfr)
-    \iffoundinlist{\lfparamR@defcs}{\listRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}%
+    \iffoundinlist{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}%
   \or%(3: \usedotsingleqtfr)
-    \iffoundinlist{\lfparamR@defcs}{\listRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}%
+    \iffoundinlist{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{.\ #2}{.\ \paren{#2}}%
   \or%(4: \useparenpluralqtfr)
     \ \paren{#2}%
   \or%(5: \useparensingleqtfr)
@@ -114,82 +114,100 @@
   \in\setofqtfr@defcs
 }
 % define when paren is omittable
-\def\listLlfland@defcs{\lffml\lfpv\lflnot\lfland}
-\def\listLlflor@defcs{\lffml\lfpv\lflnot\lflor}
-\def\listLlflimpl@defcs{\lffml\lfpv\lflnot\lfland\lflor}
-\def\listLlflimpleqv@defcs{\lffml\lfpv\lflnot\lfland\lflor}
+\def\omitlistLlfland@defcs{\lfpv\lflnot\lfland}
+\def\mndtlistLlfland@defcs{\lfqtfr\lflor\lflimpl\lflimpleqv}
+\def\omitlistLlflor@defcs{\lfpv\lflnot\lflor}
+\def\mndtlistLlflor@defcs{\lfqtfr\lfland\lflimpl\lflimpleqv}
+\def\omitlistLlflimpl@defcs{\lfpv\lflnot\lfland\lflor}
+\def\mndtlistLlflimpl@defcs{\lfqtfr\lflimpl\lflimpleqv}
+\def\omitlistLlflimpleqv@defcs{\lfpv\lflnot\lfland\lflor}
+\def\mndtlistLlflimpleqv@defcs{\lfqtfr\lflimpl\lflimpleqv}
 %
-\def\listRlfqtfr@defcs{\lffml\lfpv\lflnot}
-\def\listRlflnot@defcs{\lfpv\lflnot\lfqtfr}
-\def\listRlfland@defcs{\lffml\lfpv\lflnot\lfland}
-\def\listRlflor@defcs{\lffml\lfpv\lflnot\lflor}
-\def\listRlflimpl@defcs{\lffml\lfpv\lflnot\lfland\lflor\lflimpl}
-\def\listRlflimpleqv@defcs{\lffml\lfpv\lflnot\lfland\lflor}
+\def\omitlistRlfqtfr@defcs{\lfpv\lflnot}
+\def\mndtlistRlfqtfr@defcs{\lfqtfr\lfland\lflor\lflimpl\lflimpleqv}
+\def\omitlistRlflnot@defcs{\lfpv\lflnot\lfqtfr}
+\def\mndtlistRlflnot@defcs{\lfland\lflor\lflimpl\lflimpleqv}
+\def\omitlistRlfland@defcs{\lfpv\lflnot\lfland}
+\def\mndtlistRlfland@defcs{\lfqtfr\lflor\lflimpl\lflimpleqv}
+\def\omitlistRlflor@defcs{\lfpv\lflnot\lflor}
+\def\mndtlistRlflor@defcs{\lfqtfr\lfland\lflimpl\lflimpleqv}
+\def\omitlistRlflimpl@defcs{\lfpv\lflnot\lfland\lflor\lflimpl}
+\def\mndtlistRlflimpl@defcs{\lfqtfr\lflimpleqv}
+\def\omitlistRlflimpleqv@defcs{\lfpv\lflnot\lfland\lflor}
+\def\mndtlistRlflimpleqv@defcs{\lfqtfr\lflimpl\lflimpleqv}
 %
-\newif\iffoundmpo@bool
 \def\makerightparenomittable#1#2{%
-  \foundmpo@boolfalse
-  \expandafter\def\expandafter\tempmposub@defcs\expandafter{\csname#2\endcsname}%
-  \expandafter\let\expandafter\templist@letcs\expandafter=\csname listR#1@defcs\endcsname
-  \expandafter\@tfor\expandafter\tkmpo@tforcs\expandafter:\expandafter=\templist@letcs\do{%
-    \ifx\tkmpo@tforcs\tempmposub@defcs
-      \foundmpo@booltrue
-    \fi
-  }%
-  \iffoundmpo@bool
-  \else
-    \expandafter\expandafter\expandafter\def
-      \expandafter\expandafter\expandafter\templist@letcs
-      \expandafter\expandafter\expandafter{%
-      \expandafter\templist@letcs\csname#2\endcsname}%
-    \expandafter\let\csname listR#1@defcs\endcsname=\templist@letcs
-  \fi
+  \expandafter\def\expandafter\added@defcs\expandafter{\csname#2\endcsname}%
+%
+  \expandafter\let\expandafter\tempomitlist@letcs\expandafter=\csname omitlistR#1@defcs\endcsname
+  \addtokentolist{\added@defcs}{\tempomitlist@letcs}%
+  \expandafter\let\csname omitlistR#1@defcs\endcsname=\tempomitlist@letcs
+%
+  \expandafter\let\expandafter\tempmndtlist@letcs\expandafter=\csname mndtlistR#1@defcs\endcsname
+  \deletetokenfromlist{\added@defcs}{\tempmndtlist@letcs}%
+  \expandafter\let\csname mndtlistR#1@defcs\endcsname=\tempmndtlist@letcs
 }
 \def\makeleftparenomittable#1#2{%
-  \foundmpo@boolfalse
-  \expandafter\def\expandafter\tempmposub@defcs\expandafter{\csname#2\endcsname}%
-  \expandafter\let\expandafter\templist@letcs\expandafter=\csname listL#1@defcs\endcsname
-  \expandafter\@tfor\expandafter\tkmpo@tforcs\expandafter:\expandafter=\templist@letcs\do{%
-    \ifx\tkmpo@tforcs\tempmposub@defcs
-      \foundmpo@booltrue
-    \fi
-  }%
-  \iffoundmpo@bool
-  \else
-    \expandafter\expandafter\expandafter\def
-      \expandafter\expandafter\expandafter\templist@letcs
-      \expandafter\expandafter\expandafter{%
-      \expandafter\templist@letcs\csname#2\endcsname}%
-    \expandafter\let\csname listL#1@defcs\endcsname=\templist@letcs
-  \fi
+  \expandafter\def\expandafter\added@defcs\expandafter{\csname#2\endcsname}%
+%
+  \expandafter\let\expandafter\tempomitlist@letcs\expandafter=\csname omitlistL#1@defcs\endcsname
+  \addtokentolist{\added@defcs}{\tempomitlist@letcs}%
+  \expandafter\let\csname omitlistL#1@defcs\endcsname=\tempomitlist@letcs
+%
+  \expandafter\let\expandafter\tempmndtlist@letcs\expandafter=\csname mndtlistL#1@defcs\endcsname
+  \deletetokenfromlist{\added@defcs}{\tempmndtlist@letcs}%
+  \expandafter\let\csname mndtlistL#1@defcs\endcsname=\tempmndtlist@letcs
 }
 \def\makerightparenmandatory#1#2{%
-  \def\tempmpo@defcs{}%
-  \expandafter\def\expandafter\tempmposub@defcs\expandafter{\csname#2\endcsname}%
-  \expandafter\let\expandafter\templist@letcs\expandafter=\csname listR#1@defcs\endcsname
-  \expandafter\@tfor\expandafter\tkmpo@tforcs\expandafter:\expandafter=\templist@letcs\do{%
-    \ifx\tkmpo@tforcs\tempmposub@defcs
-    \else
-      \expandafter\expandafter\expandafter\def
-        \expandafter\expandafter\expandafter\tempmpo@defcs
-        \expandafter\expandafter\expandafter{\expandafter\tempmpo@defcs\tkmpo@tforcs}%
-    \fi
-  }%
-  \expandafter\let\csname listR#1@defcs\endcsname=\tempmpo@defcs
+  \expandafter\def\expandafter\deleted@defcs\expandafter{\csname#2\endcsname}%
+%
+  \expandafter\let\expandafter\tempomitlist@letcs\expandafter=\csname omitlistR#1@defcs\endcsname
+  \deletetokenfromlist{\deleted@defcs}{\tempomitlist@letcs}%
+  \expandafter\let\csname omitlistR#1@defcs\endcsname=\tempomitlist@letcs
+%
+  \expandafter\let\expandafter\tempmndtlist@letcs\expandafter=\csname omitlistR#1@defcs\endcsname
+  \addtokentolist{\deleted@defcs}{\tempmndtlist@letcs}%
+  \expandafter\let\csname mndtlistR#1@defcs\endcsname=\tempmndtlist@letcs
 }
 \def\makeleftparenmandatory#1#2{%
-  \def\tempmpo@defcs{}%
-  \expandafter\def\expandafter\tempmposub@defcs\expandafter{\csname#2\endcsname}%
-  \expandafter\let\expandafter\templist@letcs\expandafter=\csname listL#1@defcs\endcsname
-  \expandafter\@tfor\expandafter\tkmpo@tforcs\expandafter:\expandafter=\templist@letcs\do{%
-    \ifx\tkmpo@tforcs\tempmposub@defcs
+  \expandafter\def\expandafter\deleted@defcs\expandafter{\csname#2\endcsname}%
+%
+  \expandafter\let\expandafter\tempomitlist@letcs\expandafter=\csname omitlistL#1@defcs\endcsname
+  \deletetokenfromlist{\deleted@defcs}{\tempomitlist@letcs}%
+  \expandafter\let\csname omitlistL#1@defcs\endcsname=\tempomitlist@letcs
+%
+  \expandafter\let\expandafter\tempmndtlist@letcs\expandafter=\csname omitlistL#1@defcs\endcsname
+  \addtokentolist{\deleted@defcs}{\tempmndtlist@letcs}%
+  \expandafter\let\csname mndtlistL#1@defcs\endcsname=\tempmndtlist@letcs
+}
+%
+\def\deletetokenfromlist#1#2{%
+  \def\appended@defcs{}%
+  \expandafter\@tfor\expandafter\element@tforcs\expandafter:\expandafter=#2\do{%
+    \ifx\element@tforcs#1
     \else
       \expandafter\expandafter\expandafter\def
-        \expandafter\expandafter\expandafter\tempmpo@defcs
-        \expandafter\expandafter\expandafter{\expandafter\tempmpo@defcs\tkmpo@tforcs}%
+        \expandafter\expandafter\expandafter\appended@defcs
+        \expandafter\expandafter\expandafter{\expandafter\appended@defcs\element@tforcs}%
     \fi
   }%
-  \expandafter\let\csname listL#1@defcs\endcsname=\tempmpo@defcs
+  \let#2=\appended@defcs
+}
+\newif\iffoundtoken@bool
+\def\addtokentolist#1#2{%
+  \foundtoken@boolfalse
+  \expandafter\@tfor\expandafter\element@tforcs\expandafter:\expandafter=#2\do{%
+    \ifx\element@tforcs#1
+      \foundtoken@booltrue
+    \fi
+  }%
+  \iffoundtoken@bool
+  \else
+    \expandafter\expandafter\expandafter\def
+      \expandafter\expandafter\expandafter#2%
+      \expandafter\expandafter\expandafter{%
+      \expandafter#2#1}%
+  \fi
 }
 %
 \newif\iffoundinlist@bool
@@ -206,6 +224,17 @@
     #4%
   \fi
 }
+\def\iffoundinlisttriple#1#2#3#4#5#6{%
+  \iffoundinlist{#1}{#2}{%
+    #4%
+  }{%
+    \iffoundinlist{#1}{#3}{%
+      #5%
+    }{%
+      #6%
+    }%
+  }%
+}
 \newif\ifgft@bool
 \def\getfirsttoken@gfnlf#1#2{%
   \gft@booltrue
@@ -216,46 +245,54 @@
     \fi
   }%
 }
-\def\lfpv#1{#1}%(predicate variables)
-\def\lffml#1{#1}%(formulae)
+\def\fmlskip{\ }%(skip between formula and logical sign)
+\def\lfpv#1{#1}%(predicate/propositional variables)
 \def\lflnot#1{%
   \getfirsttoken@gfnlf{#1}{\lfparamR@defcs}%
   \lnot
-  \iffoundinlist{\lfparamR@defcs}{\listRlflnot@defcs}{#1}{\paren{#1}}%
+  \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflnot@defcs}{\mndtlistLlflnot@defcs}{#1}{\paren{#1}}{\paren{#1}}
 }
 \def\lfland#1#2{%
   \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
-  \iffoundinlist{\lfparamL@defcs}{\listLlfland@defcs}{%
-    \iffoundinlist{\lfparamR@defcs}{\listRlfland@defcs}{#1\land#2}{#1\land\paren{#2}}%
+  \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlfland@defcs}{\mndtlistLlfland@defcs}{%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{#1\land#2}{#1\land\paren{#2}}{#1\land\fmlskip#2}%
   }{%
-    \iffoundinlist{\lfparamR@defcs}{\listRlfland@defcs}{\paren{#1}\land#2}{\paren{#1}\land\paren{#2}}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{\paren{#1}\land#2}{\paren{#1}\land\paren{#2}}{\paren{#1}\land\fmlskip#2}%
+  }{%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{#1\fmlskip\land#2}{#1\fmlskip\land\paren{#2}}{#1\fmlskip\land\fmlskip#2}%
   }%
 }
 \def\lflor#1#2{%
   \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
-  \iffoundinlist{\lfparamL@defcs}{\listLlflor@defcs}{%
-    \iffoundinlist{\lfparamR@defcs}{\listRlflor@defcs}{#1\lor#2}{#1\lor\paren{#2}}%
+  \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflor@defcs}{\mndtlistLlflor@defcs}{%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{#1\lor#2}{#1\lor\paren{#2}}{#1\lor\fmlskip#2}%
   }{%
-    \iffoundinlist{\lfparamR@defcs}{\listRlflor@defcs}{\paren{#1}\lor#2}{\paren{#1}\lor\paren{#2}}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{\paren{#1}\lor#2}{\paren{#1}\lor\paren{#2}}{\paren{#1}\lor\fmlskip#2}%
+  }{%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{#1\fmlskip\lor#2}{#1\fmlskip\lor\paren{#2}}{#1\fmlskip\lor\fmlskip#2}%
   }%
 }
 \def\lflimpl#1#2{%
   \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
-  \iffoundinlist{\lfparamL@defcs}{\listLlflimpl@defcs}{%
-    \iffoundinlist{\lfparamR@defcs}{\listRlflimpl@defcs}{#1\limpl#2}{#1\limpl\paren{#2}}%
+  \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflimpl@defcs}{\mndtlistLlflimpl@defcs}{%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{#1\limpl#2}{#1\limpl\paren{#2}}{#1\limpl\fmlskip#2}%
   }{%
-    \iffoundinlist{\lfparamR@defcs}{\listRlflimpl@defcs}{\paren{#1}\limpl#2}{\paren{#1}\limpl\paren{#2}}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{\paren{#1}\limpl#2}{\paren{#1}\limpl\paren{#2}}{\paren{#1}\limpl\fmlskip#2}%
+  }{%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{#1\fmlskip\limpl#2}{#1\fmlskip\limpl\paren{#2}}{#1\fmlskip\limpl\fmlskip#2}%
   }%
 }
 \def\lflimpleqv#1#2{%
   \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
-  \iffoundinlist{\lfparamL@defcs}{\listLlflimpleqv@defcs}{%
-    \iffoundinlist{\lfparamR@defcs}{\listRlflimpleqv@defcs}{#1\limpleqv#2}{#1\limpleqv\paren{#2}}%
+  \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflimpleqv@defcs}{\mndtlistLlflimpleqv@defcs}{%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{#1\limpleqv#2}{#1\limpleqv\paren{#2}}{#1\limpleqv\fmlskip#2}%
   }{%
-    \iffoundinlist{\lfparamR@defcs}{\listRlflimpleqv@defcs}{\paren{#1}\limpleqv#2}{\paren{#1}\limpleqv\paren{#2}}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{\paren{#1}\limpleqv#2}{\paren{#1}\limpleqv\paren{#2}}{\paren{#1}\limpleqv\fmlskip#2}%
+  }{%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{#1\fmlskip\limpleqv#2}{#1\fmlskip\limpleqv\paren{#2}}{#1\fmlskip\limpleqv\fmlskip#2}%
   }%
 }
