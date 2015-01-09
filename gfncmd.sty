@@ -19,12 +19,12 @@
     \ifx\tempparam@defcs\empty
       \settoheight\tempdimenA{%
         \advance\depthofparen@count by1\relax
-        $\displaystyle #1$\rule[0pt]{0pt}{1em}%
+        $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
         \advance\depthofparen@count by-1\relax
       }%
       \settodepth\tempdimenB{%
         \advance\depthofparen@count by1\relax
-        $\displaystyle #1$\rule[0pt]{0pt}{1em}%
+        $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
         \advance\depthofparen@count by-1\relax
       }%
     \else
@@ -61,15 +61,17 @@
   \def\middlesign@defcs{#3}%
   \def\openparen@defcs{#4}%
   \def\closeparen@defcs{#5}%
-  \settoheight\tempdimenA{$\displaystyle #1$}%
-  \settoheight\tempdimenB{$\displaystyle #2$}%
+%  \settoheight\tempdimenA{$\displaystyle #1$}%
+%  \settoheight\tempdimenB{$\displaystyle #2$}%
+  \settoheight\tempdimenA{$\displaystyle #1$\rule[-0.1zh]{0pt}{1.1zh}}%
+  \settoheight\tempdimenB{$\displaystyle #2$\rule[-0.1zh]{0pt}{1.1zh}}%
   \ifdim\tempdimenA>\tempdimenB
     \expandafter\def\expandafter\largerheight\expandafter{\the\tempdimenA}%
   \else
     \expandafter\def\expandafter\largerheight\expandafter{\the\tempdimenB}%
   \fi
-  \settodepth\tempdimenA{$\displaystyle #1$}%
-  \settodepth\tempdimenB{$\displaystyle #2$}%
+  \settodepth\tempdimenA{$\displaystyle #1$\rule[-0.1zh]{0pt}{1.1zh}}%
+  \settodepth\tempdimenB{$\displaystyle #2$\rule[-0.1zh]{0pt}{1.1zh}}%
   \ifdim\tempdimenA>\tempdimenB
     \expandafter\def\expandafter\largerdepth\expandafter{\the\tempdimenA}%
   \else
