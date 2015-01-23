@@ -61,8 +61,6 @@
   \def\middlesign@defcs{#3}%
   \def\openparen@defcs{#4}%
   \def\closeparen@defcs{#5}%
-%  \settoheight\tempdimenA{$\displaystyle #1$}%
-%  \settoheight\tempdimenB{$\displaystyle #2$}%
   \settoheight\tempdimenA{$\displaystyle #1$\rule[-0.1zh]{0pt}{1.1zh}}%
   \settoheight\tempdimenB{$\displaystyle #2$\rule[-0.1zh]{0pt}{1.1zh}}%
   \ifdim\tempdimenA>\tempdimenB
@@ -125,10 +123,7 @@
 \def\absprn#1{\left|#1\right|}
 \def\dist#1{\left\|#1\right\|}
 \def\setprn#1{\genparen{#1}{\{}{\}}{}{}}
-    %集合用の括弧
 \def\seqprn#1{\genparen{#1}{(}{)}{}{}}
-    %直積の元の括弧
-%\def\setprnsep#1#2{\setprn{\:#1\:|\:#2\:}}
 \def\setprnsep#1#2{\genparenwithmiddle{#1\:}{\:#2}{|}{\{}{\}}}
     %分出公理に基づいて定義される集合用の括弧
 %---函数引数用括弧----------------------
@@ -539,7 +534,7 @@
 }
 \let\trps=\transposed
 \newcommand{\newword}[2][\relax]{%
-  \textgt{#2}%
+  \textsf{#2}%
   \ifx{#1}\relax
   \else
     \index{#1}%

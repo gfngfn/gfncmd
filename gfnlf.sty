@@ -18,25 +18,30 @@
 \newif\ifdealwithqtfr@bool
 \newif\ifafterdeal@bool
 \newif\iftempbeginning@bool
-\def\lfqtfr#1#2{%
+\def\lfqtfrpunctskip{\ }
+\def\lfqtfrparenskip{\ }
+\def\lfqtfrnoparenskip{\ \ }
+\def\inserttaboption@defcs{a}
+\def\escapedtabchar{&}
+\newcommand\lfqtfr[3][\relax]{%
   \afterdeal@boolfalse
-  \@tfor\tok@tforcs:=#1\do{%
+  \@tfor\tok@tforcs:=#2\do{%
     \expandafter\def\expandafter\tempparam@gfnlf\expandafter{\tok@tforcs}%
     \ifafterdeal@bool
       \afterdeal@boolfalse
       \ifcase\styleofqtfr@case
       %%%%(0: \usepluralqtfr)
-        ,\ %
+        ,\lfqtfrpunctskip
       \or%(1: \usesingleqtfr)
-        ,\ %
+        ,\lfqtfrpunctskip
       \or%(2: \usedotpluralqtfr)
-        .\ %
+        .\lfqtfrpunctskip
       \or%(3: \usedotsingleqtfr)
-        .\ %
+        .\lfqtfrpunctskip
       \or%(4: \useparenpluralqtfr)
-        ,\ %
+        ,\lfqtfrpunctskip
       \or%(5: \useparensingleqtfr)
-        ,\ %
+        ,\lfqtfrpunctskip
       \fi
     \fi
     \ifreadtermsofqtfr@bool
@@ -77,20 +82,28 @@
       \fi
     \fi
   }%
-  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
+  \def\tempparam@defcs{#1}%
+  \ifx\tempparam@defcs\inserttaboption@defcs
+    \escapedtabchar
+  \fi
+  \getfirsttoken@gfnlf{#3}{\lfparamR@defcs}%
   \ifcase\styleofqtfr@case
   %%%%(0: \usepluralqtfr)
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{;\ \ #2}{;\ \paren{#2}}{;\ \ #2}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{%
+      ;\lfqtfrnoparenskip#3}{;\lfqtfrparenskip\paren{#3}}{;\lfqtfrnoparenskip#3}%
   \or%(1: \usesingleqtfr)
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{;\ \ #2}{;\ \paren{#2}}{;\ \ #2}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{%
+      ;\lfqtfrnoparenskip#3}{;\lfqtfrparenskip\paren{#3}}{;\lfqtfrnoparenskip#3}%
   \or%(2: \usedotpluralqtfr)
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{.\ \ #2}{.\ \paren{#2}}{.\ \ #2}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{%
+      .\lfqtfrnoparenskip#3}{.\lfqtfrparenskip\paren{#3}}{.\lfqtfrnoparenskip#3}%
   \or%(3: \usedotsingleqtfr)
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{.\ \ #2}{.\ \paren{#2}}{.\ \ #2}%
+    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{%
+      .\lfqtfrnoparenskip#3}{.\lfqtfrparenskip\paren{#3}}{.\lfqtfrnoparenskip#3}%
   \or%(4: \useparenpluralqtfr)
-    \ \paren{#2}%
+    \lfqtfrparenskip\paren{#3}%
   \or%(5: \useparensingleqtfr)
-    \ \paren{#2}%
+    \lfqtfrparenskip\paren{#3}%
   \fi
 }%
 %
@@ -215,24 +228,25 @@
   }%
 }
 \def\fmlskip{\ }% (skip between formula and logical sign)
+\def\noparenskip{\ }%
 \def\lfpv#1{#1}% (predicate/propositional variables)
 \def\lflnot#1{%
   \getfirsttoken@gfnlf{#1}{\lfparamR@defcs}%
   \lnot
-  \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflnot@defcs}{\mndtlistLlflnot@defcs}{#1}{\paren{#1}}{\paren{#1}}
+  \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflnot@defcs}{\mndtlistRlflnot@defcs}{#1}{\paren{#1}}{\paren{#1}}
 }
 \def\lfland#1#2{%
   \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
   \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlfland@defcs}{\mndtlistLlfland@defcs}{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{%
-      #1\land#2}{#1\land\paren{#2}}{#1\land\fmlskip#2}%
+      #1\noparenskip\land\noparenskip#2}{#1\noparenskip\land\paren{#2}}{#1\noparenskip\land\fmlskip#2}%
   }{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{%
-      \paren{#1}\land#2}{\paren{#1}\land\paren{#2}}{\paren{#1}\land\fmlskip#2}%
+      \paren{#1}\land\noparenskip#2}{\paren{#1}\land\paren{#2}}{\paren{#1}\land\fmlskip#2}%
   }{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{%
-      #1\fmlskip\land#2}{#1\fmlskip\land\paren{#2}}{#1\fmlskip\land\fmlskip#2}%
+      #1\fmlskip\land\noparenskip#2}{#1\fmlskip\land\paren{#2}}{#1\fmlskip\land\fmlskip#2}%
   }%
 }
 \def\lflor#1#2{%
@@ -240,13 +254,13 @@
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
   \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflor@defcs}{\mndtlistLlflor@defcs}{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{%
-      #1\lor#2}{#1\lor\paren{#2}}{#1\lor\fmlskip#2}%
+      #1\noparenskip\lor\noparenskip#2}{#1\noparenskip\lor\paren{#2}}{#1\noparenskip\lor\fmlskip#2}%
   }{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{%
-      \paren{#1}\lor#2}{\paren{#1}\lor\paren{#2}}{\paren{#1}\lor\fmlskip#2}%
+      \paren{#1}\lor\noparenskip#2}{\paren{#1}\lor\paren{#2}}{\paren{#1}\lor\fmlskip#2}%
   }{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{%
-      #1\fmlskip\lor#2}{#1\fmlskip\lor\paren{#2}}{#1\fmlskip\lor\fmlskip#2}%
+      #1\fmlskip\lor\noparenskip#2}{#1\fmlskip\lor\paren{#2}}{#1\fmlskip\lor\fmlskip#2}%
   }%
 }
 \def\lflimpl#1#2{%
@@ -254,13 +268,13 @@
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
   \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflimpl@defcs}{\mndtlistLlflimpl@defcs}{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{%
-      #1\limpl#2}{#1\limpl\paren{#2}}{#1\limpl\fmlskip#2}%
+      #1\noparenskip\limpl\noparenskip#2}{#1\noparenskip\limpl\paren{#2}}{#1\noparenskip\limpl\fmlskip#2}%
   }{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{%
-      \paren{#1}\limpl#2}{\paren{#1}\limpl\paren{#2}}{\paren{#1}\limpl\fmlskip#2}%
+      \paren{#1}\limpl\noparenskip#2}{\paren{#1}\limpl\paren{#2}}{\paren{#1}\limpl\fmlskip#2}%
   }{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{%
-      #1\fmlskip\limpl#2}{#1\fmlskip\limpl\paren{#2}}{#1\fmlskip\limpl\fmlskip#2}%
+      #1\fmlskip\limpl\noparenskip#2}{#1\fmlskip\limpl\paren{#2}}{#1\fmlskip\limpl\fmlskip#2}%
   }%
 }
 \def\lflimpleqv#1#2{%
@@ -268,12 +282,12 @@
   \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
   \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflimpleqv@defcs}{\mndtlistLlflimpleqv@defcs}{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{%
-      #1\limpleqv#2}{#1\limpleqv\paren{#2}}{#1\limpleqv\fmlskip#2}%
+      #1\noparenskip\limpleqv\noparenskip#2}{#1\noparenskip\limpleqv\paren{#2}}{#1\noparenskip\limpleqv\fmlskip#2}%
   }{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{%
-      \paren{#1}\limpleqv#2}{\paren{#1}\limpleqv\paren{#2}}{\paren{#1}\limpleqv\fmlskip#2}%
+      \paren{#1}\limpleqv\noparenskip#2}{\paren{#1}\limpleqv\paren{#2}}{\paren{#1}\limpleqv\fmlskip#2}%
   }{%
     \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{%
-      #1\fmlskip\limpleqv#2}{#1\fmlskip\limpleqv\paren{#2}}{#1\fmlskip\limpleqv\fmlskip#2}%
+      #1\fmlskip\limpleqv\noparenskip#2}{#1\fmlskip\limpleqv\paren{#2}}{#1\fmlskip\limpleqv\fmlskip#2}%
   }%
 }
