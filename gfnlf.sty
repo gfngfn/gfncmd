@@ -1,295 +1,249 @@
-% +-----------------------------------------------------+
-% | gfnlf.sty ver. 0.05                                 |
-% |   (C) @bd_gfngfn on Twitter, gfngfn on GitHub       |
-% +-----------------------------------------------------+
-\newcount\styleofqtfr@case
-\styleofqtfr@case=0\relax
-\def\usepluralqtfr{\styleofqtfr@case=0\relax}
-\def\usesingleqtfr{\styleofqtfr@case=1\relax}
-\def\usedotpluralqtfr{\styleofqtfr@case=2\relax}
-\def\usedotsingleqtfr{\styleofqtfr@case=3\relax}
-\def\useparenpluralqtfr{\styleofqtfr@case=4\relax}
-\def\useparensingleqtfr{\styleofqtfr@case=5\relax}
+%%
+%% This is file `gfnlf.sty',
+%% a LaTeX package for writing logical formulae in structurized style.
+%%
+%% Copyright 2015 gfn (Takashi SUWA)
+%%      Email (Private) : b d . g f n g f n ( a t m a r k ) g m a i l . c o m
+%%               GitHub : https://github.com/gfngfn
+%%             Web Site : http://buddhagaja.soregashi.com/
+%%
+\NeedsTeXFormat{LaTeX2e}
+  [1994/12/01]% LaTeX date must be December 1994 or later
+\ProvidesPackage{gfnlf}[2015/02/07 v0.9 by gfn (Takashi SUWA)]
 %
-\def\forallinsub@gfnlf{\forallin}
-\def\existsinsub@gfnlf{\existsin}
-\newif\ifreadtermsofqtfr@bool
-\newif\ifreadsetofqtfr@bool
-\newif\ifdealwithqtfr@bool
-\newif\ifafterdeal@bool
-\newif\iftempbeginning@bool
-\def\lfqtfrpunctskip{\ }
-\def\lfqtfrparenskip{\ }
-\def\lfqtfrnoparenskip{\ \ }
-\def\inserttaboption@defcs{a}
-\def\escapedtabchar{&}
-\newcommand\lfqtfr[3][\relax]{%
-  \afterdeal@boolfalse
-  \@tfor\tok@tforcs:=#2\do{%
-    \expandafter\def\expandafter\tempparam@gfnlf\expandafter{\tok@tforcs}%
-    \ifafterdeal@bool
-      \afterdeal@boolfalse
-      \ifcase\styleofqtfr@case
-      %%%%(0: \usepluralqtfr)
-        ,\lfqtfrpunctskip
-      \or%(1: \usesingleqtfr)
-        ,\lfqtfrpunctskip
-      \or%(2: \usedotpluralqtfr)
-        .\lfqtfrpunctskip
-      \or%(3: \usedotsingleqtfr)
-        .\lfqtfrpunctskip
-      \or%(4: \useparenpluralqtfr)
-        ,\lfqtfrpunctskip
-      \or%(5: \useparensingleqtfr)
-        ,\lfqtfrpunctskip
-      \fi
-    \fi
-    \ifreadtermsofqtfr@bool
-      \readtermsofqtfr@boolfalse
-      \expandafter\def\expandafter\termsofqtfr@defcs\expandafter{\tok@tforcs}%
-      \readsetofqtfr@booltrue
-    \else%
-      \ifreadsetofqtfr@bool%
-        \readsetofqtfr@boolfalse%
-        \expandafter\def\expandafter\setofqtfr@defcs\expandafter{\tok@tforcs}%
-        % ---- main process for displaying a quantifier, terms and a set
-        \ifcase\styleofqtfr@case
-        %%%%(0: \usepluralqtfr)
-          \pluralqtfr@subroutine
-        \or%(1: \usesingleqtfr)
-          \singleqtfr@subroutine
-        \or%(2: \usedotpluralqtfr)
-          \pluralqtfr@subroutine
-        \or%(3: \usesingleqtfr)
-          \singleqtfr@subroutine
-        \or%(4: \useparenpluralqtfr)
-          \pluralqtfr@subroutine
-        \or%(5: \useparensingleqtfr)
-          \singleqtfr@subroutine
-        \fi
-        %/----
-        \afterdeal@booltrue
-      \else
-        \ifx\forallinsub@gfnlf\tempparam@gfnlf
-          \let\quantifier@letcs=\forall
-          \readtermsofqtfr@booltrue
-        \else
-          \ifx\existsinsub@gfnlf\tempparam@gfnlf
-            \let\quantifier@letcs=\exists
-            \readtermsofqtfr@booltrue
-          \else
-            \tempparam@gfnlf
-          \fi
-        \fi
-      \fi
-    \fi
-  }%
-  \def\tempparam@defcs{#1}%
-  \ifx\tempparam@defcs\inserttaboption@defcs
-    \escapedtabchar
-  \fi
-  \getfirsttoken@gfnlf{#3}{\lfparamR@defcs}%
-  \ifcase\styleofqtfr@case
-  %%%%(0: \usepluralqtfr)
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{%
-      ;\lfqtfrnoparenskip#3}{;\lfqtfrparenskip\paren{#3}}{;\lfqtfrnoparenskip#3}%
-  \or%(1: \usesingleqtfr)
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{%
-      ;\lfqtfrnoparenskip#3}{;\lfqtfrparenskip\paren{#3}}{;\lfqtfrnoparenskip#3}%
-  \or%(2: \usedotpluralqtfr)
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{%
-      .\lfqtfrnoparenskip#3}{.\lfqtfrparenskip\paren{#3}}{.\lfqtfrnoparenskip#3}%
-  \or%(3: \usedotsingleqtfr)
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfqtfr@defcs}{\mndtlistRlfqtfr@defcs}{%
-      .\lfqtfrnoparenskip#3}{.\lfqtfrparenskip\paren{#3}}{.\lfqtfrnoparenskip#3}%
-  \or%(4: \useparenpluralqtfr)
-    \lfqtfrparenskip\paren{#3}%
-  \or%(5: \useparensingleqtfr)
-    \lfqtfrparenskip\paren{#3}%
-  \fi
-}%
+% ---- control sequence for option declaration ----
+\def\usesinglequantifier{\def\gfncmd@option@quantifier{0}}
+\def\usepluralquantifier{\def\gfncmd@option@quantifier{1}}
+\def\usedotsinglequantifier{\def\gfncmd@option@quantifier{2}}
+\def\usedotpluralquantifier{\def\gfncmd@option@quantifier{3}}
+\def\useparensinglequantifier{\def\gfncmd@option@quantifier{4}}
+\def\useparenpluralquantifier{\def\gfncmd@option@quantifier{5}}
+\usedotpluralquantifier
 %
-\def\pluralqtfr@subroutine{%
-  \expandafter\@tfor\expandafter\term@tforcs\expandafter:\expandafter=\termsofqtfr@defcs\do{%
-    \quantifier@letcs\term@tforcs
-  }%
-  \in\setofqtfr@defcs
+\def\quantifierparenskip{\hspace{0.25em}}
+\def\quantifiernoparenskip{\hspace{0.75em}}
+\def\operatorparenskip{\hspace{0.125em}}
+\def\operatornoparenskip{\hspace{0.25em}}
+%
+% ---- general quantifier ----
+\def\quantifier#1#2#3#4#5#6{%
+  \gfncmd@subquantifier#1|\gfncmd@punct{#2}{#3}{#4}{#5}{0}{#6}%
 }
-\def\singleqtfr@subroutine{%
-  \tempbeginning@booltrue
-  \expandafter\@tfor\expandafter\term@tforcs\expandafter:\expandafter=\termsofqtfr@defcs\do{%
-    \iftempbeginning@bool
-      \tempbeginning@boolfalse
-      \quantifier@letcs
-    \else%
-      , %
+\def\gfncmd@subquantifier#1|#2\gfncmd@punct#3#4#5#6#7#8{
+    % #3 : set
+    % #4 : main formula
+    % #5 : quantifier such as \forall
+    % #6 : binary operator such as \in
+  \ifcase#7\relax
+  %%%%(first time)
+    #5#1%
+  \or%(after first time)
+    \expandafter\ifcase\gfncmd@option@quantifier\relax
+    %%%%(option: \usesinglequantifier)
+      , #1%
+    \or%(option: \usepluralquantifier)
+      #5#1%
+    \or%(option: \usedotsinglequantifier)
+      , #1%
+    \or%(option: \usedotpluralquantifier)
+      #5#1%
+    \or%(option: \useparensinglequantifier)
+      , #1%
+    \or%(option: \useparenpluralquantifier)
+      #5#1%
     \fi
-    \term@tforcs
-  }%
-  \in\setofqtfr@defcs
+  \fi
+  \ifx\relax#2\relax
+    #6#3%
+    % whether inserting tab character or not
+    \ifcase#8\relax
+    \else
+      \gfncmd@escapetabchar
+    \fi
+    \expandafter\ifcase\gfncmd@option@quantifier\relax
+    %%%%(option: \usesinglequantifier)
+      \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@omitlistRquantifier}{\quantifiernoparenskip#4}{%
+        \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@mndtlistRquantifier}{%
+          \quantifierparenskip\paren{#4}}{\quantifiernoparenskip#4}}%
+    \or%(option: \usepluralquantifier)
+      \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@omitlistRquantifier}{\quantifiernoparenskip#4}{%
+        \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@mndtlistRquantifier}{%
+          \quantifierparenskip\paren{#4}}{\quantifiernoparenskip#4}}%
+    \or%(option: \usedotsinglequantifier)
+      .%
+      \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@omitlistRquantifier}{\quantifiernoparenskip#4}{%
+        \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@mndtlistRquantifier}{%
+          \quantifierparenskip\paren{#4}}{\quantifiernoparenskip#4}}%
+    \or%(option: \usedotpluralquantifier)
+      .%
+      \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@omitlistRquantifier}{\quantifiernoparenskip#4}{%
+        \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@mndtlistRquantifier}{%
+          \quantifierparenskip\paren{#4}}{\quantifiernoparenskip#4}}%
+    \or%(option: \useparensinglequantifier)
+      \quantifierparenskip\paren{#4}%
+    \or%(option: \useparenpluralquantifier)
+      \quantifierparenskip\paren{#4}%
+    \fi
+  \else
+    \gfncmd@subquantifier#2\gfncmd@punct{#3}{#4}{#5}{#6}{1}{#8}%
+  \fi
 }
-% define when paren is omittable or mandatory
-%   if neigher \omitlist.. nor \mndtlist.. contains the token T,
+\def\gfncmd@escapetabchar{&}
+%
+% ---- concrete quantifier ----
+\newcommand\forallin[4][0]{\quantifier{#2}{#3}{#4}{\forall}{\in}{#1}}
+\newcommand\existsin[4][0]{\quantifier{#1}{#2}{#3}{\exists}{\in}{#1}}
+%
+% ---- other logical operators ----
+\def\lfpv#1{#1}
+\def\lflnot#1{%
+  \lnot
+  \gfncmd@checkparenisneeded#1\gfncmd@punct{\gfncmd@omitlistRlflnot}{#1}{\paren{#1}}%
+}
+%
+% ---- general logical binary operator ----
+\def\logicalbinaryoperator#1#2#3#4#5#6#7{%
+    % #1 : left argument formula
+    % #2 : right argument formula
+    % #3 : logical binary operator
+    % #4 : list of left-paren-omittable token
+    % #5 : list of left-paren-mandatory token
+    % #6 : list of right-paren-omittable token
+    % #7 : list of right-paren-mandatory token
+  \gfncmd@checkparenisneeded#1\gfncmd@punct{#4}{#1\operatornoparenskip}{%
+    \gfncmd@checkparenisneeded#1\gfncmd@punct{#5}{%
+      \paren{#1}\operatorparenskip}{#1\operatornoparenskip}}%
+  #3%
+  \gfncmd@checkparenisneeded#2\gfncmd@punct{#6}{\operatornoparenskip#2}{%
+    \gfncmd@checkparenisneeded#2\gfncmd@punct{#7}{%
+      \operatorparenskip\paren{#2}}{\operatornoparenskip#2}}%
+}
+\def\gfncmd@checkparenisneeded#1#2\gfncmd@punct#3#4#5{%
+    % #1#2 : argument formula
+    % #3 : list of paren-omittable token
+  \gfncmd@checklist{#3}{#1}{#4}{#5}%
+}
+\def\gfncmd@checklist#1#2#3#4{%
+    % #1 : list of paren-omittable token
+    % #2 : head token of argument formula
+  \expandafter\gfncmd@subchecklist#1\gfncmd@punct{#2}{#3}{#4}%
+}
+\def\gfncmd@subchecklist#1#2\gfncmd@punct#3#4#5{%
+    % #1#2 : expanded list of paren-omittable token
+    % #3 : head token of argument formula
+  \def\gfncmd@tokeninlist{#1}%
+  \def\gfncmd@headtoken{#3}%
+  \ifx\gfncmd@tokeninlist\gfncmd@headtoken
+    #4%
+  \else
+    \ifx\relax#2\relax
+      #5%
+    \else
+      \gfncmd@subchecklist#2\gfncmd@punct{#3}{#4}{#5}%
+    \fi
+  \fi
+}
+% ---- concrete logical binary operator ----
+\def\lfland#1#2{%
+  \logicalbinaryoperator{#1}{#2}{\land}{\gfncmd@omitlistLlfland}{\gfncmd@mndtlistLlfland}%
+    {\gfncmd@omitlistRlfland}{\gfncmd@mndtlistRlfland}}
+\def\lflor#1#2{%
+  \logicalbinaryoperator{#1}{#2}{\lor}{\gfncmd@omitlistLlflor}{\gfncmd@mndtlistLlflor}%
+    {\gfncmd@omitlistRlflor}{\gfncmd@mndtlistRlflor}}
+\def\lflimpl#1#2{%
+  \logicalbinaryoperator{#1}{#2}{\limpl}{\gfncmd@omitlistLlflimpl}{\gfncmd@mndtlistLlflimpl}%
+    {\gfncmd@omitlistRlflimpl}{\gfncmd@mndtlistRlflimpl}}
+\def\lflimpleqv#1#2{%
+  \logicalbinaryoperator{#1}{#2}{\limpleqv}{\gfncmd@omitlistLlflimpleqv}{\gfncmd@mndtlistLlflimpleqv}%
+    {\gfncmd@omitlistRlflimpleqv}{\gfncmd@mndtlistRlflimpleqv}}
+%
+% ---- paren-omittable list and paren-mandatory list ----
+%   define when paren is omittable or mandatory
+%   if neigher \gfncmd@omitlist.. nor \gfncmd@mndtlist.. contains the token T,
 %   the token list whose head is T is regarded as an ordinary formula
-\def\omitlistLlfland@defcs{\lfpv\lflnot\lfland}
-  \def\mndtlistLlfland@defcs{\lfqtfr\lflor\lflimpl\lflimpleqv}
-\def\omitlistLlflor@defcs{\lfpv\lflnot\lflor}
-  \def\mndtlistLlflor@defcs{\lfqtfr\lfland\lflimpl\lflimpleqv}
-\def\omitlistLlflimpl@defcs{\lfpv\lflnot\lfland\lflor}
-  \def\mndtlistLlflimpl@defcs{\lfqtfr\lflimpl\lflimpleqv}
-\def\omitlistLlflimpleqv@defcs{\lfpv\lflnot\lfland\lflor}
-  \def\mndtlistLlflimpleqv@defcs{\lfqtfr\lflimpl\lflimpleqv}
 %
-\def\omitlistRlfqtfr@defcs{\lfpv\lflnot}
-  \def\mndtlistRlfqtfr@defcs{\lfqtfr\lfland\lflor\lflimpl\lflimpleqv}
-\def\omitlistRlflnot@defcs{\lfpv\lflnot\lfqtfr}
-  \def\mndtlistRlflnot@defcs{\lfland\lflor\lflimpl\lflimpleqv}
-\def\omitlistRlfland@defcs{\lfpv\lflnot\lfqtfr\lfland}
-  \def\mndtlistRlfland@defcs{\lflor\lflimpl\lflimpleqv}
-\def\omitlistRlflor@defcs{\lfpv\lflnot\lfqtfr\lflor}
-  \def\mndtlistRlflor@defcs{\lfland\lflimpl\lflimpleqv}
-\def\omitlistRlflimpl@defcs{\lfpv\lflnot\lfqtfr\lfland\lflor\lflimpl}
-  \def\mndtlistRlflimpl@defcs{\lflimpleqv}
-\def\omitlistRlflimpleqv@defcs{\lfpv\lflnot\lfqtfr\lfland\lflor}
-  \def\mndtlistRlflimpleqv@defcs{\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistLlfland{\lfpv\lflnot\lfland}
+  \def\gfncmd@mndtlistLlfland{\forallin\existsin\lflor\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistLlflor{\lfpv\lflnot\lflor}
+  \def\gfncmd@mndtlistLlflor{\forallin\existsin\lfland\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistLlflimpl{\lfpv\lflnot\lfland\lflor}
+  \def\gfncmd@mndtlistLlflimpl{\forallin\existsin\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistLlflimpleqv{\lfpv\lflnot\lfland\lflor}
+  \def\gfncmd@mndtlistLlflimpleqv{\forallin\existsin\lflimpl\lflimpleqv}
 %
+\def\gfncmd@omitlistRquantifier{\lfpv\lflnot\forallin\existsin}
+  \def\gfncmd@mndtlistRquantifier{\lfland\lflor\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistRlflnot{\lfpv\lflnot\forallin\existsin}
+  \def\gfncmd@mndtlistRlflnot{\lfland\lflor\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistRlfland{\lfpv\lflnot\forallin\existsin\lfland}
+  \def\gfncmd@mndtlistRlfland{\lflor\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistRlflor{\lfpv\lflnot\forallin\existsin\lflor}
+  \def\gfncmd@mndtlistRlflor{\lfland\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistRlflimpl{\lfpv\lflnot\forallin\existsin\lfland\lflor\lflimpl}
+  \def\gfncmd@mndtlistRlflimpl{\lflimpleqv}
+\def\gfncmd@omitlistRlflimpleqv{\lfpv\lflnot\forallin\existsin\lfland\lflor}
+  \def\gfncmd@mndtlistRlflimpleqv{\lflimpl\lflimpleqv}
+%
+% ---- control sequence for changing list ----
 \def\makerightparenomittable#1#2{%
-  \expandafter\def\expandafter\added@defcs\expandafter{\csname#2\endcsname}%
-  \expandafter\addtokentolist\expandafter\added@defcs\csname omitlistR#1@defcs\endcsname
-  \expandafter\deletetokenfromlist\expandafter\added@defcs\csname mndtlistR#1@defcs\endcsname
+  \expandafter\def\expandafter\gfncmd@added\expandafter{\csname#2\endcsname}%
+  \expandafter\gfncmd@addtokentolist\expandafter\gfncmd@added\csname gfncmd@omitlistR#1\endcsname
+  \expandafter\gfncmd@deletetokenfromlist\expandafter\gfncmd@added\csname gfncmd@mndtlistR#1\endcsname
 }
 \def\makeleftparenomittable#1#2{%
-  \expandafter\def\expandafter\added@defcs\expandafter{\csname#2\endcsname}%
-  \expandafter\addtokentolist\expandafter\added@defcs\csname omitlistL#1@defcs\endcsname
-  \expandafter\deletetokenfromlist\expandafter\added@defcs\csname mndtlistL#1@defcs\endcsname
+  \expandafter\def\expandafter\gfncmd@added\expandafter{\csname#2\endcsname}%
+  \expandafter\gfncmd@addtokentolist\expandafter\gfncmd@added\csname gfncmd@omitlistL#1\endcsname
+  \expandafter\gfncmd@deletetokenfromlist\expandafter\gfncmd@added\csname gfncmd@mndtlistL#1\endcsname
 }
 \def\makerightparenmandatory#1#2{%
-  \expandafter\def\expandafter\deleted@defcs\expandafter{\csname#2\endcsname}%
-  \expandafter\deletetokenfromlist\expandafter\deleted@defcs\csname omitlistR#1@defcs\endcsname
-  \expandafter\addtokentolist\expandafter\deleted@defcs\csname mndtlistR#1@defcs\endcsname
+  \expandafter\def\expandafter\gfncmd@deleted\expandafter{\csname#2\endcsname}%
+  \expandafter\gfncmd@deletetokenfromlist\expandafter\gfncmd@deleted\csname gfncmd@omitlistR#1\endcsname
+  \expandafter\gfncmd@addtokentolist\expandafter\gfncmd@deleted\csname gfncmd@mndtlistR#1\endcsname
 }
 \def\makeleftparenmandatory#1#2{%
-  \expandafter\def\expandafter\deleted@defcs\expandafter{\csname#2\endcsname}%
-  \expandafter\deletetokenfromlist\expandafter\deleted@defcs\csname omitlistL#1@defcs\endcsname
-  \expandafter\addtokentolist\expandafter\deleted@defcs\csname mndtlistL#1@defcs\endcsname
+  \expandafter\def\expandafter\gfncmd@deleted\expandafter{\csname#2\endcsname}%
+  \expandafter\gfncmd@deletetokenfromlist\expandafter\gfncmd@deleted\csname gfncmd@omitlistL#1\endcsname
+  \expandafter\gfncmd@addtokentolist\expandafter\gfncmd@deleted\csname gfncmd@mndtlistL#1\endcsname
 }
-%
-\def\deletetokenfromlist#1#2{%
-  \def\appended@defcs{}%
-  \expandafter\@tfor\expandafter\element@tforcs\expandafter:\expandafter=#2\do{%
-    \ifx\element@tforcs#1%
+  \def\gfncmd@deletetokenfromlist#1#2{%
+    % #1 : token-in token
+    % #2 : list
+  \expandafter\gfncmd@subdeletetokenfromlist#2\gfncmd@punct\gfncmd@punct{#1}{#2}%
+}
+\def\gfncmd@subdeletetokenfromlist#1#2\gfncmd@punct#3\gfncmd@punct#4#5{%
+    % #1#2 : expanded list
+    % #3 : growing expanded list
+    % #4 : token-in token
+    % #5 : list
+  \def\gfncmd@tokeninlist{#1}%
+  \ifx\gfncmd@tokeninlist#4%
+    \gfncmd@subdeletetokenfromlist#2\gfncmd@punct#3\gfncmd@punct{#4}{#5}%
+  \else
+    \ifx\relax#2\relax
+      \def#5{#3#1}%
     \else
+      \gfncmd@subdeletetokenfromlist#2\gfncmd@punct#3#1\gfncmd@punct{#4}{#5}%
+    \fi
+  \fi
+}
+  \def\gfncmd@addtokentolist#1#2{%
+    % #1 : token-in token
+    % #2 : list
+  \expandafter\gfncmd@subaddtokentolist#2\gfncmd@punct{#1}{#2}%
+}
+\def\gfncmd@subaddtokentolist#1#2\gfncmd@punct#3#4{%
+    % #1#2 : expanded list
+    % #3 : token-in token
+    % #4 : list
+  \def\gfncmd@tokeninlist{#1}%
+  \ifx\gfncmd@tokeninlist#3%
+  \else
+    \ifx\relax#2\relax
       \expandafter\expandafter\expandafter\def
-        \expandafter\expandafter\expandafter\appended@defcs
-        \expandafter\expandafter\expandafter{\expandafter\appended@defcs\element@tforcs}%
+      \expandafter\expandafter\expandafter#4%
+      \expandafter\expandafter\expandafter{\expandafter#4#3}%
+    \else
+      \gfncmd@subaddtokentolist#2\gfncmd@punct{#3}{#4}%
     \fi
-  }%
-  \let#2=\appended@defcs
-}
-\newif\iffoundtoken@bool
-\def\addtokentolist#1#2{%
-  \foundtoken@boolfalse
-  \expandafter\@tfor\expandafter\element@tforcs\expandafter:\expandafter=#2\do{%
-    \ifx\element@tforcs#1%
-      \foundtoken@booltrue
-    \fi
-  }%
-  \iffoundtoken@bool
-  \else
-    \expandafter\expandafter\expandafter\def
-      \expandafter\expandafter\expandafter#2%
-      \expandafter\expandafter\expandafter{\expandafter#2#1}%
   \fi
-}
-%
-\newif\iffoundinlist@bool
-\def\iffoundinlist#1#2#3#4{%
-  \foundinlist@boolfalse
-  \expandafter\@tfor\expandafter\tk@tforcs\expandafter:\expandafter=#2\do{%
-    \ifx#1\tk@tforcs
-      \foundinlist@booltrue
-    \fi
-  }%
-  \iffoundinlist@bool
-    #3%
-  \else
-    #4%
-  \fi
-}
-\def\iffoundinlisttriple#1#2#3#4#5#6{%
-  \iffoundinlist{#1}{#2}{#4}{\iffoundinlist{#1}{#3}{#5}{#6}}%
-}
-\newif\ifgft@bool
-\def\getfirsttoken@gfnlf#1#2{%
-  \gft@booltrue
-  \@tfor\gft@tforcs:=#1\do{%
-    \ifgft@bool
-      \gft@boolfalse
-      \expandafter\def\expandafter#2\expandafter{\gft@tforcs}%
-    \fi
-  }%
-}
-\def\fmlskip{\ }% (skip between formula and logical sign)
-\def\noparenskip{\ }%
-\def\lfpv#1{#1}% (predicate/propositional variables)
-\def\lflnot#1{%
-  \getfirsttoken@gfnlf{#1}{\lfparamR@defcs}%
-  \lnot
-  \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflnot@defcs}{\mndtlistRlflnot@defcs}{#1}{\paren{#1}}{\paren{#1}}
-}
-\def\lfland#1#2{%
-  \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
-  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
-  \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlfland@defcs}{\mndtlistLlfland@defcs}{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{%
-      #1\noparenskip\land\noparenskip#2}{#1\noparenskip\land\paren{#2}}{#1\noparenskip\land\fmlskip#2}%
-  }{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{%
-      \paren{#1}\land\noparenskip#2}{\paren{#1}\land\paren{#2}}{\paren{#1}\land\fmlskip#2}%
-  }{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlfland@defcs}{\mndtlistRlfland@defcs}{%
-      #1\fmlskip\land\noparenskip#2}{#1\fmlskip\land\paren{#2}}{#1\fmlskip\land\fmlskip#2}%
-  }%
-}
-\def\lflor#1#2{%
-  \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
-  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
-  \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflor@defcs}{\mndtlistLlflor@defcs}{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{%
-      #1\noparenskip\lor\noparenskip#2}{#1\noparenskip\lor\paren{#2}}{#1\noparenskip\lor\fmlskip#2}%
-  }{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{%
-      \paren{#1}\lor\noparenskip#2}{\paren{#1}\lor\paren{#2}}{\paren{#1}\lor\fmlskip#2}%
-  }{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflor@defcs}{\mndtlistRlflor@defcs}{%
-      #1\fmlskip\lor\noparenskip#2}{#1\fmlskip\lor\paren{#2}}{#1\fmlskip\lor\fmlskip#2}%
-  }%
-}
-\def\lflimpl#1#2{%
-  \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
-  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
-  \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflimpl@defcs}{\mndtlistLlflimpl@defcs}{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{%
-      #1\noparenskip\limpl\noparenskip#2}{#1\noparenskip\limpl\paren{#2}}{#1\noparenskip\limpl\fmlskip#2}%
-  }{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{%
-      \paren{#1}\limpl\noparenskip#2}{\paren{#1}\limpl\paren{#2}}{\paren{#1}\limpl\fmlskip#2}%
-  }{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpl@defcs}{\mndtlistRlflimpl@defcs}{%
-      #1\fmlskip\limpl\noparenskip#2}{#1\fmlskip\limpl\paren{#2}}{#1\fmlskip\limpl\fmlskip#2}%
-  }%
-}
-\def\lflimpleqv#1#2{%
-  \getfirsttoken@gfnlf{#1}{\lfparamL@defcs}%
-  \getfirsttoken@gfnlf{#2}{\lfparamR@defcs}%
-  \iffoundinlisttriple{\lfparamL@defcs}{\omitlistLlflimpleqv@defcs}{\mndtlistLlflimpleqv@defcs}{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{%
-      #1\noparenskip\limpleqv\noparenskip#2}{#1\noparenskip\limpleqv\paren{#2}}{#1\noparenskip\limpleqv\fmlskip#2}%
-  }{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{%
-      \paren{#1}\limpleqv\noparenskip#2}{\paren{#1}\limpleqv\paren{#2}}{\paren{#1}\limpleqv\fmlskip#2}%
-  }{%
-    \iffoundinlisttriple{\lfparamR@defcs}{\omitlistRlflimpleqv@defcs}{\mndtlistRlflimpleqv@defcs}{%
-      #1\fmlskip\limpleqv\noparenskip#2}{#1\fmlskip\limpleqv\paren{#2}}{#1\fmlskip\limpleqv\fmlskip#2}%
-  }%
 }
