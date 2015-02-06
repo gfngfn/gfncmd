@@ -18,7 +18,7 @@ An example is here:
     $\forallin{x|y|z}{P}{\lflimpl{\lfland{x \pord y}{y \pord z}}{x \pord z}}$
 
 generates ∀x, y, z∈P (x ≦ y ∧ y ≦ z ⇒ x ≦ z) ,
-where `useRightarrowaslimpl` and `\usesinglequantifier` are notation options.
+where `\\useRightarrowaslimpl` and `\\usesinglequantifier` are notation options.
 If you change options like
 
     \usepackage{amsmath}
