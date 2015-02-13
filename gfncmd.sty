@@ -5,10 +5,9 @@
 \gfncmd@caseparen=0\relax
 \def\usenormalparen{\gfncmd@caseparen=0\relax}
 \def\useexpandingparen{\gfncmd@caseparen=1}
-\def\gfncmd@enablebreakinparen{\def\breakinparen{}}
+%\def\gfncmd@enablebreakinparen{\def\breakinparen{}}
 \def\gfncmd@disablebreakinparen{\def\breakinparen{}}
 \def\gfncmd@true{t}
-%\gfncmd@enablebreakinparen
 \newcount\gfncmd@count@depthofparen
 \gfncmd@count@depthofparen=0\relax
 \newdimen\tempdimenA
@@ -23,15 +22,12 @@
     \def\tempparam@defcs{#4}%
     \ifx\tempparam@defcs\empty
       \gfncmd@disablebreakinparen
-      \expandafter\def\csname pre[\the\gfncmd@count@depthofparen]\endcsname{t}%
-      %\typeout{(**TYPEOUT1**)[\the\gfncmd@count@depthofparen]}%<test>
       \advance\gfncmd@count@depthofparen by1\relax
       \settoheight\tempdimenA{%
         $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
       }%
       \advance\gfncmd@count@depthofparen by-1\relax
       \gfncmd@disablebreakinparen
-      %\typeout{(**TYPEOUT2**)[\the\gfncmd@count@depthofparen]}%<test>
       \advance\gfncmd@count@depthofparen by1\relax
       \settodepth\tempdimenB{%
         $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
@@ -49,7 +45,7 @@
     \expandafter\let\csname sum[\the\gfncmd@count@depthofparen]\endcsname=\tempcsS
 %
     \ifnum\gfncmd@count@depthofparen=0%
-      \tempdimenB=-0.3\tempdimenB\relax
+      \tempdimenC=-0.3\tempdimenB\relax
       \expandafter\expandafter\expandafter\def
         \expandafter\expandafter\expandafter\gfncmd@resultofparen
         \expandafter\expandafter\expandafter{%
@@ -58,7 +54,7 @@
         \expandafter\expandafter\expandafter\raisebox
         \expandafter\expandafter\expandafter{%
         \expandafter\the
-        \expandafter\tempdimenB
+        \expandafter\tempdimenC
         \expandafter}%
         \expandafter{%
         \expandafter\text
@@ -67,18 +63,12 @@
         \expandafter{\the\tempdimenA}{0pt}\selectfont $#2$}}}}%
     \else
       \def\gfncmd@resultofparen{}%<?>
-      \mathopen{\raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#2$}}}%
+      \mathopen{\raisebox{-0.3\tempdimenB}{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#2$}}}%
     \fi
 %
-    \expandafter\def\csname pre[\the\gfncmd@count@depthofparen]\endcsname{f}%
-    \expandafter\ifx\csname pre[0]\endcsname\gfncmd@true
-      \gfncmd@disablebreakinparen
-    \else
-      \gfncmd@enablebreakinparen
-    \fi
-%
+    \gfncmd@disablebreakinparen
     \advance\gfncmd@count@depthofparen by1\relax
-    \ifnum\gfncmd@count@depthofparen=1
+    \ifnum\gfncmd@count@depthofparen=1%
       \expandafter\def\expandafter\gfncmd@resultofparen\expandafter{\gfncmd@resultofparen
         \ifmmode\else\displaystyle\fi#1}%
     \else
@@ -93,7 +83,7 @@
     \expandafter\tempdimenA\expandafter=\tempcsS\relax
 %
     \ifnum\gfncmd@count@depthofparen=0
-      \tempdimenC=0.3\tempdimenB\relax
+      \tempdimenC=-0.3\tempdimenB\relax
       \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\def
         \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\gfncmd@resultofparen
         \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter{%
@@ -111,7 +101,7 @@
         \expandafter\fontsize
         \expandafter{\the\tempdimenA}{0pt}\selectfont $#3$}}}}%
     \else
-      \mathclose{\raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#3$}}}%
+      \mathclose{\raisebox{-0.3\tempdimenB}{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#3$}}}%
     \fi
 %
     \advance\tempdimenA by0.1zw\relax
@@ -133,8 +123,8 @@
     \fi
   \fi
   \def\breakinparen{\\}%
-  %\expandafter\showtokens\expandafter{\gfncmd@resultofparen}%<test>
   \gfncmd@resultofparen
+  \gfncmd@disablebreakinparen
 }
 \def\genparenwithmiddle#1#2#3#4#5{%
   \def\leftcontent@defcs{#1}%

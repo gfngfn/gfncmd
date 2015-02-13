@@ -10,8 +10,13 @@
 \NeedsTeXFormat{LaTeX2e}
   [1994/12/01]% LaTeX date must be December 1994 or later
 \ProvidesPackage{gfnlf}[2015/02/07 v0.9 by gfn (Takashi SUWA)]
+% ---- style options ----
+\def\quantifierparenskip{\hspace{0.25em}}
+\def\quantifiernoparenskip{\hspace{0.75em}}
+\def\operatorparenskip{\hspace{0.125em}}
+\def\operatornoparenskip{\hspace{0.25em}}
 %
-% ---- control sequence for option declaration ----
+% -- option declaration --
 \def\usesinglequantifier{\def\gfncmd@option@quantifier{0}}
 \def\usepluralquantifier{\def\gfncmd@option@quantifier{1}}
 \def\usedotsinglequantifier{\def\gfncmd@option@quantifier{2}}
@@ -20,20 +25,18 @@
 \def\useparenpluralquantifier{\def\gfncmd@option@quantifier{5}}
 \usedotpluralquantifier
 %
-\def\quantifierparenskip{\hspace{0.25em}}
-\def\quantifiernoparenskip{\hspace{0.75em}}
-\def\operatorparenskip{\hspace{0.125em}}
-\def\operatornoparenskip{\hspace{0.25em}}
-%
-% ---- general quantifier ----
+% ==== quantifier ====
+% -- general quantifier --
 \def\quantifier#1#2#3#4#5#6{%
   \gfncmd@subquantifier#1|\gfncmd@punct{#2}{#3}{#4}{#5}{0}{#6}%
 }
 \def\gfncmd@subquantifier#1|#2\gfncmd@punct#3#4#5#6#7#8{
+    % ---- ---- ---- ----
     % #3 : set
     % #4 : main formula
     % #5 : quantifier such as \forall
     % #6 : binary operator such as \in
+    % ---- ---- ---- ----
   \ifcase#7\relax
   %%%%(first time)
     #5#1%
@@ -58,7 +61,7 @@
     % whether inserting tab character or not
     \ifcase#8\relax
     \else
-      \gfncmd@escapetabchar
+      \gfncmd@escapedtabchar
     \fi
     \expandafter\ifcase\gfncmd@option@quantifier\relax
     %%%%(option: \usesinglequantifier)
@@ -88,28 +91,32 @@
     \gfncmd@subquantifier#2\gfncmd@punct{#3}{#4}{#5}{#6}{1}{#8}%
   \fi
 }
-\def\gfncmd@escapetabchar{&}
+\def\gfncmd@escapedtabchar{&}
 %
 % ---- concrete quantifier ----
 \newcommand\forallin[4][0]{\quantifier{#2}{#3}{#4}{\forall}{\in}{#1}}
-\newcommand\existsin[4][0]{\quantifier{#1}{#2}{#3}{\exists}{\in}{#1}}
+\newcommand\existsin[4][0]{\quantifier{#2}{#3}{#4}{\exists}{\in}{#1}}
 %
-% ---- other logical operators ----
+% ==== other logical operators ====
+% -- predicate symbols ----
 \def\lfpv#1{#1}
+% -- unary logical NOT operator --
 \def\lflnot#1{%
   \lnot
   \gfncmd@checkparenisneeded#1\gfncmd@punct{\gfncmd@omitlistRlflnot}{#1}{\paren{#1}}%
 }
-%
-% ---- general logical binary operator ----
+% ==== binary logical operator ====
+% -- general binary logical operator --
 \def\logicalbinaryoperator#1#2#3#4#5#6#7{%
+    % ---- ---- ---- ----
     % #1 : left argument formula
     % #2 : right argument formula
-    % #3 : logical binary operator
-    % #4 : list of left-paren-omittable token
-    % #5 : list of left-paren-mandatory token
-    % #6 : list of right-paren-omittable token
-    % #7 : list of right-paren-mandatory token
+    % #3 : binary logical operator symbol
+    % #4 : list of left-paren-omittable token(s)
+    % #5 : list of left-paren-mandatory token(s)
+    % #6 : list of right-paren-omittable token(s)
+    % #7 : list of right-paren-mandatory token(s)
+    % ---- ---- ---- ----
   \gfncmd@checkparenisneeded#1\gfncmd@punct{#4}{#1\operatornoparenskip}{%
     \gfncmd@checkparenisneeded#1\gfncmd@punct{#5}{%
       \paren{#1}\operatorparenskip}{#1\operatornoparenskip}}%
@@ -119,18 +126,26 @@
       \operatorparenskip\paren{#2}}{\operatornoparenskip#2}}%
 }
 \def\gfncmd@checkparenisneeded#1#2\gfncmd@punct#3#4#5{%
+    % ---- ---- ---- ----
     % #1#2 : argument formula
-    % #3 : list of paren-omittable token
+    % #3 : list of token(s)
+    % #4 : program evaluated if #3 contains #1
+    % #5 : program evaluated otherwise
+    % ---- ---- ---- ----
   \gfncmd@checklist{#3}{#1}{#4}{#5}%
 }
 \def\gfncmd@checklist#1#2#3#4{%
-    % #1 : list of paren-omittable token
+    % ---- ---- ---- ----
+    % #1 : list of token(s)
     % #2 : head token of argument formula
+    % ---- ---- ---- ----
   \expandafter\gfncmd@subchecklist#1\gfncmd@punct{#2}{#3}{#4}%
 }
 \def\gfncmd@subchecklist#1#2\gfncmd@punct#3#4#5{%
-    % #1#2 : expanded list of paren-omittable token
+    % ---- ---- ---- ----
+    % #1#2 : expanded list
     % #3 : head token of argument formula
+    % ---- ---- ---- ----
   \def\gfncmd@tokeninlist{#1}%
   \def\gfncmd@headtoken{#3}%
   \ifx\gfncmd@tokeninlist\gfncmd@headtoken
@@ -143,7 +158,7 @@
     \fi
   \fi
 }
-% ---- concrete logical binary operator ----
+% -- concrete logical binary operator --
 \def\lfland#1#2{%
   \logicalbinaryoperator{#1}{#2}{\land}{\gfncmd@omitlistLlfland}{\gfncmd@mndtlistLlfland}%
     {\gfncmd@omitlistRlfland}{\gfncmd@mndtlistRlfland}}
@@ -157,11 +172,10 @@
   \logicalbinaryoperator{#1}{#2}{\limpleqv}{\gfncmd@omitlistLlflimpleqv}{\gfncmd@mndtlistLlflimpleqv}%
     {\gfncmd@omitlistRlflimpleqv}{\gfncmd@mndtlistRlflimpleqv}}
 %
-% ---- paren-omittable list and paren-mandatory list ----
+% ==== paren-omittable list and paren-mandatory list ====
 %   define when paren is omittable or mandatory
 %   if neigher \gfncmd@omitlist.. nor \gfncmd@mndtlist.. contains the token T,
 %   the token list whose head is T is regarded as an ordinary formula
-%
 \def\gfncmd@omitlistLlfland{\lfpv\lflnot\lfland}
   \def\gfncmd@mndtlistLlfland{\forallin\existsin\lflor\lflimpl\lflimpleqv}
 \def\gfncmd@omitlistLlflor{\lfpv\lflnot\lflor}
@@ -184,7 +198,7 @@
 \def\gfncmd@omitlistRlflimpleqv{\lfpv\lflnot\forallin\existsin\lfland\lflor}
   \def\gfncmd@mndtlistRlflimpleqv{\lflimpl\lflimpleqv}
 %
-% ---- control sequence for changing list ----
+% ==== control sequence for operating list ====
 \def\makerightparenomittable#1#2{%
   \expandafter\def\expandafter\gfncmd@added\expandafter{\csname#2\endcsname}%
   \expandafter\gfncmd@addtokentolist\expandafter\gfncmd@added\csname gfncmd@omitlistR#1\endcsname
@@ -206,15 +220,19 @@
   \expandafter\gfncmd@addtokentolist\expandafter\gfncmd@deleted\csname gfncmd@mndtlistL#1\endcsname
 }
   \def\gfncmd@deletetokenfromlist#1#2{%
+    % ---- ---- ---- ----
     % #1 : token-in token
     % #2 : list
+    % ---- ---- ---- ----
   \expandafter\gfncmd@subdeletetokenfromlist#2\gfncmd@punct\gfncmd@punct{#1}{#2}%
 }
 \def\gfncmd@subdeletetokenfromlist#1#2\gfncmd@punct#3\gfncmd@punct#4#5{%
+    % ---- ---- ---- ----
     % #1#2 : expanded list
     % #3 : growing expanded list
     % #4 : token-in token
     % #5 : list
+    % ---- ---- ---- ----
   \def\gfncmd@tokeninlist{#1}%
   \ifx\gfncmd@tokeninlist#4%
     \gfncmd@subdeletetokenfromlist#2\gfncmd@punct#3\gfncmd@punct{#4}{#5}%
@@ -226,22 +244,26 @@
     \fi
   \fi
 }
-  \def\gfncmd@addtokentolist#1#2{%
+\def\gfncmd@addtokentolist#1#2{%
+    % ---- ---- ---- ----
     % #1 : token-in token
     % #2 : list
+    % ---- ---- ---- ----
   \expandafter\gfncmd@subaddtokentolist#2\gfncmd@punct{#1}{#2}%
 }
 \def\gfncmd@subaddtokentolist#1#2\gfncmd@punct#3#4{%
+    % ---- ---- ---- ----
     % #1#2 : expanded list
     % #3 : token-in token
     % #4 : list
+    % ---- ---- ---- ----
   \def\gfncmd@tokeninlist{#1}%
   \ifx\gfncmd@tokeninlist#3%
   \else
     \ifx\relax#2\relax
       \expandafter\expandafter\expandafter\def
-      \expandafter\expandafter\expandafter#4%
-      \expandafter\expandafter\expandafter{\expandafter#4#3}%
+        \expandafter\expandafter\expandafter#4%
+        \expandafter\expandafter\expandafter{\expandafter#4#3}%
     \else
       \gfncmd@subaddtokentolist#2\gfncmd@punct{#3}{#4}%
     \fi
