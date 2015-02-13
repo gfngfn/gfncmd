@@ -1,16 +1,16 @@
 %This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
 %
 %---括弧類------------------------------
-\newcount\caseparen@gfncmd
-\caseparen@gfncmd=0\relax
-\def\usenormalparen{\caseparen@gfncmd=0\relax}
-\def\useexpandingparen{\caseparen@gfncmd=1}
+\newcount\gfncmd@caseparen
+\gfncmd@caseparen=0\relax
+\def\usenormalparen{\gfncmd@caseparen=0\relax}
+\def\useexpandingparen{\gfncmd@caseparen=1}
 \newcount\depthofparen@count
 \depthofparen@count=0\relax
 \newdimen\tempdimenA
 \newdimen\tempdimenB
 \def\genparen#1#2#3#4#5{%
-  \ifcase\caseparen@gfncmd
+  \ifcase\gfncmd@caseparen
   %%%%(0: \usenormalparen)
     \left#2 #1 \right#3%
   \or%(1: \useexpandingparen)
@@ -287,15 +287,15 @@
 }
 %===束論========================================================================
 %---半順序 (partial order) -------------
-\newcount\casepord@gfncmd
-\casepord@gfncmd=0\relax
-\def\usepreccurlyeqaspord{\casepord@gfncmd=0\relax}
-\def\usepreceqaspord{\casepord@gfncmd=1\relax}
-\def\useleqaspord{\casepord@gfncmd=2\relax}
-\def\useleqslantaspord{\casepord@gfncmd=3\relax}
+\newcount\gfncmd@casepord
+\gfncmd@casepord=0\relax
+\def\usepreccurlyeqaspord{\gfncmd@casepord=0\relax}
+\def\usepreceqaspord{\gfncmd@casepord=1\relax}
+\def\useleqaspord{\gfncmd@casepord=2\relax}
+\def\useleqslantaspord{\gfncmd@casepord=3\relax}
 \def\pord{%
   \mathrel{%
-    \ifcase\casepord@gfncmd
+    \ifcase\gfncmd@casepord
       %(needs amssymb)
       \preccurlyeq
     \or
@@ -329,13 +329,13 @@
 }
 \def\thmpdif#1#2#3{\paren{\frac{{\partial}#1}{{\partial}#2}}_{#3}}
 % ---- 微分演算子 ----
-\newcount\caseordd@gfncmd
-\caseordd@gfncmd=0\relax
-\def\useromanordd{\caseordd@gfncmd=0\relax}
-\def\useitalicordd{\caseordd@gfncmd=1\relax}
+\newcount\gfncmd@caseordd
+\gfncmd@caseordd=0\relax
+\def\useromanordd{\gfncmd@caseordd=0\relax}
+\def\useitalicordd{\gfncmd@caseordd=1\relax}
 \def\ordd{%
   \mathord{%
-    \ifcase\caseordd@gfncmd
+    \ifcase\gfncmd@caseordd
       \,\mathrm{d}%
     \or%
       \,d%
@@ -345,35 +345,35 @@
 %
 %===文字類======================================================================
 %---イプシロンの再定義------------------
-\newcount\casemakeepsilonsdifferent@gfncmd
-\casemakeepsilonsdifferent@gfncmd=0\relax
-\def\makeepsilonssame{\casemakeepsilonsdifferent@gfncmd=0\relax}
-\def\makeepsilonsdifferent{\casemakeepsilonsdifferent@gfncmd=1\relax}
+\newcount\gfncmd@casemakeepsilonsdifferent
+\gfncmd@casemakeepsilonsdifferent=0\relax
+\def\makeepsilonssame{\gfncmd@casemakeepsilonsdifferent=0\relax}
+\def\makeepsilonsdifferent{\gfncmd@casemakeepsilonsdifferent=1\relax}
 \newcount\caseepsilon@gfncmd
 \caseepsilon@gfncmd=0\relax
 \def\usesymbolepsilon{\caseepsilon@gfncmd=0\relax}
 \def\usescriptepsilon{\caseepsilon@gfncmd=1\relax}
-\let\varepsilon@gfncmd=\varepsilon
-\let\epsilon@gfncmd=\epsilon
+\let\gfncmd@varepsilon=\varepsilon
+\let\gfncmd@epsilon=\epsilon
 \def\epsilon{%
   \mathord{%
-    \ifcase\casemakeepsilonsdifferent@gfncmd
+    \ifcase\gfncmd@casemakeepsilonsdifferent
       \ifcase\caseepsilon@gfncmd
-        \epsilon@gfncmd
+        \gfncmd@epsilon
       \or
-        \varepsilon@gfncmd
+        \gfncmd@varepsilon
       \fi
     \or
-      \epsilon@gfncmd
+      \gfncmd@epsilon
     \fi
   }%
 }
 \def\varepsilon{%
   \mathord{%
-    \ifcase\casemakeepsilonsdifferent@gfncmd
-      \undefined@gfncmd
+    \ifcase\gfncmd@casemakeepsilonsdifferent
+      \gfncmd@undefined
     \or
-      \varepsilon@gfncmd
+      \gfncmd@varepsilon
     \fi
   }%
 }
@@ -386,130 +386,130 @@
 \casephi@gfncmd=0\relax
 \def\usesymbolphi{\casephi@gfncmd=0\relax}
 \def\usescriptphi{\casephi@gfncmd=1\relax}
-\let\phi@gfncmd=\phi
-\let\varphi@gfncmd=\varphi
+\let\gfncmd@phi=\phi
+\let\gfncmd@varphi=\varphi
 \def\phi{%
   \mathord{%
     \ifcase\casemakephisdifferent@gfncmd
       \ifcase\casephi@gfncmd
-        \phi@gfncmd
+        \gfncmd@phi
       \or
-        \varphi@gfncmd
+        \gfncmd@varphi
       \fi
     \or
-      \phi@gfncmd
+      \gfncmd@phi
     \fi
   }%
 }
 \def\varphi{%
   \mathord{%
     \ifcase\casemakephisdifferent@gfncmd
-      \undefined@gfncmd
+      \gfncmd@undefined
     \or
-      \varphi@gfncmd
+      \gfncmd@varphi
     \fi
   }%
 }
 %---ギリシア大文字の再定義--------------
-\newcount\casegreekcapital@gfncmd
-\casegreekcapital@gfncmd=0\relax
-\def\useitalicgreekcapital{\casegreekcapital@gfncmd=0\relax}
-\def\useromangreekcapital{\casegreekcapital@gfncmd=1\relax}
+\newcount\gfncmd@casegreekcapital
+\gfncmd@casegreekcapital=0\relax
+\def\useitalicgreekcapital{\gfncmd@casegreekcapital=0\relax}
+\def\useromangreekcapital{\gfncmd@casegreekcapital=1\relax}
 %------------------
 \def\rmAlpha{\mathrm{A}}
-\def\Alpha{\ifcase\casegreekcapital@gfncmd A\or\rmAlpha\fi}
+\def\Alpha{\ifcase\gfncmd@casegreekcapital A\or\rmAlpha\fi}
 %------------------
 \def\rmBeta{\mathrm{B}}
-\def\Beta{\ifcase\casegreekcapital@gfncmd B\or\rmBeta\fi}
+\def\Beta{\ifcase\gfncmd@casegreekcapital B\or\rmBeta\fi}
 %------------------
 \let\rmGamma=\Gamma
 \let\varGamma@gfncmd=\varGamma
-\def\Gamma{\ifcase\casegreekcapital@gfncmd \varGamma@gfncmd\or\rmGamma\fi}
-\def\varGamma{\undefined@gfncmd}
+\def\Gamma{\ifcase\gfncmd@casegreekcapital \varGamma@gfncmd\or\rmGamma\fi}
+\def\varGamma{\gfncmd@undefined}
 %------------------
 \let\rmDelta=\Delta
 \let\varDelta@gfncmd=\varDelta
-\def\Delta{\ifcase\casegreekcapital@gfncmd \varDelta@gfncmd\or\rmDelta\fi}
-\def\varDelta{\undefined@gfncmd}
+\def\Delta{\ifcase\gfncmd@casegreekcapital \varDelta@gfncmd\or\rmDelta\fi}
+\def\varDelta{\gfncmd@undefined}
 %------------------
 \def\rmEpsilon{\mathrm{E}}
-\def\Epsilon{\ifcase\casegreekcapital@gfncmd E\or\rmEpsilon\fi}
+\def\Epsilon{\ifcase\gfncmd@casegreekcapital E\or\rmEpsilon\fi}
 %------------------
 \def\rmZeta{\mathrm{Z}}
-\def\Zeta{\ifcase\casegreekcapital@gfncmd Z\or\rmZeta\fi}
+\def\Zeta{\ifcase\gfncmd@casegreekcapital Z\or\rmZeta\fi}
 %------------------
 \def\rmEta{\mathrm{H}}
-\def\Eta{\ifcase\casegreekcapital@gfncmd H\or\rmEta\fi}
+\def\Eta{\ifcase\gfncmd@casegreekcapital H\or\rmEta\fi}
 %------------------
 \let\rmTheta=\Theta
 \let\varTheta@gfncmd=\varTheta
-\def\Theta{\ifcase\casegreekcapital@gfncmd \varTheta@gfncmd\or\rmTheta\fi}
-\def\varTheta{\undefined@gfncmd}
+\def\Theta{\ifcase\gfncmd@casegreekcapital \varTheta@gfncmd\or\rmTheta\fi}
+\def\varTheta{\gfncmd@undefined}
 %------------------
 \def\rmIota{\mathrm{I}}
-\def\Iota{\ifcase\casegreekcapital@gfncmd I\or\rmIota\fi}
+\def\Iota{\ifcase\gfncmd@casegreekcapital I\or\rmIota\fi}
 %------------------
 \def\rmKappa{\mathrm{K}}
-\def\Kappa{\ifcase\casegreekcapital@gfncmd K\or\rmKappa\fi}
+\def\Kappa{\ifcase\gfncmd@casegreekcapital K\or\rmKappa\fi}
 %------------------
 \let\rmLambda=\Lambda
 \let\varLambda@gfncmd=\varLambda
-\def\Lambda{\ifcase\casegreekcapital@gfncmd \varLambda@gfncmd\or\rmLambda\fi}
-\def\varLambda{\undefined@gfncmd}
+\def\Lambda{\ifcase\gfncmd@casegreekcapital \varLambda@gfncmd\or\rmLambda\fi}
+\def\varLambda{\gfncmd@undefined}
 %------------------
 \def\rmMu{\mathrm{M}}
-\def\Mu{\ifcase\casegreekcapital@gfncmd M\or\rmMu\fi}
+\def\Mu{\ifcase\gfncmd@casegreekcapital M\or\rmMu\fi}
 %------------------
 \def\rmNu{\mathrm{N}}
-\def\Nu{\ifcase\casegreekcapital@gfncmd N\or\rmNu\fi}
+\def\Nu{\ifcase\gfncmd@casegreekcapital N\or\rmNu\fi}
 %------------------
 \let\rmXi=\Xi
 \let\varXi@gfncmd=\varXi
-\def\Xi{\ifcase\casegreekcapital@gfncmd \varXi@gfncmd\or\rmXi\fi}
-\def\varXi{\undefined@gfncmd}
+\def\Xi{\ifcase\gfncmd@casegreekcapital \varXi@gfncmd\or\rmXi\fi}
+\def\varXi{\gfncmd@undefined}
 %------------------
 \def\omicron{o}
 \def\rmOmicron{\mathrm{O}}
-\def\Omicron{\ifcase\casegreekcapital@gfncmd O\or\rmOmicron\fi}
+\def\Omicron{\ifcase\gfncmd@casegreekcapital O\or\rmOmicron\fi}
 %------------------
 \let\rmPi=\Pi
 \let\varPi@gfncmd=\varPi
-\def\Pi{\ifcase\casegreekcapital@gfncmd \varPi@gfncmd\or\rmPi\fi}
-\def\varPi{\undefined@gfncmd}
+\def\Pi{\ifcase\gfncmd@casegreekcapital \varPi@gfncmd\or\rmPi\fi}
+\def\varPi{\gfncmd@undefined}
 %------------------
 \def\rmRho{\mathrm{P}}
-\def\Rho{\ifcase\casegreekcapital@gfncmd P\or\rmRho\fi}
+\def\Rho{\ifcase\gfncmd@casegreekcapital P\or\rmRho\fi}
 %------------------
 \let\rmSigma=\Sigma
 \let\varSigma@gfncmd=\varSigma
-\def\Sigma{\ifcase\casegreekcapital@gfncmd \varSigma@gfncmd\or\rmSigma\fi}
-\def\varSigma{\undefined@gfncmd}
+\def\Sigma{\ifcase\gfncmd@casegreekcapital \varSigma@gfncmd\or\rmSigma\fi}
+\def\varSigma{\gfncmd@undefined}
 %------------------
 \def\rmTau{\mathrm{T}}
-\def\Tau{\ifcase\casegreekcapital@gfncmd T\or\rmTau\fi}
+\def\Tau{\ifcase\gfncmd@casegreekcapital T\or\rmTau\fi}
 %------------------
 \let\rmUpsilon=\Upsilon
 \let\varUpsilon@gfncmd=\varUpsilon
-\def\Upsilon{\ifcase\casegreekcapital@gfncmd \varUpsilon@gfncmd\or\rmUpsilon\fi}
-\def\varUpsilon{\undefined@gfncmd}
+\def\Upsilon{\ifcase\gfncmd@casegreekcapital \varUpsilon@gfncmd\or\rmUpsilon\fi}
+\def\varUpsilon{\gfncmd@undefined}
 %------------------
 \let\rmPhi=\Phi
 \let\varPhi@gfncmd=\varPhi
-\def\Phi{\ifcase\casegreekcapital@gfncmd \varPhi@gfncmd\or\rmPhi\fi}
-\def\varPhi{\undefined@gfncmd}
+\def\Phi{\ifcase\gfncmd@casegreekcapital \varPhi@gfncmd\or\rmPhi\fi}
+\def\varPhi{\gfncmd@undefined}
 %------------------
 \def\rmChi{\mathrm{X}}
-\def\Chi{\ifcase\casegreekcapital@gfncmd X\or\rmChi\fi}
+\def\Chi{\ifcase\gfncmd@casegreekcapital X\or\rmChi\fi}
 %------------------
 \let\rmPsi=\Psi
 \let\varPsi@gfncmd=\varPsi
-\def\Psi{\ifcase\casegreekcapital@gfncmd \varPsi@gfncmd\or\rmPsi\fi}
-\def\varPsi{\undefined@gfncmd}
+\def\Psi{\ifcase\gfncmd@casegreekcapital \varPsi@gfncmd\or\rmPsi\fi}
+\def\varPsi{\gfncmd@undefined}
 %------------------
 \let\rmOmega=\Omega
 \let\varOmega@gfncmd=\varOmega
-\def\Omega{\ifcase\casegreekcapital@gfncmd \varOmega@gfncmd\or\rmOmega\fi}
-\def\varOmega{\undefined@gfncmd}
+\def\Omega{\ifcase\gfncmd@casegreekcapital \varOmega@gfncmd\or\rmOmega\fi}
+\def\varOmega{\gfncmd@undefined}
 %---------------------------------------
 %最適化
 %\newcommand{\minimize}{\quad\mathrm{Minimize}\quad}

@@ -5,9 +5,12 @@
 \gfncmd@caseparen=0\relax
 \def\usenormalparen{\gfncmd@caseparen=0\relax}
 \def\useexpandingparen{\gfncmd@caseparen=1}
-%\def\gfncmd@enablebreakinparen{\def\breakinparen{}}
-\def\gfncmd@disablebreakinparen{\def\breakinparen{}}
-\def\gfncmd@true{t}
+\def\gfncmd@disableescapedchar{%
+  %\def\tabinparen{}%
+  \def\breakinparen{}}
+\def\gfncmd@enableescapedchar{%
+  %\def\tabinparen{\\&}%
+  \def\breakinparen{\\}}
 \newcount\gfncmd@count@depthofparen
 \gfncmd@count@depthofparen=0\relax
 \newdimen\tempdimenA
@@ -21,13 +24,13 @@
   %(needs 'lmodern', '[T1]fontenc'.)
     \def\tempparam@defcs{#4}%
     \ifx\tempparam@defcs\empty
-      \gfncmd@disablebreakinparen
+      \gfncmd@disableescapedchar
       \advance\gfncmd@count@depthofparen by1\relax
       \settoheight\tempdimenA{%
         $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
       }%
       \advance\gfncmd@count@depthofparen by-1\relax
-      \gfncmd@disablebreakinparen
+      \gfncmd@disableescapedchar
       \advance\gfncmd@count@depthofparen by1\relax
       \settodepth\tempdimenB{%
         $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
@@ -66,7 +69,7 @@
       \mathopen{\raisebox{-0.3\tempdimenB}{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#2$}}}%
     \fi
 %
-    \gfncmd@disablebreakinparen
+    \gfncmd@disableescapedchar
     \advance\gfncmd@count@depthofparen by1\relax
     \ifnum\gfncmd@count@depthofparen=1%
       \expandafter\def\expandafter\gfncmd@resultofparen\expandafter{\gfncmd@resultofparen
@@ -75,14 +78,14 @@
       \ifmmode\else\displaystyle\fi#1%
     \fi
     \advance\gfncmd@count@depthofparen by-1\relax
-    \gfncmd@disablebreakinparen
+    \gfncmd@disableescapedchar
 %
     \expandafter\let\expandafter\tempcsD\expandafter=\csname depth[\the\gfncmd@count@depthofparen]\endcsname
     \expandafter\let\expandafter\tempcsS\expandafter=\csname sum[\the\gfncmd@count@depthofparen]\endcsname
     \expandafter\tempdimenB\expandafter=\tempcsD\relax
     \expandafter\tempdimenA\expandafter=\tempcsS\relax
 %
-    \ifnum\gfncmd@count@depthofparen=0
+    \ifnum\gfncmd@count@depthofparen=0%
       \tempdimenC=-0.3\tempdimenB\relax
       \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\def
         \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\gfncmd@resultofparen
@@ -105,7 +108,7 @@
     \fi
 %
     \advance\tempdimenA by0.1zw\relax
-    \ifnum\gfncmd@count@depthofparen=0
+    \ifnum\gfncmd@count@depthofparen=0%
       \expandafter\expandafter\expandafter\rule
         \expandafter\expandafter\expandafter[%
         \expandafter\expandafter\expandafter-%
@@ -122,10 +125,31 @@
       \rule[-\tempdimenB]{0pt}{\tempdimenA}%
     \fi
   \fi
-  \def\breakinparen{\\}%
+  \gfncmd@enableescapedchar
   \gfncmd@resultofparen
-  \gfncmd@disablebreakinparen
+  \gfncmd@disableescapedchar
 }
+%
+\iffalse
+\def\gfncmd@sub{\gfncmd@comp}
+\def\gfncmd@exchangetoken#1#2\gfncmd@punct#3\gfncmd@punct#4#5{%
+  \def\gfncmd@temptoken{#1}%
+  \ifx\gfncmd@temptoken#4%
+    \ifx\gfncmd@sub#2\gfncmd@sub
+      \gfncmd@exchangetoken#2\gfncmd@punct#3#4\gfncmd@punct{#4}{#5}%
+    \else
+      \gfncmd@exchangetoken#2\gfncmd@punct#3#5\gfncmd@punct{#4}{#5}%
+    \fi
+  \else
+    \ifx\gfncmd@sub#2\gfncmd@sub
+      \gfncmd@exchangetoken#2\gfncmd@punct#3#4\gfncmd@punct{#4}{#5}%
+    \else
+      \gfncmd@exchangetoken#2\gfncmd@punct#3#5\gfncmd@punct{#4}{#5}%
+    \fi
+  \fi
+}
+\fi
+%
 \def\genparenwithmiddle#1#2#3#4#5{%
   \def\leftcontent@defcs{#1}%
   \def\rightcontent@defcs{#2}%

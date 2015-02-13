@@ -21,23 +21,23 @@
 \newcommand{\einnervb}{\vblank\noindent}
 %====章・節のテーマ=============================================================
 \newcommand{\setsectiontheme}[1]{%
-  \expandafter\let\expandafter\decosection\csname#1section@gfndeco\endcsname%
-  \expandafter\let\expandafter\decononumsection\csname#1nonumsection@gfndeco\endcsname%
-  \expandafter\let\expandafter\decosubsection\csname#1subsection@gfndeco\endcsname%
-  \expandafter\let\expandafter\decononumsubsection\csname#1nonumsubsection@gfndeco\endcsname%
-}%
+  \expandafter\let\expandafter\decosection\csname#1section@gfndeco\endcsname
+  \expandafter\let\expandafter\decononumsection\csname#1nonumsection@gfndeco\endcsname
+  \expandafter\let\expandafter\decosubsection\csname#1subsection@gfndeco\endcsname
+  \expandafter\let\expandafter\decononumsubsection\csname#1nonumsubsection@gfndeco\endcsname
+}
 \newcommand{\decosectionpunctu@gfndeco}{}%
 \newcommand{\decosectionpunctb@gfndeco}{}%
 \newcommand{\setdecosectionpunct}[2]{%
   \renewcommand{\decosectionpunctu@gfndeco}{#1}%
   \renewcommand{\decosectionpunctb@gfndeco}{#2}%
-}%
+}
 \newcommand{\writenumberingofdecosection@gfndeco}{%
   \decosectionpunctu@gfndeco\arabic{section}%
-  \decosectionpunctb@gfndeco%
-}%
-\newif\ifpagebreakbeforedecosection@gfndeco%
-\pagebreakbeforedecosection@gfndecotrue%
+  \decosectionpunctb@gfndeco
+}
+\newif\ifpagebreakbeforedecosection@gfndeco
+\pagebreakbeforedecosection@gfndecotrue
 \newcommand{\enablepagebreakbeforedecosection}{\pagebreakbeforedecosection@gfndecotrue}
 \newcommand{\disablepagebreakbeforedecosection}{\pagebreakbeforedecosection@gfndecofalse}
 \newcommand{\decosubsectionpunctu@gfndeco}{}
@@ -47,17 +47,18 @@
   \renewcommand{\decosubsectionpunctu@gfndeco}{#1}%
   \renewcommand{\decosubsectionpunctb@gfndeco}{#2}%
   \renewcommand{\decosubsectionpunctt@gfndeco}{#3}%
-}%
+}
 \newcommand{\writenumberingofdecosubsection@gfndeco}{%
   \decosubsectionpunctu@gfndeco\arabic{section}%
   \decosubsectionpunctb@gfndeco\arabic{subsection}%
   \decosubsectionpunctt@gfndeco%
-}%
+}
 %--line------------------------------------------------------------------------
 \newcommand{\linesection@gfndeco}[2][\relax]{%
-  \ifpagebreakbeforedecosection@gfndeco\clearpage\fi%
+  \vblank
+  \ifpagebreakbeforedecosection@gfndeco\clearpage\fi
   \dealwithsectioncounter@gfndeco{#1}%
-  \addcontentsline{toc}{section}{#2}%
+  \addcontentsline{toc}{section}{\writenumberingofdecosection@gfndeco\ #2}%
   {\samepage
     \noindent
     \begin{tikzpicture}
@@ -76,7 +77,8 @@
 }
 %
 \newcommand{\linenonumsection@gfndeco}[1]{%
-  \clearpage
+  \vblank
+  \ifpagebreakbeforedecosection@gfndeco\clearpage\fi
   {\samepage
     \noindent
     \begin{tikzpicture}
@@ -95,11 +97,12 @@
 }
 %
 \newcommand{\linesubsection@gfndeco}[2][\relax]{%
-  {\samepage%
+  \vblank
+  {\samepage
     \noindent
     \dealwithsubsectioncounter@gfndeco{#1}%
-    \parbox[c][1.25zh][c]{\textwidth}{\textsf{\large \writenumberingofdecosubsection@gfndeco\enskip#2}}
-    \addcontentsline{toc}{subsection}{#2}%
+    \parbox[c][1.25zh][c]{\textwidth}{\textsf{\large \writenumberingofdecosubsection@gfndeco\ #2}}
+    \addcontentsline{toc}{subsection}{\writenumberingofdecosubsection@gfndeco\ #2}%
     \parbox[c][0.25zh][t]{\textwidth}{%
       \begin{tikzpicture}
         \draw[line width=1pt] (0,0)--(\textwidth,0);
@@ -112,14 +115,17 @@
 }%
 %
 \newcommand{\linenonumsubsection@gfndeco}[1]{%
-  \noindent
-  \parbox[c][1.25zh][c]{\textwidth}{\textsf{#1}}
-  \parbox[c][0.25zh][t]{\textwidth}{%
-    \begin{tikzpicture}
-      \draw[line width=1pt] (0,0)--(\textwidth,0);
-    \end{tikzpicture}
-  }
-  \par
+  \vblank
+  {\samepage
+    \noindent
+    \parbox[c][1.25zh][c]{\textwidth}{\textsf{#1}}
+    \parbox[c][0.25zh][t]{\textwidth}{%
+      \begin{tikzpicture}
+        \draw[line width=1pt] (0,0)--(\textwidth,0);
+      \end{tikzpicture}
+    }%
+    \par
+  }%
   \nopagebreak
   \vblank
 }%
