@@ -1,140 +1,59 @@
 %This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
 %
 %---括弧類------------------------------
-\newcount\gfncmd@caseparen
-\gfncmd@caseparen=0\relax
-\def\usenormalparen{\gfncmd@caseparen=0\relax}
-\def\useexpandingparen{\gfncmd@caseparen=1}
-\def\gfncmd@enablebreakinparen{\def\breakinparen{}}
-\def\gfncmd@disablebreakinparen{\def\breakinparen{}}
-\def\gfncmd@true{t}
-%\gfncmd@enablebreakinparen
-\newcount\gfncmd@count@depthofparen
-\gfncmd@count@depthofparen=0\relax
+\newcount\caseparen@gfncmd
+\caseparen@gfncmd=0\relax
+\def\usenormalparen{\caseparen@gfncmd=0\relax}
+\def\useexpandingparen{\caseparen@gfncmd=1}
+\newcount\depthofparen@count
+\depthofparen@count=0\relax
 \newdimen\tempdimenA
 \newdimen\tempdimenB
-\newdimen\tempdimenC
 \def\genparen#1#2#3#4#5{%
-  \ifcase\gfncmd@caseparen
+  \ifcase\caseparen@gfncmd
   %%%%(0: \usenormalparen)
     \left#2 #1 \right#3%
   \or%(1: \useexpandingparen)
   %(needs 'lmodern', '[T1]fontenc'.)
     \def\tempparam@defcs{#4}%
     \ifx\tempparam@defcs\empty
-      \gfncmd@disablebreakinparen
-      \expandafter\def\csname pre[\the\gfncmd@count@depthofparen]\endcsname{t}%
-      %\typeout{(**TYPEOUT1**)[\the\gfncmd@count@depthofparen]}%<test>
-      \advance\gfncmd@count@depthofparen by1\relax
       \settoheight\tempdimenA{%
+        \advance\depthofparen@count by1\relax
         $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
+        \advance\depthofparen@count by-1\relax
       }%
-      \advance\gfncmd@count@depthofparen by-1\relax
-      \gfncmd@disablebreakinparen
-      %\typeout{(**TYPEOUT2**)[\the\gfncmd@count@depthofparen]}%<test>
-      \advance\gfncmd@count@depthofparen by1\relax
       \settodepth\tempdimenB{%
+        \advance\depthofparen@count by1\relax
         $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
+        \advance\depthofparen@count by-1\relax
       }%
-      \advance\gfncmd@count@depthofparen by-1\relax
     \else
       \tempdimenA=#4\relax
       \tempdimenB=#5\relax
     \fi
     \expandafter\def\expandafter\tempcsD\expandafter{\the\tempdimenB}%
-    \expandafter\let\csname depth[\the\gfncmd@count@depthofparen]\endcsname=\tempcsD
-%
+    \expandafter\let\csname depth[\the\depthofparen@count]\endcsname=\tempcsD
+  %
     \advance\tempdimenA by\tempdimenB\relax
     \expandafter\def\expandafter\tempcsS\expandafter{\the\tempdimenA}%
-    \expandafter\let\csname sum[\the\gfncmd@count@depthofparen]\endcsname=\tempcsS
+    \expandafter\let\csname sum[\the\depthofparen@count]\endcsname=\tempcsS
 %
-    \ifnum\gfncmd@count@depthofparen=0%
-      \tempdimenB=-0.3\tempdimenB\relax
-      \expandafter\expandafter\expandafter\def
-        \expandafter\expandafter\expandafter\gfncmd@resultofparen
-        \expandafter\expandafter\expandafter{%
-        \expandafter\expandafter\expandafter\mathopen
-        \expandafter\expandafter\expandafter{%
-        \expandafter\expandafter\expandafter\raisebox
-        \expandafter\expandafter\expandafter{%
-        \expandafter\the
-        \expandafter\tempdimenB
-        \expandafter}%
-        \expandafter{%
-        \expandafter\text
-        \expandafter{%
-        \expandafter\fontsize
-        \expandafter{\the\tempdimenA}{0pt}\selectfont $#2$}}}}%
-    \else
-      \def\gfncmd@resultofparen{}%<?>
-      \mathopen{\raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#2$}}}%
-    \fi
+    \mathopen{\raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#2$}}}%
 %
-    \expandafter\def\csname pre[\the\gfncmd@count@depthofparen]\endcsname{f}%
-    \expandafter\ifx\csname pre[0]\endcsname\gfncmd@true
-      \gfncmd@disablebreakinparen
-    \else
-      \gfncmd@enablebreakinparen
-    \fi
+    \advance\depthofparen@count by1\relax
+    \ifmmode #1\else\displaystyle #1\fi
+    \advance\depthofparen@count by-1\relax
 %
-    \advance\gfncmd@count@depthofparen by1\relax
-    \ifnum\gfncmd@count@depthofparen=1
-      \expandafter\def\expandafter\gfncmd@resultofparen\expandafter{\gfncmd@resultofparen
-        \ifmmode\else\displaystyle\fi#1}%
-    \else
-      \ifmmode\else\displaystyle\fi#1%
-    \fi
-    \advance\gfncmd@count@depthofparen by-1\relax
-    \gfncmd@disablebreakinparen
-%
-    \expandafter\let\expandafter\tempcsD\expandafter=\csname depth[\the\gfncmd@count@depthofparen]\endcsname
-    \expandafter\let\expandafter\tempcsS\expandafter=\csname sum[\the\gfncmd@count@depthofparen]\endcsname
+    \expandafter\let\expandafter\tempcsD\expandafter=\csname depth[\the\depthofparen@count]\endcsname
+    \expandafter\let\expandafter\tempcsS\expandafter=\csname sum[\the\depthofparen@count]\endcsname
     \expandafter\tempdimenB\expandafter=\tempcsD\relax
     \expandafter\tempdimenA\expandafter=\tempcsS\relax
 %
-    \ifnum\gfncmd@count@depthofparen=0
-      \tempdimenC=0.3\tempdimenB\relax
-      \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\def
-        \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\gfncmd@resultofparen
-        \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter{%
-        \expandafter\expandafter\expandafter\gfncmd@resultofparen
-        \expandafter\expandafter\expandafter\mathclose
-        \expandafter\expandafter\expandafter{%
-        \expandafter\expandafter\expandafter\raisebox
-        \expandafter\expandafter\expandafter{%
-        \expandafter\the
-        \expandafter\tempdimenC
-        \expandafter}%
-        \expandafter{%
-        \expandafter\text
-        \expandafter{%
-        \expandafter\fontsize
-        \expandafter{\the\tempdimenA}{0pt}\selectfont $#3$}}}}%
-    \else
-      \mathclose{\raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#3$}}}%
-    \fi
+    \mathclose{\raise-0.3\tempdimenB\hbox{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#3$}}}%
 %
     \advance\tempdimenA by0.1zw\relax
-    \ifnum\gfncmd@count@depthofparen=0
-      \expandafter\expandafter\expandafter\rule
-        \expandafter\expandafter\expandafter[%
-        \expandafter\expandafter\expandafter-%
-        \expandafter\the
-        \expandafter\tempdimenB
-        \expandafter]%
-        \expandafter{%
-        \expandafter0%
-        \expandafter p%
-        \expandafter t%
-        \expandafter}%
-        \expandafter{\the\tempdimenA}%
-    \else
-      \rule[-\tempdimenB]{0pt}{\tempdimenA}%
-    \fi
+    \rule[-\tempdimenB]{0pt}{\tempdimenA}%
   \fi
-  \def\breakinparen{\\}%
-  %\expandafter\showtokens\expandafter{\gfncmd@resultofparen}%<test>
-  \gfncmd@resultofparen
 }
 \def\genparenwithmiddle#1#2#3#4#5{%
   \def\leftcontent@defcs{#1}%
@@ -156,13 +75,13 @@
   \else
     \expandafter\def\expandafter\largerdepth\expandafter{\the\tempdimenB}%
   \fi
-  \expandafter\let\csname lcnt[\the\gfncmd@count@depthofparen]\endcsname=\leftcontent@defcs
-  \expandafter\let\csname rcnt[\the\gfncmd@count@depthofparen]\endcsname=\rightcontent@defcs
-  \expandafter\let\csname msgn[\the\gfncmd@count@depthofparen]\endcsname=\middlesign@defcs
-  \expandafter\let\csname opn[\the\gfncmd@count@depthofparen]\endcsname=\openparen@defcs
-  \expandafter\let\csname cls[\the\gfncmd@count@depthofparen]\endcsname=\closeparen@defcs
-  \expandafter\let\csname lgrhgt[\the\gfncmd@count@depthofparen]\endcsname=\largerheight
-  \expandafter\let\csname lgrdpt[\the\gfncmd@count@depthofparen]\endcsname=\largerdepth
+  \expandafter\let\csname lcnt[\the\depthofparen@count]\endcsname=\leftcontent@defcs
+  \expandafter\let\csname rcnt[\the\depthofparen@count]\endcsname=\rightcontent@defcs
+  \expandafter\let\csname msgn[\the\depthofparen@count]\endcsname=\middlesign@defcs
+  \expandafter\let\csname opn[\the\depthofparen@count]\endcsname=\openparen@defcs
+  \expandafter\let\csname cls[\the\depthofparen@count]\endcsname=\closeparen@defcs
+  \expandafter\let\csname lgrhgt[\the\depthofparen@count]\endcsname=\largerheight
+  \expandafter\let\csname lgrdpt[\the\depthofparen@count]\endcsname=\largerdepth
   %
   \expandafter\expandafter\expandafter\genparen
     \expandafter\expandafter\expandafter{%
@@ -177,13 +96,13 @@
     \expandafter\expandafter\expandafter{%
     \expandafter\largerheight\expandafter}\expandafter{\largerdepth}%
   %
-  \expandafter\let\expandafter\leftcontent@defcs\expandafter=\csname lcnt[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\rightcontent@defcs\expandafter=\csname rcnt[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\middlesign@defcs\expandafter=\csname msgn[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\openparen@defcs\expandafter=\csname opn[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\closeparen@defcs\expandafter=\csname cls[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\largerheight\expandafter=\csname lgrhgt[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\largerdepth\expandafter=\csname lgrdpt[\the\gfncmd@count@depthofparen]\endcsname
+  \expandafter\let\expandafter\leftcontent@defcs\expandafter=\csname lcnt[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\rightcontent@defcs\expandafter=\csname rcnt[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\middlesign@defcs\expandafter=\csname msgn[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\openparen@defcs\expandafter=\csname opn[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\closeparen@defcs\expandafter=\csname cls[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\largerheight\expandafter=\csname lgrhgt[\the\depthofparen@count]\endcsname
+  \expandafter\let\expandafter\largerdepth\expandafter=\csname lgrdpt[\the\depthofparen@count]\endcsname
   %
   \expandafter\expandafter\expandafter\genparen
     \expandafter\expandafter\expandafter{%
@@ -368,15 +287,15 @@
 }
 %===束論========================================================================
 %---半順序 (partial order) -------------
-\newcount\gfncmd@casepord
-\gfncmd@casepord=0\relax
-\def\usepreccurlyeqaspord{\gfncmd@casepord=0\relax}
-\def\usepreceqaspord{\gfncmd@casepord=1\relax}
-\def\useleqaspord{\gfncmd@casepord=2\relax}
-\def\useleqslantaspord{\gfncmd@casepord=3\relax}
+\newcount\casepord@gfncmd
+\casepord@gfncmd=0\relax
+\def\usepreccurlyeqaspord{\casepord@gfncmd=0\relax}
+\def\usepreceqaspord{\casepord@gfncmd=1\relax}
+\def\useleqaspord{\casepord@gfncmd=2\relax}
+\def\useleqslantaspord{\casepord@gfncmd=3\relax}
 \def\pord{%
   \mathrel{%
-    \ifcase\gfncmd@casepord
+    \ifcase\casepord@gfncmd
       %(needs amssymb)
       \preccurlyeq
     \or
@@ -410,13 +329,13 @@
 }
 \def\thmpdif#1#2#3{\paren{\frac{{\partial}#1}{{\partial}#2}}_{#3}}
 % ---- 微分演算子 ----
-\newcount\gfncmd@caseordd
-\gfncmd@caseordd=0\relax
-\def\useromanordd{\gfncmd@caseordd=0\relax}
-\def\useitalicordd{\gfncmd@caseordd=1\relax}
+\newcount\caseordd@gfncmd
+\caseordd@gfncmd=0\relax
+\def\useromanordd{\caseordd@gfncmd=0\relax}
+\def\useitalicordd{\caseordd@gfncmd=1\relax}
 \def\ordd{%
   \mathord{%
-    \ifcase\gfncmd@caseordd
+    \ifcase\caseordd@gfncmd
       \,\mathrm{d}%
     \or%
       \,d%
@@ -426,35 +345,35 @@
 %
 %===文字類======================================================================
 %---イプシロンの再定義------------------
-\newcount\gfncmd@casemakeepsilonsdifferent
-\gfncmd@casemakeepsilonsdifferent=0\relax
-\def\makeepsilonssame{\gfncmd@casemakeepsilonsdifferent=0\relax}
-\def\makeepsilonsdifferent{\gfncmd@casemakeepsilonsdifferent=1\relax}
+\newcount\casemakeepsilonsdifferent@gfncmd
+\casemakeepsilonsdifferent@gfncmd=0\relax
+\def\makeepsilonssame{\casemakeepsilonsdifferent@gfncmd=0\relax}
+\def\makeepsilonsdifferent{\casemakeepsilonsdifferent@gfncmd=1\relax}
 \newcount\caseepsilon@gfncmd
 \caseepsilon@gfncmd=0\relax
 \def\usesymbolepsilon{\caseepsilon@gfncmd=0\relax}
 \def\usescriptepsilon{\caseepsilon@gfncmd=1\relax}
-\let\gfncmd@varepsilon=\varepsilon
-\let\gfncmd@epsilon=\epsilon
+\let\varepsilon@gfncmd=\varepsilon
+\let\epsilon@gfncmd=\epsilon
 \def\epsilon{%
   \mathord{%
-    \ifcase\gfncmd@casemakeepsilonsdifferent
+    \ifcase\casemakeepsilonsdifferent@gfncmd
       \ifcase\caseepsilon@gfncmd
-        \gfncmd@epsilon
+        \epsilon@gfncmd
       \or
-        \gfncmd@varepsilon
+        \varepsilon@gfncmd
       \fi
     \or
-      \gfncmd@epsilon
+      \epsilon@gfncmd
     \fi
   }%
 }
 \def\varepsilon{%
   \mathord{%
-    \ifcase\gfncmd@casemakeepsilonsdifferent
-      \gfncmd@undefined
+    \ifcase\casemakeepsilonsdifferent@gfncmd
+      \undefined@gfncmd
     \or
-      \gfncmd@varepsilon
+      \varepsilon@gfncmd
     \fi
   }%
 }
@@ -467,130 +386,130 @@
 \casephi@gfncmd=0\relax
 \def\usesymbolphi{\casephi@gfncmd=0\relax}
 \def\usescriptphi{\casephi@gfncmd=1\relax}
-\let\gfncmd@phi=\phi
-\let\gfncmd@varphi=\varphi
+\let\phi@gfncmd=\phi
+\let\varphi@gfncmd=\varphi
 \def\phi{%
   \mathord{%
     \ifcase\casemakephisdifferent@gfncmd
       \ifcase\casephi@gfncmd
-        \gfncmd@phi
+        \phi@gfncmd
       \or
-        \gfncmd@varphi
+        \varphi@gfncmd
       \fi
     \or
-      \gfncmd@phi
+      \phi@gfncmd
     \fi
   }%
 }
 \def\varphi{%
   \mathord{%
     \ifcase\casemakephisdifferent@gfncmd
-      \gfncmd@undefined
+      \undefined@gfncmd
     \or
-      \gfncmd@varphi
+      \varphi@gfncmd
     \fi
   }%
 }
 %---ギリシア大文字の再定義--------------
-\newcount\gfncmd@casegreekcapital
-\gfncmd@casegreekcapital=0\relax
-\def\useitalicgreekcapital{\gfncmd@casegreekcapital=0\relax}
-\def\useromangreekcapital{\gfncmd@casegreekcapital=1\relax}
+\newcount\casegreekcapital@gfncmd
+\casegreekcapital@gfncmd=0\relax
+\def\useitalicgreekcapital{\casegreekcapital@gfncmd=0\relax}
+\def\useromangreekcapital{\casegreekcapital@gfncmd=1\relax}
 %------------------
 \def\rmAlpha{\mathrm{A}}
-\def\Alpha{\ifcase\gfncmd@casegreekcapital A\or\rmAlpha\fi}
+\def\Alpha{\ifcase\casegreekcapital@gfncmd A\or\rmAlpha\fi}
 %------------------
 \def\rmBeta{\mathrm{B}}
-\def\Beta{\ifcase\gfncmd@casegreekcapital B\or\rmBeta\fi}
+\def\Beta{\ifcase\casegreekcapital@gfncmd B\or\rmBeta\fi}
 %------------------
 \let\rmGamma=\Gamma
 \let\varGamma@gfncmd=\varGamma
-\def\Gamma{\ifcase\gfncmd@casegreekcapital \varGamma@gfncmd\or\rmGamma\fi}
-\def\varGamma{\gfncmd@undefined}
+\def\Gamma{\ifcase\casegreekcapital@gfncmd \varGamma@gfncmd\or\rmGamma\fi}
+\def\varGamma{\undefined@gfncmd}
 %------------------
 \let\rmDelta=\Delta
 \let\varDelta@gfncmd=\varDelta
-\def\Delta{\ifcase\gfncmd@casegreekcapital \varDelta@gfncmd\or\rmDelta\fi}
-\def\varDelta{\gfncmd@undefined}
+\def\Delta{\ifcase\casegreekcapital@gfncmd \varDelta@gfncmd\or\rmDelta\fi}
+\def\varDelta{\undefined@gfncmd}
 %------------------
 \def\rmEpsilon{\mathrm{E}}
-\def\Epsilon{\ifcase\gfncmd@casegreekcapital E\or\rmEpsilon\fi}
+\def\Epsilon{\ifcase\casegreekcapital@gfncmd E\or\rmEpsilon\fi}
 %------------------
 \def\rmZeta{\mathrm{Z}}
-\def\Zeta{\ifcase\gfncmd@casegreekcapital Z\or\rmZeta\fi}
+\def\Zeta{\ifcase\casegreekcapital@gfncmd Z\or\rmZeta\fi}
 %------------------
 \def\rmEta{\mathrm{H}}
-\def\Eta{\ifcase\gfncmd@casegreekcapital H\or\rmEta\fi}
+\def\Eta{\ifcase\casegreekcapital@gfncmd H\or\rmEta\fi}
 %------------------
 \let\rmTheta=\Theta
 \let\varTheta@gfncmd=\varTheta
-\def\Theta{\ifcase\gfncmd@casegreekcapital \varTheta@gfncmd\or\rmTheta\fi}
-\def\varTheta{\gfncmd@undefined}
+\def\Theta{\ifcase\casegreekcapital@gfncmd \varTheta@gfncmd\or\rmTheta\fi}
+\def\varTheta{\undefined@gfncmd}
 %------------------
 \def\rmIota{\mathrm{I}}
-\def\Iota{\ifcase\gfncmd@casegreekcapital I\or\rmIota\fi}
+\def\Iota{\ifcase\casegreekcapital@gfncmd I\or\rmIota\fi}
 %------------------
 \def\rmKappa{\mathrm{K}}
-\def\Kappa{\ifcase\gfncmd@casegreekcapital K\or\rmKappa\fi}
+\def\Kappa{\ifcase\casegreekcapital@gfncmd K\or\rmKappa\fi}
 %------------------
 \let\rmLambda=\Lambda
 \let\varLambda@gfncmd=\varLambda
-\def\Lambda{\ifcase\gfncmd@casegreekcapital \varLambda@gfncmd\or\rmLambda\fi}
-\def\varLambda{\gfncmd@undefined}
+\def\Lambda{\ifcase\casegreekcapital@gfncmd \varLambda@gfncmd\or\rmLambda\fi}
+\def\varLambda{\undefined@gfncmd}
 %------------------
 \def\rmMu{\mathrm{M}}
-\def\Mu{\ifcase\gfncmd@casegreekcapital M\or\rmMu\fi}
+\def\Mu{\ifcase\casegreekcapital@gfncmd M\or\rmMu\fi}
 %------------------
 \def\rmNu{\mathrm{N}}
-\def\Nu{\ifcase\gfncmd@casegreekcapital N\or\rmNu\fi}
+\def\Nu{\ifcase\casegreekcapital@gfncmd N\or\rmNu\fi}
 %------------------
 \let\rmXi=\Xi
 \let\varXi@gfncmd=\varXi
-\def\Xi{\ifcase\gfncmd@casegreekcapital \varXi@gfncmd\or\rmXi\fi}
-\def\varXi{\gfncmd@undefined}
+\def\Xi{\ifcase\casegreekcapital@gfncmd \varXi@gfncmd\or\rmXi\fi}
+\def\varXi{\undefined@gfncmd}
 %------------------
 \def\omicron{o}
 \def\rmOmicron{\mathrm{O}}
-\def\Omicron{\ifcase\gfncmd@casegreekcapital O\or\rmOmicron\fi}
+\def\Omicron{\ifcase\casegreekcapital@gfncmd O\or\rmOmicron\fi}
 %------------------
 \let\rmPi=\Pi
 \let\varPi@gfncmd=\varPi
-\def\Pi{\ifcase\gfncmd@casegreekcapital \varPi@gfncmd\or\rmPi\fi}
-\def\varPi{\gfncmd@undefined}
+\def\Pi{\ifcase\casegreekcapital@gfncmd \varPi@gfncmd\or\rmPi\fi}
+\def\varPi{\undefined@gfncmd}
 %------------------
 \def\rmRho{\mathrm{P}}
-\def\Rho{\ifcase\gfncmd@casegreekcapital P\or\rmRho\fi}
+\def\Rho{\ifcase\casegreekcapital@gfncmd P\or\rmRho\fi}
 %------------------
 \let\rmSigma=\Sigma
 \let\varSigma@gfncmd=\varSigma
-\def\Sigma{\ifcase\gfncmd@casegreekcapital \varSigma@gfncmd\or\rmSigma\fi}
-\def\varSigma{\gfncmd@undefined}
+\def\Sigma{\ifcase\casegreekcapital@gfncmd \varSigma@gfncmd\or\rmSigma\fi}
+\def\varSigma{\undefined@gfncmd}
 %------------------
 \def\rmTau{\mathrm{T}}
-\def\Tau{\ifcase\gfncmd@casegreekcapital T\or\rmTau\fi}
+\def\Tau{\ifcase\casegreekcapital@gfncmd T\or\rmTau\fi}
 %------------------
 \let\rmUpsilon=\Upsilon
 \let\varUpsilon@gfncmd=\varUpsilon
-\def\Upsilon{\ifcase\gfncmd@casegreekcapital \varUpsilon@gfncmd\or\rmUpsilon\fi}
-\def\varUpsilon{\gfncmd@undefined}
+\def\Upsilon{\ifcase\casegreekcapital@gfncmd \varUpsilon@gfncmd\or\rmUpsilon\fi}
+\def\varUpsilon{\undefined@gfncmd}
 %------------------
 \let\rmPhi=\Phi
 \let\varPhi@gfncmd=\varPhi
-\def\Phi{\ifcase\gfncmd@casegreekcapital \varPhi@gfncmd\or\rmPhi\fi}
-\def\varPhi{\gfncmd@undefined}
+\def\Phi{\ifcase\casegreekcapital@gfncmd \varPhi@gfncmd\or\rmPhi\fi}
+\def\varPhi{\undefined@gfncmd}
 %------------------
 \def\rmChi{\mathrm{X}}
-\def\Chi{\ifcase\gfncmd@casegreekcapital X\or\rmChi\fi}
+\def\Chi{\ifcase\casegreekcapital@gfncmd X\or\rmChi\fi}
 %------------------
 \let\rmPsi=\Psi
 \let\varPsi@gfncmd=\varPsi
-\def\Psi{\ifcase\gfncmd@casegreekcapital \varPsi@gfncmd\or\rmPsi\fi}
-\def\varPsi{\gfncmd@undefined}
+\def\Psi{\ifcase\casegreekcapital@gfncmd \varPsi@gfncmd\or\rmPsi\fi}
+\def\varPsi{\undefined@gfncmd}
 %------------------
 \let\rmOmega=\Omega
 \let\varOmega@gfncmd=\varOmega
-\def\Omega{\ifcase\gfncmd@casegreekcapital \varOmega@gfncmd\or\rmOmega\fi}
-\def\varOmega{\gfncmd@undefined}
+\def\Omega{\ifcase\casegreekcapital@gfncmd \varOmega@gfncmd\or\rmOmega\fi}
+\def\varOmega{\undefined@gfncmd}
 %---------------------------------------
 %最適化
 %\newcommand{\minimize}{\quad\mathrm{Minimize}\quad}
