@@ -5,212 +5,121 @@
 \gfncmd@caseparen=0\relax
 \def\usenormalparen{\gfncmd@caseparen=0\relax}
 \def\useexpandingparen{\gfncmd@caseparen=1}
-\def\gfncmd@disableescapedchar{%
-  %\def\tabinparen{}%
-  \def\breakinparen{}}
-\def\gfncmd@enableescapedchar{%
-  %\def\tabinparen{\\&}%
-  \def\breakinparen{\\}}
-\newcount\gfncmd@count@depthofparen
-\gfncmd@count@depthofparen=0\relax
-\newdimen\tempdimenA
-\newdimen\tempdimenB
-\newdimen\tempdimenC
+\newif\ifgfncmd@escapechar
+\def\gfncmd@disableescapedchar{\gfncmd@escapecharfalse}
+\def\gfncmd@enableescapedchar{\gfncmd@escapechartrue}
+\def\tabinparen{\ifgfncmd@escapechar&\else [F]\fi}
+\def\breakinparen{\ifgfncmd@escapechar\\\else [F]\fi}
+\newcount\gfncmd@count@rankofparen
+\gfncmd@count@rankofparen=0\relax
+\newdimen\gfncmd@dimen@height
+\newdimen\gfncmd@dimen@depth
+\newdimen\gfncmd@dimen@innerdepth
+\def\gfncmd@enclose#1#2#3#4#5{%
+  % ---- ---- ---- ----
+  % #1 : total height of parenthesis (expanded into letters)
+  % #2 : depth of parenthesis (expanded into letters)
+  % #3 : inner content
+  % #4 : left parenthesis
+  % #5 : right parenthesis
+  % ---- ---- ---- ----
+  \mathopen{\raisebox{#2}{\text{\fontsize{#1}{0pt}\selectfont $#4$}}}%
+  \ifmmode\else\displaystyle\fi#3%
+  \mathclose{\raisebox{#2}{\text{\fontsize{#1}{0pt}\selectfont $#5$}}}%
+}
 \def\genparen#1#2#3#4#5{%
+  % ---- ---- ---- ----
+  % #1 : inner content
+  % #2 : left parenthesis
+  % #3 : right parenthesis
+  % #4 : option height (regarded as no option if empty)
+  % #5 : option depth (regarded as no option if empty)
+  % ---- ---- ---- ----
   \ifcase\gfncmd@caseparen
   %%%%(0: \usenormalparen)
     \left#2 #1 \right#3%
   \or%(1: \useexpandingparen)
   %(needs 'lmodern', '[T1]fontenc'.)
-    \def\tempparam@defcs{#4}%
-    \ifx\tempparam@defcs\empty
+    \def\gfncmd@tempcsforifx{#4}%
+    \ifx\gfncmd@tempcsforifx\empty
       \gfncmd@disableescapedchar
-      \advance\gfncmd@count@depthofparen by1\relax
-      \settoheight\tempdimenA{%
-        $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
+      \advance\gfncmd@count@rankofparen by1\relax
+      \setbox0=\hbox{$\displaystyle #1$\rule[0pt]{0pt}{1zh}}%
+      \gfncmd@dimen@height=\ht0\relax
+      \gfncmd@dimen@depth=\dp0\relax
+      \advance\gfncmd@count@rankofparen by-1\relax
+    \else
+      \gfncmd@dimen@height=#4\relax
+      \gfncmd@dimen@depth=#5\relax
+    \fi
+%
+    \advance\gfncmd@dimen@height by\gfncmd@dimen@depth\relax
+    \let\gfncmd@dimen@total=\gfncmd@dimen@height
+    \gfncmd@dimen@innerdepth=-0.3\gfncmd@dimen@depth\relax
+%
+    \ifnum\gfncmd@count@rankofparen=0%
+      \def\gfncmd@resultofparen{%
+        \expandafter\expandafter\expandafter\gfncmd@enclose
+          \expandafter\expandafter\expandafter{\expandafter\the\expandafter\gfncmd@dimen@total\expandafter}%
+          \expandafter{\the\gfncmd@dimen@innerdepth}{\copy0}{#2}{#3}%
       }%
-      \advance\gfncmd@count@depthofparen by-1\relax
-      \gfncmd@disableescapedchar
-      \advance\gfncmd@count@depthofparen by1\relax
-      \settodepth\tempdimenB{%
-        $\displaystyle #1$\rule[0pt]{0pt}{1zh}%
-      }%
-      \advance\gfncmd@count@depthofparen by-1\relax
     \else
-      \tempdimenA=#4\relax
-      \tempdimenB=#5\relax
-    \fi
-    \expandafter\def\expandafter\tempcsD\expandafter{\the\tempdimenB}%
-    \expandafter\let\csname depth[\the\gfncmd@count@depthofparen]\endcsname=\tempcsD
-%
-    \advance\tempdimenA by\tempdimenB\relax
-    \expandafter\def\expandafter\tempcsS\expandafter{\the\tempdimenA}%
-    \expandafter\let\csname sum[\the\gfncmd@count@depthofparen]\endcsname=\tempcsS
-%
-    \ifnum\gfncmd@count@depthofparen=0%
-      \tempdimenC=-0.3\tempdimenB\relax
-      \expandafter\expandafter\expandafter\def
-        \expandafter\expandafter\expandafter\gfncmd@resultofparen
-        \expandafter\expandafter\expandafter{%
-        \expandafter\expandafter\expandafter\mathopen
-        \expandafter\expandafter\expandafter{%
-        \expandafter\expandafter\expandafter\raisebox
-        \expandafter\expandafter\expandafter{%
-        \expandafter\the
-        \expandafter\tempdimenC
-        \expandafter}%
-        \expandafter{%
-        \expandafter\text
-        \expandafter{%
-        \expandafter\fontsize
-        \expandafter{\the\tempdimenA}{0pt}\selectfont $#2$}}}}%
-    \else
-      \def\gfncmd@resultofparen{}%<?>
-      \mathopen{\raisebox{-0.3\tempdimenB}{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#2$}}}%
+      \def\gfncmd@resultofparen{}%
+      \expandafter\expandafter\expandafter\gfncmd@enclose
+        \expandafter\expandafter\expandafter{\expandafter\the\expandafter\gfncmd@dimen@total\expandafter}%
+        \expandafter{\the\gfncmd@dimen@innerdepth}{\copy0}{#2}{#3}%
     \fi
 %
-    \gfncmd@disableescapedchar
-    \advance\gfncmd@count@depthofparen by1\relax
-    \ifnum\gfncmd@count@depthofparen=1%
-      \expandafter\def\expandafter\gfncmd@resultofparen\expandafter{\gfncmd@resultofparen
-        \ifmmode\else\displaystyle\fi#1}%
-    \else
-      \ifmmode\else\displaystyle\fi#1%
-    \fi
-    \advance\gfncmd@count@depthofparen by-1\relax
-    \gfncmd@disableescapedchar
-%
-    \expandafter\let\expandafter\tempcsD\expandafter=\csname depth[\the\gfncmd@count@depthofparen]\endcsname
-    \expandafter\let\expandafter\tempcsS\expandafter=\csname sum[\the\gfncmd@count@depthofparen]\endcsname
-    \expandafter\tempdimenB\expandafter=\tempcsD\relax
-    \expandafter\tempdimenA\expandafter=\tempcsS\relax
-%
-    \ifnum\gfncmd@count@depthofparen=0%
-      \tempdimenC=-0.3\tempdimenB\relax
-      \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\def
-        \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\gfncmd@resultofparen
-        \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter{%
-        \expandafter\expandafter\expandafter\gfncmd@resultofparen
-        \expandafter\expandafter\expandafter\mathclose
-        \expandafter\expandafter\expandafter{%
-        \expandafter\expandafter\expandafter\raisebox
-        \expandafter\expandafter\expandafter{%
-        \expandafter\the
-        \expandafter\tempdimenC
-        \expandafter}%
-        \expandafter{%
-        \expandafter\text
-        \expandafter{%
-        \expandafter\fontsize
-        \expandafter{\the\tempdimenA}{0pt}\selectfont $#3$}}}}%
-    \else
-      \mathclose{\raisebox{-0.3\tempdimenB}{\text{\fontsize{\tempdimenA}{0pt}\selectfont $#3$}}}%
-    \fi
-%
-    \advance\tempdimenA by0.1zw\relax
-    \ifnum\gfncmd@count@depthofparen=0%
-      \expandafter\expandafter\expandafter\rule
-        \expandafter\expandafter\expandafter[%
-        \expandafter\expandafter\expandafter-%
-        \expandafter\the
-        \expandafter\tempdimenB
-        \expandafter]%
-        \expandafter{%
-        \expandafter0%
-        \expandafter p%
-        \expandafter t%
-        \expandafter}%
-        \expandafter{\the\tempdimenA}%
-    \else
-      \rule[-\tempdimenB]{0pt}{\tempdimenA}%
-    \fi
+    \advance\gfncmd@dimen@total by0.1zw\relax
+    \rule[-\gfncmd@dimen@depth]{0pt}{\gfncmd@dimen@total}%
   \fi
   \gfncmd@enableescapedchar
   \gfncmd@resultofparen
   \gfncmd@disableescapedchar
 }
 %
-\iffalse
-\def\gfncmd@sub{\gfncmd@comp}
-\def\gfncmd@exchangetoken#1#2\gfncmd@punct#3\gfncmd@punct#4#5{%
-  \def\gfncmd@temptoken{#1}%
-  \ifx\gfncmd@temptoken#4%
-    \ifx\gfncmd@sub#2\gfncmd@sub
-      \gfncmd@exchangetoken#2\gfncmd@punct#3#4\gfncmd@punct{#4}{#5}%
-    \else
-      \gfncmd@exchangetoken#2\gfncmd@punct#3#5\gfncmd@punct{#4}{#5}%
-    \fi
-  \else
-    \ifx\gfncmd@sub#2\gfncmd@sub
-      \gfncmd@exchangetoken#2\gfncmd@punct#3#4\gfncmd@punct{#4}{#5}%
-    \else
-      \gfncmd@exchangetoken#2\gfncmd@punct#3#5\gfncmd@punct{#4}{#5}%
-    \fi
-  \fi
-}
-\fi
-%
+\newdimen\gfncmd@dimen@heightA
+\newdimen\gfncmd@dimen@depthA
+\newdimen\gfncmd@dimen@heightB
+\newdimen\gfncmd@dimen@depthB
+\def\gfncmd@enclosewithmiddle#1#2#3#4#5#6#7{%
+  % ---- ---- ---- ----
+  % #1 : total height of parenthesis (expanded into letters)
+  % #2 : depth of parenthesis (expanded into letters)
+  % #3 : left inner content
+  % #4 : right inner content
+  % #5 : left parenthesis
+  % #6 : middle parenthesis
+  % #7 : right parenthesis
+  % ---- ---- ---- ----
+  \genparen{#3}{#5}{#6}{#1}{#2}%
+  \genparen{#4}{\empty}{#7}{#1}{#2}%
+}%
 \def\genparenwithmiddle#1#2#3#4#5{%
   \def\leftcontent@defcs{#1}%
   \def\rightcontent@defcs{#2}%
   \def\middlesign@defcs{#3}%
   \def\openparen@defcs{#4}%
   \def\closeparen@defcs{#5}%
-  \settoheight\tempdimenA{$\displaystyle #1$\rule[-0.1zh]{0pt}{1.1zh}}%
-  \settoheight\tempdimenB{$\displaystyle #2$\rule[-0.1zh]{0pt}{1.1zh}}%
-  \ifdim\tempdimenA>\tempdimenB
-    \expandafter\def\expandafter\largerheight\expandafter{\the\tempdimenA}%
+  \setbox0=\hbox{$\displaystyle #1$\rule[-0.1zh]{0pt}{1.1zh}}%
+  \gfncmd@dimen@heightA=\ht0\relax
+  \gfncmd@dimen@depthA=\dp0\relax
+  \setbox0=\hbox{$\displaystyle #2$\rule[-0.1zh]{0pt}{1.1zh}}%
+  \gfncmd@dimen@heightB=\ht0\relax
+  \gfncmd@dimen@depthB=\dp0\relax
+  \ifdim\gfncmd@dimen@heightA>\gfncmd@dimen@heightB\relax
+    \expandafter\def\expandafter\gfncmd@largerheight\expandafter{\the\gfncmd@dimen@heightA}%
   \else
-    \expandafter\def\expandafter\largerheight\expandafter{\the\tempdimenB}%
+    \expandafter\def\expandafter\gfncmd@largerheight\expandafter{\the\gfncmd@dimen@heightB}%
   \fi
-  \settodepth\tempdimenA{$\displaystyle #1$\rule[-0.1zh]{0pt}{1.1zh}}%
-  \settodepth\tempdimenB{$\displaystyle #2$\rule[-0.1zh]{0pt}{1.1zh}}%
-  \ifdim\tempdimenA>\tempdimenB
-    \expandafter\def\expandafter\largerdepth\expandafter{\the\tempdimenA}%
+  \ifdim\gfncmd@dimen@depthA>\gfncmd@dimen@depthB
+    \expandafter\def\expandafter\gfncmd@largerdepth\expandafter{\the\gfncmd@dimen@depthA}%
   \else
-    \expandafter\def\expandafter\largerdepth\expandafter{\the\tempdimenB}%
+    \expandafter\def\expandafter\gfncmd@largerdepth\expandafter{\the\gfncmd@dimen@depthB}%
   \fi
-  \expandafter\let\csname lcnt[\the\gfncmd@count@depthofparen]\endcsname=\leftcontent@defcs
-  \expandafter\let\csname rcnt[\the\gfncmd@count@depthofparen]\endcsname=\rightcontent@defcs
-  \expandafter\let\csname msgn[\the\gfncmd@count@depthofparen]\endcsname=\middlesign@defcs
-  \expandafter\let\csname opn[\the\gfncmd@count@depthofparen]\endcsname=\openparen@defcs
-  \expandafter\let\csname cls[\the\gfncmd@count@depthofparen]\endcsname=\closeparen@defcs
-  \expandafter\let\csname lgrhgt[\the\gfncmd@count@depthofparen]\endcsname=\largerheight
-  \expandafter\let\csname lgrdpt[\the\gfncmd@count@depthofparen]\endcsname=\largerdepth
-  %
-  \expandafter\expandafter\expandafter\genparen
-    \expandafter\expandafter\expandafter{%
-    \expandafter\expandafter\expandafter\leftcontent@defcs
-    \expandafter\expandafter\expandafter}%
-    \expandafter\expandafter\expandafter{%
-    \expandafter\expandafter\expandafter\openparen@defcs
-    \expandafter\expandafter\expandafter}%
-    \expandafter\expandafter\expandafter{%
-    \expandafter\expandafter\expandafter\middlesign@defcs
-    \expandafter\expandafter\expandafter}%
-    \expandafter\expandafter\expandafter{%
-    \expandafter\largerheight\expandafter}\expandafter{\largerdepth}%
-  %
-  \expandafter\let\expandafter\leftcontent@defcs\expandafter=\csname lcnt[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\rightcontent@defcs\expandafter=\csname rcnt[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\middlesign@defcs\expandafter=\csname msgn[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\openparen@defcs\expandafter=\csname opn[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\closeparen@defcs\expandafter=\csname cls[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\largerheight\expandafter=\csname lgrhgt[\the\gfncmd@count@depthofparen]\endcsname
-  \expandafter\let\expandafter\largerdepth\expandafter=\csname lgrdpt[\the\gfncmd@count@depthofparen]\endcsname
-  %
-  \expandafter\expandafter\expandafter\genparen
-    \expandafter\expandafter\expandafter{%
-    \expandafter\expandafter\expandafter\rightcontent@defcs
-    \expandafter\expandafter\expandafter}%
-    \expandafter\expandafter\expandafter{%
-    \expandafter\expandafter\expandafter\empty
-    \expandafter\expandafter\expandafter}%
-    \expandafter\expandafter\expandafter{%
-    \expandafter\expandafter\expandafter\closeparen@defcs
-    \expandafter\expandafter\expandafter}%
-    \expandafter\expandafter\expandafter{%
-    \expandafter\largerheight\expandafter}\expandafter{\largerdepth}%
+  \expandafter\expandafter\expandafter\gfncmd@enclosewithmiddle
+    \expandafter\expandafter\expandafter{\expandafter\gfncmd@largerheight\expandafter}%
+    \expandafter{\gfncmd@largerdepth}{#1}{#2}{#4}{#3}{#5}%
 }
 \def\paren#1{\genparen{#1}{(}{)}{}{}}
 \def\sqbrc#1{\genparen{#1}{[}{]}{}{}}
@@ -219,7 +128,7 @@
 \def\dist#1{\left\|#1\right\|}
 \def\setprn#1{\genparen{#1}{\{}{\}}{}{}}
 \def\seqprn#1{\genparen{#1}{(}{)}{}{}}
-\def\setprnsep#1#2{\genparenwithmiddle{#1\:}{\:#2}{|}{\{}{\}}}
+\def\setprnsep#1#2{\genparenwithmiddle{#1}{#2}{\:|\:}{\{}{\}}}
     %分出公理に基づいて定義される集合用の括弧
 %---函数引数用括弧----------------------
 \newcount\casefprn@gfncmd
@@ -301,6 +210,17 @@
       2^{#1}%
     \or
       \mathfrak{P}#1%
+    \fi
+  }%
+}
+\def\Powersetfin#1{%
+  {%
+    \ifcase\casePowerset@gfncmd
+      \mathop{\mathrm{Pow}_{\omega}}\nolimits#1%
+    \or
+      \mathop{2_{\omega}}\nolimits^{#1}%
+    \or
+      \mathop{\mathfrak{P}_{\omega}}\nolimits#1%
     \fi
   }%
 }
