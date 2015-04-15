@@ -5,11 +5,13 @@
 \gfncmd@caseparen=0\relax
 \def\usenormalparen{\gfncmd@caseparen=0\relax}
 \def\useexpandingparen{\gfncmd@caseparen=1}
-\newif\ifgfncmd@escapechar
-\def\gfncmd@disableescapedchar{\gfncmd@escapecharfalse}
-\def\gfncmd@enableescapedchar{\gfncmd@escapechartrue}
-\def\tabinparen{\ifgfncmd@escapechar&\else [F]\fi}
-\def\breakinparen{\ifgfncmd@escapechar\\\else [F]\fi}
+\newif\ifgfncmd@bool@escape
+\def\gfncmd@disableescapedchar{\gfncmd@bool@escapefalse}
+\def\gfncmd@enableescapedchar{\gfncmd@bool@escapetrue}
+\def\gfncmd@tab{&\gfncmd@enableescapedchar}
+\def\gfncmd@break{\\\gfncmd@enableescapedchar}
+\def\tabinparen{\ifgfncmd@bool@escape \gfncmd@tab\else\fi}
+\def\breakinparen{\ifgfncmd@bool@escape \gfncmd@break\else\fi}
 \newcount\gfncmd@count@rankofparen
 \gfncmd@count@rankofparen=0\relax
 \newdimen\gfncmd@dimen@height
@@ -40,9 +42,9 @@
     \left#2 #1 \right#3%
   \or%(1: \useexpandingparen)
   %(needs 'lmodern', '[T1]fontenc'.)
+    \gfncmd@disableescapedchar
     \def\gfncmd@tempcsforifx{#4}%
     \ifx\gfncmd@tempcsforifx\empty
-      \gfncmd@disableescapedchar
       \advance\gfncmd@count@rankofparen by1\relax
       \setbox0=\hbox{$\displaystyle #1$\rule[0pt]{0pt}{1zh}}%
       \gfncmd@dimen@height=\ht0\relax
@@ -61,21 +63,27 @@
       \def\gfncmd@resultofparen{%
         \expandafter\expandafter\expandafter\gfncmd@enclose
           \expandafter\expandafter\expandafter{\expandafter\the\expandafter\gfncmd@dimen@total\expandafter}%
-          \expandafter{\the\gfncmd@dimen@innerdepth}{\copy0}{#2}{#3}%
+          \expandafter{\the\gfncmd@dimen@innerdepth}{%
+            \ifmmode\else\displaystyle\fi#1%
+          }{#2}{#3}%
       }%
     \else
-      \def\gfncmd@resultofparen{}%
       \expandafter\expandafter\expandafter\gfncmd@enclose
         \expandafter\expandafter\expandafter{\expandafter\the\expandafter\gfncmd@dimen@total\expandafter}%
-        \expandafter{\the\gfncmd@dimen@innerdepth}{\copy0}{#2}{#3}%
+        \expandafter{\the\gfncmd@dimen@innerdepth}{%
+            \ifmmode\else\displaystyle\fi#1%
+        }{#2}{#3}%
     \fi
 %
     \advance\gfncmd@dimen@total by0.1zw\relax
     \rule[-\gfncmd@dimen@depth]{0pt}{\gfncmd@dimen@total}%
+%
+    \ifnum\gfncmd@count@rankofparen=0\relax
+      \gfncmd@enableescapedchar
+      \gfncmd@resultofparen
+      %\gfncmd@disableescapedchar
+    \fi
   \fi
-  \gfncmd@enableescapedchar
-  \gfncmd@resultofparen
-  \gfncmd@disableescapedchar
 }
 %
 \newdimen\gfncmd@dimen@heightA
