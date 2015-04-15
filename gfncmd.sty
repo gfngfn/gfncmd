@@ -10,8 +10,10 @@
 \def\gfncmd@enableescapedchar{\gfncmd@bool@escapetrue}
 \def\gfncmd@tab{&\gfncmd@enableescapedchar}
 \def\gfncmd@break{\\\gfncmd@enableescapedchar}
-\def\tabinparen{\ifgfncmd@bool@escape \gfncmd@tab\else\fi}
-\def\breakinparen{\ifgfncmd@bool@escape \gfncmd@break\else\fi}
+\def\midtab{\ifgfncmd@bool@escape \gfncmd@tab\else\fi}
+  %(definition of '\midtab')
+\def\midbreak{\ifgfncmd@bool@escape \gfncmd@break\else\fi}
+  %(definition of '\midbreak')
 \newcount\gfncmd@count@rankofparen
 \gfncmd@count@rankofparen=0\relax
 \newdimen\gfncmd@dimen@height
@@ -29,6 +31,8 @@
   \ifmmode\else\displaystyle\fi#3%
   \mathclose{\raisebox{#2}{\text{\fontsize{#1}{0pt}\selectfont $#5$}}}%
 }
+\def\subparen{\def\gfncmd@notinscriptstyle##1##2{##2}}
+\def\gfncmd@notinscriptstyle#1#2{#1}
 \def\genparen#1#2#3#4#5{%
   % ---- ---- ---- ----
   % #1 : inner content
@@ -37,16 +41,13 @@
   % #4 : option height (regarded as no option if empty)
   % #5 : option depth (regarded as no option if empty)
   % ---- ---- ---- ----
-  \ifcase\gfncmd@caseparen
-  %%%%(0: \usenormalparen)
-    \left#2 #1 \right#3%
-  \or%(1: \useexpandingparen)
   %(needs 'lmodern', '[T1]fontenc'.)
+  \gfncmd@notinscriptstyle{%
     \gfncmd@disableescapedchar
     \def\gfncmd@tempcsforifx{#4}%
     \ifx\gfncmd@tempcsforifx\empty
       \advance\gfncmd@count@rankofparen by1\relax
-      \setbox0=\hbox{$\displaystyle #1$\rule[0pt]{0pt}{1zh}}%
+      \setbox0=\hbox{$\displaystyle #1$\rule[0pt]{0pt}{2ex}}%
       \gfncmd@dimen@height=\ht0\relax
       \gfncmd@dimen@depth=\dp0\relax
       \advance\gfncmd@count@rankofparen by-1\relax
@@ -75,15 +76,16 @@
         }{#2}{#3}%
     \fi
 %
-    \advance\gfncmd@dimen@total by0.1zw\relax
+    \advance\gfncmd@dimen@total by0.2ex\relax
     \rule[-\gfncmd@dimen@depth]{0pt}{\gfncmd@dimen@total}%
 %
     \ifnum\gfncmd@count@rankofparen=0\relax
       \gfncmd@enableescapedchar
       \gfncmd@resultofparen
-      %\gfncmd@disableescapedchar
     \fi
-  \fi
+  }{%
+    #2#1#3%
+  }%
 }
 %
 \newdimen\gfncmd@dimen@heightA
@@ -111,10 +113,10 @@
   % #4 : middle parenthesis
   % #5 : right parenthesis
   % ---- ---- ---- ----
-  \setbox0=\hbox{$\displaystyle #1$\rule[-0.1zh]{0pt}{1.1zh}}%
+  \setbox0=\hbox{$\displaystyle #1$\rule[-0.2ex]{0pt}{2.2ex}}%
   \gfncmd@dimen@heightA=\ht0\relax
   \gfncmd@dimen@depthA=\dp0\relax
-  \setbox0=\hbox{$\displaystyle #2$\rule[-0.1zh]{0pt}{1.1zh}}%
+  \setbox0=\hbox{$\displaystyle #2$\rule[-0.2ex]{0pt}{2.2ex}}%
   \gfncmd@dimen@heightB=\ht0\relax
   \gfncmd@dimen@depthB=\dp0\relax
   \ifdim\gfncmd@dimen@heightA>\gfncmd@dimen@heightB\relax
