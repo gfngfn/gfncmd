@@ -1,6 +1,6 @@
 %This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
 %
-%---括弧類------------------------------
+% ======== Parenthesis, Brackets and Braces ========
 \newcount\gfncmd@caseparen
 \gfncmd@caseparen=0\relax
 \def\usenormalparen{\gfncmd@caseparen=0\relax}
@@ -96,11 +96,13 @@
   \genparen{#4}{\empty}{#7}{#1}{#2}%
 }%
 \def\genparenwithmiddle#1#2#3#4#5{%
-  \def\leftcontent@defcs{#1}%
-  \def\rightcontent@defcs{#2}%
-  \def\middlesign@defcs{#3}%
-  \def\openparen@defcs{#4}%
-  \def\closeparen@defcs{#5}%
+  % ---- ---- ---- ----
+  % #1 : left inner content
+  % #2 : right inner content
+  % #3 : left parenthesis
+  % #4 : middle parenthesis
+  % #5 : right parenthesis
+  % ---- ---- ---- ----
   \setbox0=\hbox{$\displaystyle #1$\rule[-0.1zh]{0pt}{1.1zh}}%
   \gfncmd@dimen@heightA=\ht0\relax
   \gfncmd@dimen@depthA=\dp0\relax
@@ -119,7 +121,7 @@
   \fi
   \expandafter\expandafter\expandafter\gfncmd@enclosewithmiddle
     \expandafter\expandafter\expandafter{\expandafter\gfncmd@largerheight\expandafter}%
-    \expandafter{\gfncmd@largerdepth}{#1}{#2}{#4}{#3}{#5}%
+    \expandafter{\gfncmd@largerdepth}{#1}{#2}{#3}{#4}{#5}%
 }
 \def\paren#1{\genparen{#1}{(}{)}{}{}}
 \def\sqbrc#1{\genparen{#1}{[}{]}{}{}}
@@ -128,9 +130,8 @@
 \def\dist#1{\left\|#1\right\|}
 \def\setprn#1{\genparen{#1}{\{}{\}}{}{}}
 \def\seqprn#1{\genparen{#1}{(}{)}{}{}}
-\def\setprnsep#1#2{\genparenwithmiddle{#1}{#2}{\:|\:}{\{}{\}}}
-    %分出公理に基づいて定義される集合用の括弧
-%---函数引数用括弧----------------------
+\def\setprnsep#1#2{\genparenwithmiddle{#1}{#2}{\{}{\:|\:}{\}}}
+% ---- parenthesis for arguments of functions ----
 \newcount\casefprn@gfncmd
 \casefprn@gfncmd=0\relax
 \def\usenormalfprn{\casefprn@gfncmd=0\relax}
@@ -147,8 +148,8 @@
 }
 \def\apply#1#2{#1\fprn{#2}}
 %
-%===集合========================================================================
-%---有名な集合--------------------------
+% ======== Sets ========
+% ---- famous set ----
 \newcount\caseset@gfncmd
 \caseset@gfncmd=0\relax
 \def\usemathbfset{\caseset@gfncmd=0\relax}
@@ -173,7 +174,7 @@
 \def\setH{\setcapital{H}}
 \def\setP{\setcapital{P}}
 \def\setNp{\setcapital{N}^{+}}
-%---行列の集合--------------------------
+% ---- set of matrix ----
 \newcount\casesetMatrix@gfncmd
 \casesetMatrix@gfncmd=0\relax
 \def\usemathbfsetMatrix{\casesetMatrix@gfncmd=0\relax}
@@ -185,18 +186,18 @@
   {%
     \ifcase\casesetMatrix@gfncmd
       \mathbf{M}_{#1, #2}\paren{#3}%
-    \or%
+    \or
       \bm{M}_{#1, #2}\paren{#3}%
-    \or%
+    \or
       \mathrm{M}_{#1, #2}\paren{#3}%
-    \or%
+    \or
       M_{#1, #2}\paren{#3}%
-    \or%
+    \or
       #3^{#1\times#2}%
-    \fi%
+    \fi
   }%
 }
-%---冪集合------------------------------
+% ---- power set ----
 \newcount\casePowerset@gfncmd
 \casePowerset@gfncmd=0\relax
 \def\useromanPowerset{\casePowerset@gfncmd=0\relax}
@@ -241,7 +242,7 @@
 \def\openclosedinterval#1#2{\genparen{#1, #2}{(}{]}{}{}}
 \def\closedopeninterval#1#2{\genparen{#1, #2}{[}{)}{}{}}
 % ---- the display of domain and codomain of a function ----
-\def\funcdoms#1#2#3{#1:{\:}#2 \to #3}
+\def\funcdoms#1#2#3{#1:\:#2\to #3}
 \def\funcdomswidebox#1#2#3#4#5{%
   \begin{center}
     \begin{tabular}{lccc}
@@ -257,51 +258,24 @@
 % ---- end of proof ----
 \def\qed{\hfill ■}
 %
-%===記号論理====================================================================
+% ======== Logic ========
 \def\rightdeduct{\mathrel{\enskip\vdash\enskip}}
 \def\rightdeductnoassump{{}\rightdeduct}
 \def\leftdeduct{\enskip \dashv \enskip}
 \def\leftrightdeduct{\mathrel{\enskip\vdash\dashv\enskip}}
-%---論理包含 (implimentation) ----------
-\newcount\caselimpl@gfncmd
-\caselimpl@gfncmd=0\relax
-\def\userightarrowaslimpl{\caselimpl@gfncmd=0\relax}
-\def\useRightarrowaslimpl{\caselimpl@gfncmd=1\relax}
-\def\useinvertedCaslimpl{\caselimpl@gfncmd=2\relax}
-\def\limpl{%
-  \mathrel{%
-    \ifcase\caselimpl@gfncmd
-      \rightarrow
-    \or
-      \Rightarrow
-    \or
-      \supset
-    \fi
-  }%
-}
-%---相互論理包含（同値）----------------
-\newcount\caselimpleqv@gfncmd
-\caselimpleqv@gfncmd=0\relax
-\def\useleftrightarrowaslimpleqv{\caselimpleqv@gfncmd=0\relax}
-\def\userightleftarrowsaslimpleqv{\caselimpleqv@gfncmd=1\relax}
-\def\useLeftrightarrowaslimpleqv{\caselimpleqv@gfncmd=2\relax}
-\def\usesupsetaslimpleqv{\caselimpleqv@gfncmd=3\relax}
-\def\limpleqv{%
-  \mathrel{%
-    \ifcase\caselimpleqv@gfncmd
-      \leftrightarrow
-    \or
-      %(needs amssymb)
-      \rightleftarrows
-    \or
-      \Leftrightarrow
-    \or
-      \supset
-    \fi
-  }%
-}
-%===束論========================================================================
-%---半順序 (partial order) -------------
+% ---- implimentation ----
+\def\userightarrowaslimpl{\def\limpl{\mathrel{\rightarrow}}}
+\def\useRightarrowaslimpl{\def\limpl{\mathrel{\Rightarrow}}}
+\def\useinvertedCaslimpl{\def\limpl{\mathrel{\supset}}}
+\useRightarrowaslimpl
+% ---- logical equivalence of implimentation ----
+\def\useLeftrightarrowaslimpleqv{\def\limpleqv{\mathrel{\Leftrightarrow}}}
+\def\useleftrightarrowaslimpleqv{\def\limpleqv{\mathrel{\leftrightarrow}}}
+\def\userightleftarrowsaslimpleqv{\def\limpleqv{\mathrel{\rightleftarrows}}}
+  %(needs amssymb)
+\useLeftrightarrowaslimpleqv
+% ======== Lattice Theory ========
+% ---- partial order ----
 \newcount\gfncmd@casepord
 \gfncmd@casepord=0\relax
 \def\usepreccurlyeqaspord{\gfncmd@casepord=0\relax}
@@ -322,28 +296,30 @@
     \fi
   }%
 }
-\def\join{\mathbin{\scriptstyle \!\mathord{\lor}\!}} % join
-\def\meet{\mathbin{\scriptstyle \!\mathord{\land}\!}} % meet
+\def\join{\mathbin{\scriptstyle \!\mathord{\lor}\!}}
+  %(join operator)
+\def\meet{\mathbin{\scriptstyle \!\mathord{\land}\!}}
+  %(meet operator)
 %
-% ==== 微積分 ====
+% ======== Integration and Differentiation ========
 \def\dif#1#2{\frac{{\ordd}#1}{{\ordd}#2}}
 \def\ddif#1#2{\frac{{\ordd}^{2}#1}{{\ordd}#2^{2}}}
 \def\ndif#1#2#3{\frac{{\ordd}^{#1}#2}{{\ordd}#3^{#1}}}
 \def\pdif#1#2{\frac{{\partial}#1}{{\partial}#2}}
 \def\pddif#1#2{{\pndif{2}{#1}{#2}}}
-\def\pndif#1#2#3{\frac{{\partial}^{#1} #2}{{\partial}#3^{#1}}}
+\def\pndif#1#2#3{\frac{{\partial}^{#1}#2}{{\partial}#3^{#1}}}
 \def\plpdif#1#2#3{%
-  \frac{{\partial}^{#1} #2}{\plpdif@sub#3|\@endplpdif@sub}%
+  \frac{{\partial}^{#1}#2}{\plpdif@sub#3|\@endplpdif@sub}%
 }
 \def\plpdif@sub#1|#2\@endplpdif@sub{%
-  \partial #1 %
+  \partial#1%
   \ifx\relax#2\relax
   \else
     \plpdif@sub#2\@endplpdif@sub
   \fi
 }
 \def\thmpdif#1#2#3{\paren{\frac{{\partial}#1}{{\partial}#2}}_{#3}}
-% ---- 微分演算子 ----
+% ---- 'd' of differentiation ----
 \newcount\gfncmd@caseordd
 \gfncmd@caseordd=0\relax
 \def\useromanordd{\gfncmd@caseordd=0\relax}
@@ -358,8 +334,8 @@
   }%
 }
 %
-%===文字類======================================================================
-%---イプシロンの再定義------------------
+% ======== Letters ========
+% ---- redefinition of epsilon ----
 \newcount\gfncmd@casemakeepsilonsdifferent
 \gfncmd@casemakeepsilonsdifferent=0\relax
 \def\makeepsilonssame{\gfncmd@casemakeepsilonsdifferent=0\relax}
@@ -392,7 +368,7 @@
     \fi
   }%
 }
-%---ファイの再定義----------------------
+% ---- redefinition of phi ----
 \newcount\casemakephisdifferent@gfncmd
 \casemakephisdifferent@gfncmd=0\relax
 \def\makephissame{\casemakephisdifferent@gfncmd=0\relax}
@@ -526,11 +502,10 @@
 \def\Omega{\ifcase\gfncmd@casegreekcapital \varOmega@gfncmd\or\rmOmega\fi}
 \def\varOmega{\gfncmd@undefined}
 %---------------------------------------
-%最適化
 %\newcommand{\minimize}{\quad\mathrm{Minimize}\quad}
 %\newcommand{\subjectto}{\quad\mathrm{subject to}\quad}
 %
-%transposed（転置）
+% ---- transposition of matrix ----
 \newcount\casetransposed@gfncmd
 \casetransposed@gfncmd=0\relax
 \def\usetoptransposed{\casetransposed@gfncmd=0\relax}
@@ -555,7 +530,7 @@
     \index{#1}%
   \fi
 }
-% ---- 圏論 ----
+% ---- category ----
 \def\mathcat#1{\mathbf{#1}}
 \def\catMatr{\mathcat{Matr}}
 \def\catEns{\mathcat{Ens}}
