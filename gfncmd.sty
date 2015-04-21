@@ -1,10 +1,6 @@
 %This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
 %
 % ======== Parenthesis, Brackets and Braces ========
-\newcount\gfncmd@caseparen
-\gfncmd@caseparen=0\relax
-\def\usenormalparen{\gfncmd@caseparen=0\relax}
-\def\useexpandingparen{\gfncmd@caseparen=1}
 \newif\ifgfncmd@bool@escape
 \def\gfncmd@disableescapedchar{\gfncmd@bool@escapefalse}
 \def\gfncmd@enableescapedchar{\gfncmd@bool@escapetrue}
@@ -27,11 +23,11 @@
   % #4 : left parenthesis
   % #5 : right parenthesis
   % ---- ---- ---- ----
-  \mathopen{\raisebox{#2}{\text{\fontsize{#1}{0pt}\selectfont $#4$}}}%
+  \mathopen{\raisebox{#2}{\text{#4{#1}}}}%
   \ifmmode\else\displaystyle\fi#3%
-  \mathclose{\raisebox{#2}{\text{\fontsize{#1}{0pt}\selectfont $#5$}}}%
+  \mathclose{\raisebox{#2}{\text{#5{#1}}}}%
 }
-\def\subparen{\def\gfncmd@notinscriptstyle##1##2{##2}}
+\def\subparen#1{\text{$#1$}}%(adjustment for paren in subscript)
 \def\gfncmd@notinscriptstyle#1#2{#1}
 \def\genparen#1#2#3#4#5{%
   % ---- ---- ---- ----
@@ -103,7 +99,7 @@
   % #7 : right parenthesis
   % ---- ---- ---- ----
   \genparen{#3}{#5}{#6}{#1}{#2}%
-  \genparen{#4}{\empty}{#7}{#1}{#2}%
+  \genparen{#4}{\gfncmd@noparen}{#7}{#1}{#2}%
 }%
 \def\genparenwithmiddle#1#2#3#4#5{%
   % ---- ---- ---- ----
@@ -113,12 +109,15 @@
   % #4 : middle parenthesis
   % #5 : right parenthesis
   % ---- ---- ---- ----
+  \gfncmd@disableescapedchar
+  \advance\gfncmd@count@rankofparen by1\relax
   \setbox0=\hbox{$\displaystyle #1$\rule[-0.2ex]{0pt}{2.2ex}}%
   \gfncmd@dimen@heightA=\ht0\relax
   \gfncmd@dimen@depthA=\dp0\relax
   \setbox0=\hbox{$\displaystyle #2$\rule[-0.2ex]{0pt}{2.2ex}}%
   \gfncmd@dimen@heightB=\ht0\relax
   \gfncmd@dimen@depthB=\dp0\relax
+  \advance\gfncmd@count@rankofparen by-1\relax
   \ifdim\gfncmd@dimen@heightA>\gfncmd@dimen@heightB\relax
     \expandafter\def\expandafter\gfncmd@largerheight\expandafter{\the\gfncmd@dimen@heightA}%
   \else
@@ -133,49 +132,63 @@
     \expandafter\expandafter\expandafter{\expandafter\gfncmd@largerheight\expandafter}%
     \expandafter{\gfncmd@largerdepth}{#1}{#2}{#3}{#4}{#5}%
 }
-\def\paren#1{\genparen{#1}{(}{)}{}{}}
-\def\sqbrc#1{\genparen{#1}{[}{]}{}{}}
-\def\curlybrc#1{\genparen{#1}{\{}{\}}{}{}}
-\def\absprn#1{\left|#1\right|}
-\def\dist#1{\left\|#1\right\|}
-\def\setprn#1{\genparen{#1}{\{}{\}}{}{}}
-\def\seqprn#1{\genparen{#1}{(}{)}{}{}}
-\def\setprnsep#1#2{\genparenwithmiddle{#1}{#2}{\{}{\:|\:}{\}}}
-% ---- parenthesis for arguments of functions ----
-\newcount\casefprn@gfncmd
-\casefprn@gfncmd=0\relax
-\def\usenormalfprn{\casefprn@gfncmd=0\relax}
-\def\usescriptfprn{\casefprn@gfncmd=1\relax}
-\def\usesmallfprn{\casefprn@gfncmd=2\relax}
-\def\fprn#1{%
-  \ifcase\casefprn@gfncmd
-    \paren{#1}%
-  \or
-    {\scriptstyle\paren{#1}}%
-  \or
-    \text{\small$\displaystyle\paren{#1}$}%
-  \fi
+\newdimen\gfncmd@dimen@parenheight
+\def\gfncmd@sizedleftparen#1{%
+  \fontsize{#1}{0pt}\selectfont $($%
 }
-\def\apply#1#2{#1\fprn{#2}}
+\def\gfncmd@sizedrightparen#1{%
+  \fontsize{#1}{0pt}\selectfont $)$%
+}
+\def\gfncmd@sizedleftbracket#1{%
+  \fontsize{#1}{0pt}\selectfont $[$%
+}
+\def\gfncmd@sizedrightbracket#1{%
+  \fontsize{#1}{0pt}\selectfont $]$%
+}
+\def\gfncmd@sizedleftbrace#1{%
+  %\ifdim#1<3ex\relax
+    \fontsize{#1}{0pt}\selectfont $\{$%
+  %\else
+  %  \gfncmd@dimen@parenheight=#1\relax
+  %  \fontsize{0.75\gfncmd@dimen@parenheight}{0pt}\selectfont $\bigl\{$%
+  %\fi
+}
+\def\gfncmd@sizedrightbrace#1{%
+  \fontsize{#1}{0pt}\selectfont $\}$%
+}
+\def\gfncmd@sizedbar#1{%
+  \fontsize{#1}{0pt}\selectfont $|$%
+}%
+\def\gfncmd@sizedBar#1{%
+  \fontsize{#1}{0pt}\selectfont $\|$%
+}%
+\def\gfncmd@sizedmidbar#1{%
+  \fontsize{#1}{0pt}\selectfont $\:|\:$%
+}
+\def\gfncmd@sizedmidslash#1{%
+  \fontsize{#1}{0pt}\selectfont $/$%
+}
+\def\gfncmd@noparen#1{}
+%
+\def\paren#1{\genparen{#1}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
+\def\sqbracket#1{\genparen{#1}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightbracket}{}{}}
+\def\curlybrace#1{\genparen{#1}{\gfncmd@sizedleftbrace}{\gfncmd@sizedrightbrace}{}{}}
+\def\absprn#1{\genparen{#1}{\gfncmd@sizedbar}{\gfncmd@sizedbar}{}{}}
+\def\distprn#1{\genparen{#1}{\gfncmd@sizedBar}{\gfncmd@sizedBar}{}{}}
+\let\setprn=\curlybrace
+\let\seqprn=\paren
+\let\card=\absprn
+\def\setprnsep#1#2{\genparenwithmiddle{#1}{#2}{\gfncmd@sizedleftbrace}{\gfncmd@sizedmidbar}{\gfncmd@sizedrightbrace}}
+\def\slashfrac#1#2{\genparenwithmiddle{#1}{#2}{\gfncmd@noparen}{\gfncmd@sizedmidslash}{\gfncmd@noparen}}
+\def\app#1#2{#1\paren{#2}}
+% ---- interval ----
+\def\openintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
+\def\closedintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightbracket}{}{}}
+\def\openclosedintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightbracket}{}{}}
+\def\closedopenintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightparen}{}{}}
 %
 % ======== Sets ========
-% ---- famous set ----
-\newcount\caseset@gfncmd
-\caseset@gfncmd=0\relax
-\def\usemathbfset{\caseset@gfncmd=0\relax}
-\def\usebmset{\caseset@gfncmd=1\relax}
-\def\usemathbbset{\caseset@gfncmd=2\relax}
-\def\setcapital#1{%
-  {%
-    \ifcase\caseset@gfncmd
-      \mathbf{#1}%
-    \or
-      \bm{#1}%
-    \or
-      \mathbb{#1}%
-    \fi
-  }%
-}
+% ---- famous sets ----
 \def\setZ{\setcapital{Z}}
 \def\setN{\setcapital{N}}
 \def\setQ{\setcapital{Q}}
@@ -183,74 +196,45 @@
 \def\setC{\setcapital{C}}
 \def\setH{\setcapital{H}}
 \def\setP{\setcapital{P}}
-\def\setNp{\setcapital{N}^{+}}
+\def\setNpos{\setcapital{N}^{+}}
+\def\setRpos{\setcapital{R}^{+}}
+\def\setRnonneg{\setcapital{R}_{{}\geq 0}}
+\def\usebfsetcapital{\let\setcapital=\mathbf}
+\def\usebmsetcapital{\let\setcapital=\bm}
+\def\usebbsetcapital{\let\setcapital=\mathbb}
+\usebfsetcapital %(setting defaultoption)
 % ---- set of matrix ----
-\newcount\casesetMatrix@gfncmd
-\casesetMatrix@gfncmd=0\relax
-\def\usemathbfsetMatrix{\casesetMatrix@gfncmd=0\relax}
-\def\usebmsetMatrix{\casesetMatrix@gfncmd=1\relax}
-\def\useromansetMatrix{\casesetMatrix@gfncmd=2\relax}
-\def\useitalicsetMatrix{\casesetMatrix@gfncmd=3\relax}
-\def\usetimessetMatrix{\casesetMatrix@gfncmd=4\relax}
-\def\setMatrix#1#2#3{%
-  {%
-    \ifcase\casesetMatrix@gfncmd
-      \mathbf{M}_{#1, #2}\paren{#3}%
-    \or
-      \bm{M}_{#1, #2}\paren{#3}%
-    \or
-      \mathrm{M}_{#1, #2}\paren{#3}%
-    \or
-      M_{#1, #2}\paren{#3}%
-    \or
-      #3^{#1\times#2}%
-    \fi
-  }%
-}
+\def\gfncmd@setMatrix@bf#1#2#3{\mathbf{M}_{#1, #2}\paren{#3}}
+\def\gfncmd@setMatrix@bm#1#2#3{\bm{M}_{#1, #2}\paren{#3}}
+\def\gfncmd@setMatrix@rm#1#2#3{\mathrm{M}_{#1, #2}\paren{#3}}
+\def\gfncmd@setMatrix@it#1#2#3{M_{#1, #2}\paren{#3}}
+\def\gfncmd@setMatrix@times#1#2#3{#3^{#1\times#2}}
+\def\usebfsetMatrix{\let\setMatrix=\gfncmd@setMatrix@bf}
+\def\usebmsetMatrix{\let\setMatrix=\gfncmd@setMatrix@bm}
+\def\usermsetMatrix{\let\setMatrix=\gfncmd@setMatrix@rm}
+\def\useitsetMatrix{\let\setMatrix=\gfncmd@setMatrix@it}
+\def\usetimessetMatrix{\let\setMatrix=\gfncmd@setMatrix@times}
+\usebfsetMatrix %(setting default option)
 % ---- power set ----
-\newcount\casePowerset@gfncmd
-\casePowerset@gfncmd=0\relax
-\def\useromanPowerset{\casePowerset@gfncmd=0\relax}
-\def\usebinaryPowerset{\casePowerset@gfncmd=1\relax}
-\def\usefrakPowerset{\casePowerset@gfncmd=2\relax}
-\def\Powerset#1{%
-  {%
-    \ifcase\casePowerset@gfncmd
-      \mathop{\mathrm{Pow}}#1%
-    \or
-      2^{#1}%
-    \or
-      \mathfrak{P}#1%
-    \fi
-  }%
+\def\usermPower{%
+  \let\Power=\gfncmd@Power@rm
+  \let\Powerfin=\gfncmd@Powerfin@rm
 }
-\def\Powersetfin#1{%
-  {%
-    \ifcase\casePowerset@gfncmd
-      \mathop{\mathrm{Pow}_{\omega}}\nolimits#1%
-    \or
-      \mathop{2_{\omega}}\nolimits^{#1}%
-    \or
-      \mathop{\mathfrak{P}_{\omega}}\nolimits#1%
-    \fi
-  }%
+\def\usebinaryPower{%
+  \let\Power=\gfncmd@Power@binary
+  \let\Powerfin=\gfncmd@Powerfin@binary
 }
-\def\Powersetprn#1{%
-  {%
-    \ifcase\casePowerset@gfncmd
-      \mathop{\mathrm{Pow}}\paren{#1}%
-    \or
-      2^{#1}%
-    \or
-      \mathop{\mathfrak{P}}\paren{#1}%
-    \fi
-  }%
+\def\usefrakPower{%
+  \let\Power=\gfncmd@Power@frak
+  \let\Powerfin=\gfncmd@Powerfin@frak
 }
-% ---- interval ----
-\def\openinterval#1#2{\genparen{#1, #2}{(}{)}{}{}}
-\def\closedinterval#1#2{\genparen{#1, #2}{[}{]}{}{}}
-\def\openclosedinterval#1#2{\genparen{#1, #2}{(}{]}{}{}}
-\def\closedopeninterval#1#2{\genparen{#1, #2}{[}{)}{}{}}
+\usefrakPower %(setting default option)
+\def\gfncmd@Power@rm#1{\mathop{\mathrm{Pow}}\nolimits#1}
+\def\gfncmd@Power@binary#1{2^{#1}}
+\def\gfncmd@Power@frak#1{\mathop{\mathfrak{P}}\nolimits#1}
+\def\gfncmd@Powerfin@rm#1{\mathop{\mathrm{Pow}_{\omega}}\nolimits#1}
+\def\gfncmd@Powerfin@binary#1{\mathop{2_{\omega}}\nolimits^{#1}}
+\def\gfncmd@Powerfin@frak#1{\mathop{\mathfrak{P}_{\omega}}\nolimits#1}
 % ---- the display of domain and codomain of a function ----
 \def\funcdoms#1#2#3{#1:\:#2\to #3}
 \def\funcdomswidebox#1#2#3#4#5{%
@@ -312,234 +296,256 @@
   %(meet operator)
 %
 % ======== Integration and Differentiation ========
-\def\dif#1#2{\frac{{\ordd}#1}{{\ordd}#2}}
-\def\ddif#1#2{\frac{{\ordd}^{2}#1}{{\ordd}#2^{2}}}
-\def\ndif#1#2#3{\frac{{\ordd}^{#1}#2}{{\ordd}#3^{#1}}}
-\def\pdif#1#2{\frac{{\partial}#1}{{\partial}#2}}
+% ---- differentiation ----
+\def\dif#1#2{\frac{\ordd#1}{\ordd#2}}
+\def\ddif#1#2{\frac{\ordd^{2}#1}{\ordd#2^{2}}}
+\def\ndif#1#2#3{\frac{\ordd^{#1}#2}{\ordd#3^{#1}}}
+\def\pdif#1#2{\frac{\partial#1}{\partial#2}}
 \def\pddif#1#2{{\pndif{2}{#1}{#2}}}
-\def\pndif#1#2#3{\frac{{\partial}^{#1}#2}{{\partial}#3^{#1}}}
+\def\pndif#1#2#3{\frac{\partial^{#1}#2}{\partial#3^{#1}}}
 \def\plpdif#1#2#3{%
-  \frac{{\partial}^{#1}#2}{\plpdif@sub#3|\@endplpdif@sub}%
+  \frac{\partial^{#1}#2}{\gfncmd@plpdif@sub#3|\gfncmd@endplpdif@sub}%
 }
-\def\plpdif@sub#1|#2\@endplpdif@sub{%
+\def\gfncmd@plpdif@sub#1|#2\gfncmd@endplpdif@sub{%
   \partial#1%
-  \ifx\relax#2\relax
-  \else
-    \plpdif@sub#2\@endplpdif@sub
+  \ifx\relax#2\relax\else
+    \gfncmd@plpdif@sub#2\gfncmd@endplpdif@sub
   \fi
 }
-\def\thmpdif#1#2#3{\paren{\frac{{\partial}#1}{{\partial}#2}}_{#3}}
+\def\thmpdif#1#2#3{\paren{\frac{\partial#1}{\partial#2}}_{#3}}
 % ---- 'd' of differentiation ----
-\newcount\gfncmd@caseordd
-\gfncmd@caseordd=0\relax
-\def\useromanordd{\gfncmd@caseordd=0\relax}
-\def\useitalicordd{\gfncmd@caseordd=1\relax}
-\def\ordd{%
-  \mathord{%
-    \ifcase\gfncmd@caseordd
-      \,\mathrm{d}%
-    \or%
-      \,d%
-    \fi%
-  }%
-}
+\def\gfncmd@ordd@rm{\mathord{\,\mathrm{d}}}
+\def\gfncmd@ordd@it{\mathord{\,d}}
+\def\usermordd{\let\ordd=\gfncmd@ordd@rm}
+\def\useitordd{\let\ordd=\gfncmd@ordd@it}
+\usermordd %(setting default option)
 %
 % ======== Letters ========
 % ---- redefinition of epsilon ----
-\newcount\gfncmd@casemakeepsilonsdifferent
-\gfncmd@casemakeepsilonsdifferent=0\relax
-\def\makeepsilonssame{\gfncmd@casemakeepsilonsdifferent=0\relax}
-\def\makeepsilonsdifferent{\gfncmd@casemakeepsilonsdifferent=1\relax}
-\newcount\caseepsilon@gfncmd
-\caseepsilon@gfncmd=0\relax
-\def\usesymbolepsilon{\caseepsilon@gfncmd=0\relax}
-\def\usescriptepsilon{\caseepsilon@gfncmd=1\relax}
 \let\gfncmd@varepsilon=\varepsilon
 \let\gfncmd@epsilon=\epsilon
-\def\epsilon{%
-  \mathord{%
-    \ifcase\gfncmd@casemakeepsilonsdifferent
-      \ifcase\caseepsilon@gfncmd
-        \gfncmd@epsilon
-      \or
-        \gfncmd@varepsilon
-      \fi
-    \or
-      \gfncmd@epsilon
-    \fi
-  }%
+\def\usesymbolepsilon{%
+  \let\epsilon=\gfncmd@epsilon
+  \let\varepsilon=\gfncmd@undefined
 }
-\def\varepsilon{%
-  \mathord{%
-    \ifcase\gfncmd@casemakeepsilonsdifferent
-      \gfncmd@undefined
-    \or
-      \gfncmd@varepsilon
-    \fi
-  }%
+\def\usescriptepsilon{%
+  \let\epsilon=\gfncmd@varepsilon
+  \let\varepsilon=\gfncmd@undefined
 }
+\usescriptepsilon
 % ---- redefinition of phi ----
-\newcount\casemakephisdifferent@gfncmd
-\casemakephisdifferent@gfncmd=0\relax
-\def\makephissame{\casemakephisdifferent@gfncmd=0\relax}
-\def\makephisdifferent{\casemakephisdifferent@gfncmd=1\relax}
-\newcount\casephi@gfncmd
-\casephi@gfncmd=0\relax
-\def\usesymbolphi{\casephi@gfncmd=0\relax}
-\def\usescriptphi{\casephi@gfncmd=1\relax}
 \let\gfncmd@phi=\phi
 \let\gfncmd@varphi=\varphi
-\def\phi{%
-  \mathord{%
-    \ifcase\casemakephisdifferent@gfncmd
-      \ifcase\casephi@gfncmd
-        \gfncmd@phi
-      \or
-        \gfncmd@varphi
-      \fi
-    \or
-      \gfncmd@phi
-    \fi
-  }%
+\def\usesymbolphi{%
+  \let\phi=\gfncmd@phi
+  \let\varphi=\gfncmd@undefined
 }
-\def\varphi{%
-  \mathord{%
-    \ifcase\casemakephisdifferent@gfncmd
-      \gfncmd@undefined
-    \or
-      \gfncmd@varphi
-    \fi
-  }%
+\def\usescriptphi{%
+  \let\phi=\gfncmd@varphi
+  \let\varphi=\gfncmd@undefined
 }
-%---ギリシア大文字の再定義--------------
-\newcount\gfncmd@casegreekcapital
-\gfncmd@casegreekcapital=0\relax
-\def\useitalicgreekcapital{\gfncmd@casegreekcapital=0\relax}
-\def\useromangreekcapital{\gfncmd@casegreekcapital=1\relax}
-%------------------
-\def\rmAlpha{\mathrm{A}}
-\def\Alpha{\ifcase\gfncmd@casegreekcapital A\or\rmAlpha\fi}
-%------------------
-\def\rmBeta{\mathrm{B}}
-\def\Beta{\ifcase\gfncmd@casegreekcapital B\or\rmBeta\fi}
-%------------------
-\let\rmGamma=\Gamma
-\let\varGamma@gfncmd=\varGamma
-\def\Gamma{\ifcase\gfncmd@casegreekcapital \varGamma@gfncmd\or\rmGamma\fi}
-\def\varGamma{\gfncmd@undefined}
-%------------------
-\let\rmDelta=\Delta
-\let\varDelta@gfncmd=\varDelta
-\def\Delta{\ifcase\gfncmd@casegreekcapital \varDelta@gfncmd\or\rmDelta\fi}
-\def\varDelta{\gfncmd@undefined}
-%------------------
-\def\rmEpsilon{\mathrm{E}}
-\def\Epsilon{\ifcase\gfncmd@casegreekcapital E\or\rmEpsilon\fi}
-%------------------
-\def\rmZeta{\mathrm{Z}}
-\def\Zeta{\ifcase\gfncmd@casegreekcapital Z\or\rmZeta\fi}
-%------------------
-\def\rmEta{\mathrm{H}}
-\def\Eta{\ifcase\gfncmd@casegreekcapital H\or\rmEta\fi}
-%------------------
-\let\rmTheta=\Theta
-\let\varTheta@gfncmd=\varTheta
-\def\Theta{\ifcase\gfncmd@casegreekcapital \varTheta@gfncmd\or\rmTheta\fi}
-\def\varTheta{\gfncmd@undefined}
-%------------------
-\def\rmIota{\mathrm{I}}
-\def\Iota{\ifcase\gfncmd@casegreekcapital I\or\rmIota\fi}
-%------------------
-\def\rmKappa{\mathrm{K}}
-\def\Kappa{\ifcase\gfncmd@casegreekcapital K\or\rmKappa\fi}
-%------------------
-\let\rmLambda=\Lambda
-\let\varLambda@gfncmd=\varLambda
-\def\Lambda{\ifcase\gfncmd@casegreekcapital \varLambda@gfncmd\or\rmLambda\fi}
-\def\varLambda{\gfncmd@undefined}
-%------------------
-\def\rmMu{\mathrm{M}}
-\def\Mu{\ifcase\gfncmd@casegreekcapital M\or\rmMu\fi}
-%------------------
-\def\rmNu{\mathrm{N}}
-\def\Nu{\ifcase\gfncmd@casegreekcapital N\or\rmNu\fi}
-%------------------
-\let\rmXi=\Xi
-\let\varXi@gfncmd=\varXi
-\def\Xi{\ifcase\gfncmd@casegreekcapital \varXi@gfncmd\or\rmXi\fi}
-\def\varXi{\gfncmd@undefined}
-%------------------
-\def\omicron{o}
-\def\rmOmicron{\mathrm{O}}
-\def\Omicron{\ifcase\gfncmd@casegreekcapital O\or\rmOmicron\fi}
-%------------------
-\let\rmPi=\Pi
-\let\varPi@gfncmd=\varPi
-\def\Pi{\ifcase\gfncmd@casegreekcapital \varPi@gfncmd\or\rmPi\fi}
-\def\varPi{\gfncmd@undefined}
-%------------------
-\def\rmRho{\mathrm{P}}
-\def\Rho{\ifcase\gfncmd@casegreekcapital P\or\rmRho\fi}
-%------------------
-\let\rmSigma=\Sigma
-\let\varSigma@gfncmd=\varSigma
-\def\Sigma{\ifcase\gfncmd@casegreekcapital \varSigma@gfncmd\or\rmSigma\fi}
-\def\varSigma{\gfncmd@undefined}
-%------------------
-\def\rmTau{\mathrm{T}}
-\def\Tau{\ifcase\gfncmd@casegreekcapital T\or\rmTau\fi}
-%------------------
-\let\rmUpsilon=\Upsilon
-\let\varUpsilon@gfncmd=\varUpsilon
-\def\Upsilon{\ifcase\gfncmd@casegreekcapital \varUpsilon@gfncmd\or\rmUpsilon\fi}
-\def\varUpsilon{\gfncmd@undefined}
-%------------------
-\let\rmPhi=\Phi
-\let\varPhi@gfncmd=\varPhi
-\def\Phi{\ifcase\gfncmd@casegreekcapital \varPhi@gfncmd\or\rmPhi\fi}
-\def\varPhi{\gfncmd@undefined}
-%------------------
-\def\rmChi{\mathrm{X}}
-\def\Chi{\ifcase\gfncmd@casegreekcapital X\or\rmChi\fi}
-%------------------
-\let\rmPsi=\Psi
-\let\varPsi@gfncmd=\varPsi
-\def\Psi{\ifcase\gfncmd@casegreekcapital \varPsi@gfncmd\or\rmPsi\fi}
-\def\varPsi{\gfncmd@undefined}
-%------------------
-\let\rmOmega=\Omega
-\let\varOmega@gfncmd=\varOmega
-\def\Omega{\ifcase\gfncmd@casegreekcapital \varOmega@gfncmd\or\rmOmega\fi}
-\def\varOmega{\gfncmd@undefined}
-%---------------------------------------
-%\newcommand{\minimize}{\quad\mathrm{Minimize}\quad}
-%\newcommand{\subjectto}{\quad\mathrm{subject to}\quad}
+\usesymbolphi
 %
-% ---- transposition of matrix ----
-\newcount\casetransposed@gfncmd
-\casetransposed@gfncmd=0\relax
-\def\usetoptransposed{\casetransposed@gfncmd=0\relax}
-\def\useTtransposed{\casetransposed@gfncmd=1\relax}
-\def\uselefttransposed{\casetransposed@gfncmd=2\relax}
-\def\transposed#1{%
-  \mathord{%
-    \ifcase\casetransposed@gfncmd
-      {#1}^{\top}\!%
-    \or
-      {#1}^{\mathrm{T}}%
-    \or
-      \,{}^{t}\!#1%
-    \fi
-  }%
+% ---- redefintion of Greek capital letters ----
+\def\gfncmd@Alpha{\mathrm{A}}
+\def\gfncmd@varAlpha{A}
+\def\gfncmd@Beta{\mathrm{B}}
+\def\gfncmd@varBeta{B}
+\let\gfncmd@Gamma=\Gamma
+\let\gfncmd@varGamma=\varGamma
+\let\gfncmd@Delta=\Delta
+\let\gfncmd@varDelta=\varDelta
+\def\gfncmd@Epsilon{\mathrm{E}}
+\def\gfncmd@varEpsilon{E}
+\def\gfncmd@Zeta{\mathrm{Z}}
+\def\gfncmd@varZeta{Z}
+\def\gfncmd@Eta{\mathrm{H}}
+\def\gfncmd@varEta{H}
+\let\gfncmd@Theta=\Theta
+\let\gfncmd@varTheta=\varTheta
+\def\gfncmd@Iota{\mathrm{I}}
+\def\gfncmd@varIota{I}
+\def\gfncmd@Kappa{\mathrm{K}}
+\def\gfncmd@varKappa{K}
+\let\gfncmd@Lambda=\Lambda
+\let\gfncmd@varLambda=\varLambda
+\def\gfncmd@Mu{\mathrm{M}}
+\def\gfncmd@varMu{M}
+\def\gfncmd@Nu{\mathrm{N}}
+\def\gfncmd@varNu{N}
+\let\gfncmd@Xi=\Xi
+\let\gfncmd@varXi=\varXi
+\def\gfncmd@Omicron{\mathrm{O}}
+\def\gfncmd@varOmicron{O}
+\let\gfncmd@Pi=\Pi
+\let\gfncmd@varPi=\varPi
+\def\gfncmd@Rho{\mathrm{P}}
+\def\gfncmd@varRho{P}
+\let\gfncmd@Sigma=\Sigma
+\let\gfncmd@varSigma=\varSigma
+\def\gfncmd@Tau{\mathrm{T}}
+\def\gfncmd@varTau{T}
+\let\gfncmd@Upsilon=\Upsilon
+\let\gfncmd@varUpsilon=\varUpsilon
+\let\gfncmd@Phi=\Phi
+\let\gfncmd@varPhi=\varPhi
+\def\gfncmd@Chi{\mathrm{X}}
+\def\gfncmd@varChi{X}
+\let\gfncmd@Psi=\Psi
+\let\gfncmd@varPsi=\varPsi
+\let\gfncmd@Omega=\Omega
+\let\gfncmd@varOmega=\varOmega
+%
+\def\omicron{o}
+%
+\let\varGamma=\gfncmd@undefined
+\let\varDelta=\gfncmd@undefined
+\let\varTheta=\gfncmd@undefined
+\let\varLambda=\gfncmd@undefined
+\let\varXi=\gfncmd@undefined
+\let\varPi=\gfncmd@undefined
+\let\varSigma=\gfncmd@undefined
+\let\varUpsilon=\gfncmd@undefined
+\let\varPhi=\gfncmd@undefined
+\let\varPsi=\gfncmd@undefined
+\let\varOmega=\gfncmd@undefined
+%
+\def\useitalicgreekcapital{%
+  \let\Alpha=\gfncmd@varAlpha
+  \let\Beta=\gfncmd@varBeta
+  \let\Gamma=\gfncmd@varGamma
+  \let\Delta=\gfncmd@varDelta
+  \let\Epsilon=\gfncmd@varEpsilon
+  \let\Zeta=\gfncmd@varZeta
+  \let\Eta=\gfncmd@varEta
+  \let\Theta=\gfncmd@varTheta
+  \let\Iota=\gfncmd@varIota
+  \let\Kappa=\gfncmd@varKappa
+  \let\Lambda=\gfncmd@varLambda
+  \let\Mu=\gfncmd@varMu
+  \let\Nu=\gfncmd@varNu
+  \let\Xi=\gfncmd@varXi
+  \let\Omicron=\gfncmd@varOmicron
+  \let\Pi=\gfncmd@varPi
+  \let\Rho=\gfncmd@varRho
+  \let\Tau=\gfncmd@varTau
+  \let\Sigma=\gfncmd@varSigma
+  \let\Upsilon=\gfncmd@varUpsilon
+  \let\Phi=\gfncmd@varPhi
+  \let\Chi=\gfncmd@varChi
+  \let\Psi=\gfncmd@varPsi
+  \let\Omega=\gfncmd@varOmega
+  \let\rmAlpha=\gfncmd@Alpha
+  \let\rmBeta=\gfncmd@Beta
+  \let\rmGamma=\gfncmd@Gamma
+  \let\rmDelta=\gfncmd@Delta
+  \let\rmEpsilon=\gfncmd@Epsilon
+  \let\rmZeta=\gfncmd@Zeta
+  \let\rmEta=\gfncmd@Eta
+  \let\rmTheta=\gfncmd@Theta
+  \let\rmIota=\gfncmd@Iota
+  \let\rmKappa=\gfncmd@Kappa
+  \let\rmLambda=\gfncmd@Lambda
+  \let\rmMu=\gfncmd@Mu
+  \let\rmNu=\gfncmd@Nu
+  \let\rmXi=\gfncmd@Xi
+  \let\rmOmicron=\gfncmd@Omicron
+  \let\rmPi=\gfncmd@Pi
+  \let\rmRho=\gfncmd@Rho
+  \let\rmTau=\gfncmd@Tau
+  \let\rmSigma=\gfncmd@Sigma
+  \let\rmUpsilon=\gfncmd@Upsilon
+  \let\rmPhi=\gfncmd@Phi
+  \let\rmChi=\gfncmd@Chi
+  \let\rmPsi=\gfncmd@Psi
+  \let\rmOmega=\gfncmd@Omega
 }
-\let\trps=\transposed
-\newcommand{\newword}[2][\relax]{%
-  \textsf{#2}%
-  \ifx{#1}\relax
+\def\useromangreekcapital{%
+  \let\Alpha=\gfncmd@Alpha
+  \let\Beta=\gfncmd@Beta
+  \let\Gamma=\gfncmd@Gamma
+  \let\Delta=\gfncmd@Delta
+  \let\Epsilon=\gfncmd@Epsilon
+  \let\Zeta=\gfncmd@Zeta
+  \let\Eta=\gfncmd@Eta
+  \let\Theta=\gfncmd@Theta
+  \let\Iota=\gfncmd@Iota
+  \let\Kappa=\gfncmd@Kappa
+  \let\Lambda=\gfncmd@Lambda
+  \let\Mu=\gfncmd@Mu
+  \let\Nu=\gfncmd@Nu
+  \let\Xi=\gfncmd@Xi
+  \let\Omicron=\gfncmd@Omicron
+  \let\Pi=\gfncmd@Pi
+  \let\Rho=\gfncmd@Rho
+  \let\Tau=\gfncmd@Tau
+  \let\Sigma=\gfncmd@Sigma
+  \let\Upsilon=\gfncmd@Upsilon
+  \let\Phi=\gfncmd@Phi
+  \let\Chi=\gfncmd@Chi
+  \let\Psi=\gfncmd@Psi
+  \let\Omega=\gfncmd@Omega
+  \let\rmAlpha=\gfncmd@Alpha
+  \let\rmBeta=\gfncmd@Beta
+  \let\rmGamma=\gfncmd@Gamma
+  \let\rmDelta=\gfncmd@Delta
+  \let\rmEpsilon=\gfncmd@Epsilon
+  \let\rmZeta=\gfncmd@Zeta
+  \let\rmEta=\gfncmd@Eta
+  \let\rmTheta=\gfncmd@Theta
+  \let\rmIota=\gfncmd@Iota
+  \let\rmKappa=\gfncmd@Kappa
+  \let\rmLambda=\gfncmd@Lambda
+  \let\rmMu=\gfncmd@Mu
+  \let\rmNu=\gfncmd@Nu
+  \let\rmXi=\gfncmd@Xi
+  \let\rmOmicron=\gfncmd@Omicron
+  \let\rmPi=\gfncmd@Pi
+  \let\rmRho=\gfncmd@Rho
+  \let\rmTau=\gfncmd@Tau
+  \let\rmSigma=\gfncmd@Sigma
+  \let\rmUpsilon=\gfncmd@Upsilon
+  \let\rmPhi=\gfncmd@Phi
+  \let\rmChi=\gfncmd@Chi
+  \let\rmPsi=\gfncmd@Psi
+  \let\rmOmega=\gfncmd@Omega
+}
+\useitalicgreekcapital
+% ---- transposition of matrix ----
+\def\gfncmd@trsps@i#1{#1^\top\!}
+\def\gfncmd@trsps@ii#1{#1^{\mathrm{T}}}
+\def\gfncmd@trsps@iii#1{\,{}^{t}\!#1}
+\def\usetoptrsps{\let\trsps=\gfncmd@trsps@i}
+\def\useTtrsps{\let\trsps=\gfncmd@trsps@ii}
+\def\uselefttrsps{\let\trsps=\gfncmd@trsps@iii}
+\usetoptrsps
+%
+% ---- image by function ----
+\def\funcimg#1#2{#1\sqbracket{#2}}
+% ---- composition of functions ----
+\def\compnd#1{\gfncmd@compndsub#1|\gfncmd@endofargument}
+\def\gfncmd@compndsub#1|#2\gfncmd@endofargument{%
+  \ifx\relax#2\relax
+    #1%
   \else
-    \index{#1}%
+    #1 \mathbin{\circ} \gfncmd@compndsub#2\gfncmd@endofargument
   \fi
 }
+% ---- equal-to sign for definition ----
+\def\defeq{\mathrel{:\hspace{-0.0625em}=}}
+%
+% ---- new word ----
+\newcommand{\newword}[2][]{%
+  \textsf{#2}%
+  \def\gfncmd@tempforifx{#1}
+  \ifx\gfncmd@tempforifx\empty
+  \else\index{#1}\fi
+}
+% ---- enumeration of theorem ----
+\newcounter{thmenum}
+\newenvironment{thmenum}{\setcounter{thmenum}{0}\begin{itemize}}{\end{itemize}}
+\newcommand{\thmenumitem}{\refstepcounter{thmenum}\item[(\thethmenum)]}
+%
 % ---- category ----
 \def\mathcat#1{\mathbf{#1}}
 \def\catMatr{\mathcat{Matr}}
