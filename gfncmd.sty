@@ -6,7 +6,13 @@
 \def\gfncmd@enableescapedchar{\gfncmd@bool@escapetrue}
 \def\gfncmd@tab{&\gfncmd@enableescapedchar}
 \def\gfncmd@break{\\\gfncmd@enableescapedchar}
-\def\midtab{\ifgfncmd@bool@escape \gfncmd@tab\else\fi}
+\def\midtab{%
+  \ifnum\gfncmd@count@rankofparen=0\relax
+    &%
+  \else
+    \ifgfncmd@bool@escape \gfncmd@tab\else\fi
+  \fi
+}
   %(definition of '\midtab')
 \def\midbreak{\ifgfncmd@bool@escape \gfncmd@break\else\fi}
   %(definition of '\midbreak')
@@ -56,7 +62,7 @@
     \let\gfncmd@dimen@total=\gfncmd@dimen@height
     \gfncmd@dimen@innerdepth=-0.3\gfncmd@dimen@depth\relax
 %
-    \ifnum\gfncmd@count@rankofparen=0%
+    \ifnum\gfncmd@count@rankofparen=0\relax
       \def\gfncmd@resultofparen{%
         \expandafter\expandafter\expandafter\gfncmd@enclose
           \expandafter\expandafter\expandafter{\expandafter\the\expandafter\gfncmd@dimen@total\expandafter}%
@@ -187,6 +193,29 @@
 \def\openclosedintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightbracket}{}{}}
 \def\closedopenintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightparen}{}{}}
 %
+% ---- change catcode of & ----
+  \def\makeampactive{\begingroup\catcode`\&=\active\relax}
+  \def\makeampother{\endgroup}
+  \makeampactive
+  \global\let&=\midtab
+  \makeampother
+  \newenvironment{gfnmath}{%
+    \makeampactive
+    % ---- from amsmath
+    \start@align\@ne\st@rredtrue\m@ne
+    % ----
+  }{%
+    % ---- from amsmath
+    \math@cr \black@\totwidth@
+    \egroup
+    \ifingather@\restorealignstate@
+    \egroup
+    \nonumber\ifnum0=‘{\fi\iffalse}\fi
+    \else$$\fi
+    \ignorespacesafterend
+    % ----
+    \makeampother
+  }
 % ======== Sets ========
 % ---- famous sets ----
 \def\setZ{\setcapital{Z}}
@@ -247,6 +276,12 @@
        & $\displaystyle #4$ & $\longmapsto$ & $\displaystyle #5$
     \end{tabular}
   \end{center}
+%  \setbox0=\hbox{$\displaystyle#1:$}%
+%  \gfncmd@dimen@funcwidth=\wd0\relax
+%  \begin{center}
+%    \begin{tikzpicture}
+%    \end{tikzpicture}
+%  \end{center}
 }
 %
 % ---- end of proof ----
@@ -558,3 +593,4 @@
 \def\catAb{\mathcat{Ab}}
 \def\catRng{\mathcat{Rng}}
 \def\catCRng{\mathcat{CRng}}
+%
