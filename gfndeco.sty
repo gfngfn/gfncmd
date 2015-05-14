@@ -82,13 +82,13 @@
   {\samepage
     \noindent
     \begin{tikzpicture}
-      \draw[line width=2pt] (0,0) -- (\textwidth,0);
-      \draw[line width=1pt] (0,-5pt) -- (\textwidth,-5pt);
+      \draw[line width=2pt] (0,0) -- (0.95\textwidth,0);
+      \draw[line width=1pt] (0,-5pt) -- (0.95\textwidth,-5pt);
     \end{tikzpicture}%
-    \parbox[c][3zw][c]{\textwidth}{\enskip\textsf{\LARGE #1}}%
+    \parbox[c][2zw][c]{0.99\textwidth}{\enskip\textsf{\LARGE #1}}%
     \begin{tikzpicture}
-      \draw[line width=1pt] (0,0) -- (\textwidth,0);
-      \draw[line width=2pt] (0,-5pt) -- (\textwidth,-5pt);
+      \draw[line width=1pt] (0,0) -- (0.95\textwidth,0);
+      \draw[line width=2pt] (0,-5pt) -- (0.95\textwidth,-5pt);
     \end{tikzpicture}%
     \par
   }%
@@ -283,6 +283,21 @@
 \newcommand{\topnonum@gfndeco}[3]{%
   \noindent
   \textsf{\writenonumtitle@gfndeco{#3}{#1}}\quad#2
+  \par
+  \vblank
+}%
+%
+%---top（タイトル込み段落）---------------------------------
+\newcommand{\ultopcmd@gfndeco}[4]{%
+  \dealwithsubsubsectioncounter@gfndeco{#1}%
+  \noindent
+  \underline{\textsf{#4\writenumbering@gfndeco\writenonemptytitle@gfndeco{#2}}}\quad#3
+  \par
+  \vblank
+}%
+\newcommand{\ultopnonum@gfndeco}[3]{%
+  \noindent
+  \underline{\textsf{\writenonumtitle@gfndeco{#3}{#1}}}\quad#2
   \par
   \vblank
 }%

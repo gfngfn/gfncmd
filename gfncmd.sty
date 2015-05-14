@@ -193,29 +193,29 @@
 \def\openclosedintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightbracket}{}{}}
 \def\closedopenintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightparen}{}{}}
 %
-% ---- change catcode of & ----
-  \def\makeampactive{\begingroup\catcode`\&=\active\relax}
-  \def\makeampother{\endgroup}
-  \makeampactive
-  \global\let&=\midtab
-  \makeampother
-  \newenvironment{gfnmath}{%
-    \makeampactive
-    % ---- from amsmath
-    \start@align\@ne\st@rredtrue\m@ne
-    % ----
-  }{%
-    % ---- from amsmath
-    \math@cr \black@\totwidth@
-    \egroup
-    \ifingather@\restorealignstate@
-    \egroup
-    \nonumber\ifnum0=‘{\fi\iffalse}\fi
-    \else$$\fi
-    \ignorespacesafterend
-    % ----
-    \makeampother
-  }
+%% ---- change catcode of & ----
+%  \def\makeampactive{\begingroup\catcode`\&=\active\relax}
+%  \def\makeampother{\endgroup}
+%  \makeampactive
+%  \global\let&=\midtab
+%  \makeampother
+%  \newenvironment{gfnmath}{%
+%    \makeampactive
+%    % ---- from amsmath
+%    \start@align\@ne\st@rredtrue\m@ne
+%    % ----
+%  }{%
+%    % ---- from amsmath
+%    \math@cr \black@\totwidth@
+%    \egroup
+%    \ifingather@\restorealignstate@
+%    \egroup
+%    \nonumber\ifnum0=‘{\fi\iffalse}\fi
+%    \else$$\fi
+%    \ignorespacesafterend
+%    % ----
+%    \makeampother
+%  }
 % ======== Sets ========
 % ---- famous sets ----
 \def\setZ{\setcapital{Z}}
@@ -293,9 +293,18 @@
 \def\leftdeduct{\enskip \dashv \enskip}
 \def\leftrightdeduct{\mathrel{\enskip\vdash\dashv\enskip}}
 % ---- implimentation ----
-\def\userightarrowaslimpl{\def\limpl{\mathrel{\rightarrow}}}
-\def\useRightarrowaslimpl{\def\limpl{\mathrel{\Rightarrow}}}
-\def\useinvertedCaslimpl{\def\limpl{\mathrel{\supset}}}
+\def\userightarrowaslimpl{%
+  \def\limpl{\mathrel{\rightarrow}}%
+  \def\backlimpl{\mathrel{\lefttarrow}}%
+}
+\def\useRightarrowaslimpl{%
+  \def\limpl{\mathrel{\Rightarrow}}%
+  \def\backlimpl{\mathrel{\Leftarrow}}%
+}
+\def\useinvertedCaslimpl{%
+  \def\limpl{\mathrel{\supset}}%
+  \def\backlimpl{\mathrel{\subset}}%
+}
 \useRightarrowaslimpl
 % ---- logical equivalence of implimentation ----
 \def\useLeftrightarrowaslimpleqv{\def\limpleqv{\mathrel{\Leftrightarrow}}}
@@ -580,6 +589,7 @@
 \newcounter{thmenum}
 \newenvironment{thmenum}{\setcounter{thmenum}{0}\begin{itemize}}{\end{itemize}}
 \newcommand{\thmenumitem}{\refstepcounter{thmenum}\item[(\thethmenum)]}
+\newcommand{\thmenumref}[1]{(\ref{#1})}
 %
 % ---- optimization tableaux ----
 \newdimen\gfncmd@dimen@maxwidth

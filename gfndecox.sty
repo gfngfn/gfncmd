@@ -1,0 +1,43 @@
+\def\newdecoclass#1#2#3#4{%
+  % ---- ---- ---- ----
+  % #1 : class name
+  % #2 : counter
+  % #3 : prefix
+  % #4 : style
+  % ---- ---- ---- ----
+  \long\def#1{%
+    \def\gfndeco@selectbyoption{%
+      \ifx[\gfndeco@maybeoption
+        \def\gfndeco@selected{\csname gfndeco@labeled@#4\endcsname{#2}{#3}}%
+      \else
+        \ifx*\gfndeco@maybeoption
+          \def\gfndeco@selected{\csname gfndeco@nonumber@#4\endcsname{#3}}%
+        \else
+          \def\gfndeco@selected{\csname gfndeco@number@#4\endcsname{#2}{#3}}%
+        \fi
+      \fi
+      \gfndeco@selected
+    }%
+    \futurelet\gfndeco@maybeoption\gfndeco@selectbyoption
+  }%
+}
+\long\def\gfndeco@nonumber@top#1*#2#3{%
+  % ---- ---- ---- ----
+  % #1 : prefix, #2 : title, #3 : content
+  % ---- ---- ---- ----
+  \noindent\textsf{#1\enskip #2}\quad#3\par
+}
+\long\def\gfndeco@number@top#1#2#3#4{%
+  % ---- ---- ---- ----
+  % #1 : counter, #2 : prefix, #3 : title, #4 : content
+  % ---- ---- ---- ----
+  \refstepcounter{#1}%
+  \noindent\textsf{#2\csname the#1\endcsname\enskip #3}\quad#4\par
+}
+\long\def\gfndeco@labeled@top#1#2[#3]#4#5{%
+  % ---- ---- ---- ----
+  % #1 : counter, #2 : prefix, #3 : label, #4 : title, #5 : content
+  % ---- ---- ---- ----
+  \refstepcounter{#1}\label{#3}%
+  \noindent\textsf{#2\csname the#1\endcsname\enskip#4}\quad#5\par
+}
