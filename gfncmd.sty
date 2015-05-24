@@ -188,10 +188,10 @@
 \def\slashfrac#1#2{\genparenwithmiddle{#1}{#2}{\gfncmd@noparen}{\gfncmd@sizedmidslash}{\gfncmd@noparen}}
 \def\app#1#2{#1\paren{#2}}
 % ---- interval ----
-\def\openintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
-\def\closedintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightbracket}{}{}}
-\def\openclosedintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightbracket}{}{}}
-\def\closedopenintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightparen}{}{}}
+\def\opintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
+\def\clintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightbracket}{}{}}
+\def\opclintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightbracket}{}{}}
+\def\clopintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightparen}{}{}}
 %
 %% ---- change catcode of & ----
 %  \def\makeampactive{\begingroup\catcode`\&=\active\relax}
