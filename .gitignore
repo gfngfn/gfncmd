@@ -6,3 +6,6 @@ gfnlf_old.sty
 *.pdf
 *.log
 *.aux
+*.synctex.gz
+*.fdb_latexmk
+*.fls

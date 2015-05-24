@@ -47,67 +47,67 @@
 %
 % ---- 'top' style ----
 \long\def\gfndeco@nonumber@top#1*#2#3{%
-  \noindent\textsf{#1\gfndeco@ifempty{#2}{}{\enskip#2}}%
+  \noindent\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}%
   \quad\ignorespaces#3\par
 }
 \long\def\gfndeco@number@top#1#2#3#4{%
   \refstepcounter{#1}%,
-  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\enskip#3}}%
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}%
   \quad\ignorespaces#4\par
 }
 \long\def\gfndeco@labeled@top#1#2[#3]#4#5{%
   \refstepcounter{#1}\label{#3}%
-  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\enskip#4}}%
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}%
   \quad\ignorespaces#5\par
 }
 % ---- 'std' style ----
 \long\def\gfndeco@nonumber@std#1*#2#3{%
-  \noindent\textsf{#1\enskip #2}\newline\nopagebreak
+  \noindent\textsf{#1\gfndeco@ifempty{#1}{}{\enskip}#2}\newline\nopagebreak
   \hskip\parindent\relax\ignorespaces#3\par
 }
 \long\def\gfndeco@number@std#1#2#3#4{%
   \refstepcounter{#1}%
-  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\enskip#3}}\newline\nopagebreak
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}\newline\nopagebreak
   \hskip\parindent\relax\ignorespaces#4\par
 }
 \long\def\gfndeco@labeled@std#1#2[#3]#4#5{%
   \refstepcounter{#1}\label{#3}%
-  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\enskip#4}}\newline\nopagebreak
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}\newline\nopagebreak
   \hskip\parindent\relax\ignorespaces#5\par
 }
 % ---- 'ul' style ----
 \long\def\gfndeco@nonumber@ul#1*#2#3{%
-  \noindent\underline{\textsf{#1\gfndeco@ifempty{#2}{}{\enskip#2}}}\newline\nopagebreak
+  \noindent\underline{\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}}\newline\nopagebreak
   \hskip\parindent\relax\ignorespaces#3\par
 }
 \long\def\gfndeco@number@ul#1#2#3#4{%
   \refstepcounter{#1}%
-  \noindent\underline{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\enskip#3}}}\newline\nopagebreak
+  \noindent\underline{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}}\newline\nopagebreak
   \hskip\parindent\relax\ignorespaces#4\par
 }
 \long\def\gfndeco@labeled@ul#1#2[#3]#4#5{%
   \refstepcounter{#1}\label{#3}%
-  \noindent\underline{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\enskip#4}}}\newline\nopagebreak
+  \noindent\underline{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}}\newline\nopagebreak
   \hskip\parindent\relax\ignorespaces#5\par
 }
 % ---- 'box' style ----
 \long\def\gfndeco@nonumber@box#1*#2#3{%
   \noindent
-  \begin{itembox}[l]{\textsf{#1\gfndeco@ifempty{#2}{}{\enskip#2}}}
+  \begin{itembox}[l]{\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}}
     \ignorespaces#3%
   \end{itembox}\par
 }
 \long\def\gfndeco@number@box#1#2#3#4{%
   \refstepcounter{#1}%
   \noindent
-  \begin{itembox}[l]{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\enskip#3}}}%
+  \begin{itembox}[l]{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}}%
     \ignorespaces#4%
   \end{itembox}\par
 }
 \long\def\gfndeco@labeled@box#1#2[#3]#4#5{%
   \refstepcounter{#1}\label{#3}%
   \noindent
-  \begin{itembox}[l]{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\enskip#4}}}%
+  \begin{itembox}[l]{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}}%
     \ignorespaces#5%
   \end{itembox}\par
 }

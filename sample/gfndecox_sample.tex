@@ -15,6 +15,7 @@
   \newdecoclass{\defpar}{定義}{ul}{subsubsection}
   \newnonumberdecoclass{\example}{例}{top}
   \newdecoclass{\thmpar}{定理}{box}{subsubsection}
+  \newnonumberdecoclass{\plainpar}{}{top}
 % ---- 体裁 ----
   \setlength{\parskip}{1em}
 % ---- 意味マークアップ ----
@@ -23,13 +24,16 @@
   \def\bksl{\symbol{"5C}}
   \def\meta#1{\hskip1ex\relax\textrm{#1}\hskip1ex\relax}
 % ---- ----
-  \title{gfndecoxパッケージ使用例}
+  \title{\pkgname{gfncls}，\pkgname{gfndecox}パッケージ使用例}
   \author{gfn}
 \makeatother
 \begin{document}
   \maketitle
   \section{おでん理論}
     \subsection{おでん}
+      \plainpar{はじめに}{
+        この文書に掲げた例と説明は大変杜撰である．
+      }
       \defpar{ちくわ}{
         おでんの具のうち，円環体と同相であるものを\newword{広義ちくわ}と呼ぶ．
       }
@@ -38,6 +42,19 @@
         \TeX と\LaTeX を混同することはアレである．
       }
   \section{本題}
+    \subsection{章・節体裁}
+      \plainpar{}{
+        \pkgname{gfncls}パッケージは
+        （本当はパッケージが担うべき役目とはいえないのですが）
+        クラスファイルのごく一部を上書きするパッケージです．
+        \begin{center}
+          \texttt{\bksl setsectiontheme\{\meta{体裁指定}\}}
+        \end{center}
+        で章・節の体裁を指定できますが，
+        現状ではまだ\texttt{std}オプションと\texttt{line}オプションしかありません．
+        この文書の体裁は\texttt{line}オプションです．
+        \texttt{line}オプションは\pkgname{tikz}パッケージに依存するので別個に読み込んでください．
+      }
     \subsection{段落分類の宣言}
       \defpar{段落分類}{
         段落に分類を与え，分類ごとに装飾を施すのが\pkgname{gfndecox}パッケージの主要な仕事です．
@@ -49,7 +66,12 @@
         という形で宣言します．分類名とカウンタによる番号がタイトルとなり，
         段落全体に体裁指定にしたがった装飾が施されます（
         といっても体裁指定は現状では\texttt{std}，\texttt{ul}，\texttt{top}，
-        \texttt{box}（\pkgname{ascmac}パッケージに依存）くらいしかありません）．
+        \texttt{box}くらいしかありません）．
+        使うときには
+        \begin{center}
+          \texttt{\meta{制御綴}\{\meta{タイトル}\}\{\meta{本文}\}}
+        \end{center}
+        とします．
         番号を振りたくない箇所には\texttt{*}をつけることで一部だけ消すことができ，
         また番号を参照したい場合は\texttt{\bksl label}命令ではなくオプション引数で指定できます．
       \decosep
@@ -57,9 +79,11 @@
         \begin{center}
           \texttt{\bksl newnonumberdecoclass\{\meta{制御綴}\}\{\meta{分類名}\}\{\meta{体裁指定}\}}
         \end{center}
-        で宣言します．
+        で宣言します．これによって宣言された段落分類は\texttt{*}をつけなくても番号が振られません．
+        というより，\texttt{*}やオプション引数には対応していないので，
+        つけるとエラーになるか，或いは意図されるような挙動はしません．
       }
-    \subsection{例}
+    \subsection{使用例}
       \defpar*{番号をつけない}{
         \texttt{*}をつけると，番号がふられなくなります．
       }
@@ -76,5 +100,27 @@
       \decosep
         改段落しました．まあでも後ろの段落も長くないと綺麗に見えませんよね，
         色は匂へど散りぬるを，吾が世誰ぞ恒ならむ，有為の奥山今日越えて，浅き夢見じ酔ひもせず．
+      }
+    \subsection{体裁一覧}
+      \newdecoclass{\testpar}{表示例}{std}{subsubsection}
+      \testpar{\texttt{std}オプション}{
+        普通のタイトルつきの段落です．例によって残りは意味のない文章です：\quad
+        色は匂へど散りぬるを，吾が世誰ぞ恒ならむ，有為の奥山今日越えて，浅き夢見じ酔ひもせず．
+      }
+      \newdecoclass{\testpar}{表示例}{ul}{subsubsection}
+      \testpar{\texttt{ul}オプション}{
+        タイトルに下線がつきます．やはり残りは意味のない文章です：\quad
+        色は匂へど散りぬるを，吾が世誰ぞ恒ならむ，有為の奥山今日越えて，浅き夢見じ酔ひもせず．
+      }
+      \newdecoclass{\testpar}{表示例}{top}{subsubsection}
+      \testpar{\texttt{top}オプション}{
+        本文がタイトルと同一の行で始まります．
+        色は匂へど散りぬるを，吾が世誰ぞ恒ならむ，有為の奥山今日越えて，浅き夢見じ酔ひもせず．
+      }
+      \newdecoclass{\testpar}{表示例}{box}{subsubsection}
+      \testpar{\texttt{box}オプション}{
+        本文が箱で括られます．
+        \pkgname{ascmac}パッケージに依存するので，別途読み込んでください．
+        また，途中で改ページすることはできないので注意してください．
       }
 \end{document}
