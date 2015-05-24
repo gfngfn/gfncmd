@@ -1,0 +1,80 @@
+\documentclass{jsarticle}
+\makeatletter
+  \usepackage{lmodern}
+  \usepackage[T1]{fontenc}
+  \usepackage[dvipdfmx]{graphicx}
+  \usepackage[dvipdfmx]{xcolor}
+  \usepackage{tikz}
+  \usepackage{ascmac}
+% ---- gfncls ----
+  \usepackage{gfncls}
+  \setsectiontheme{line}
+    %(現状はまだ line スタイルしかありません)
+% ---- gfndecox ----
+  \usepackage{gfndecox}
+  \newdecoclass{\defpar}{定義}{ul}{subsubsection}
+  \newnonumberdecoclass{\example}{例}{top}
+  \newdecoclass{\thmpar}{定理}{box}{subsubsection}
+% ---- 体裁 ----
+  \setlength{\parskip}{1em}
+% ---- 意味マークアップ ----
+  \def\newword#1{\textsf{#1}}
+  \def\pkgname#1{\texttt{#1}}
+  \def\bksl{\symbol{"5C}}
+  \def\meta#1{\hskip1ex\relax\textrm{#1}\hskip1ex\relax}
+% ---- ----
+  \title{gfndecoxパッケージ使用例}
+  \author{gfn}
+\makeatother
+\begin{document}
+  \maketitle
+  \section{おでん理論}
+    \subsection{おでん}
+      \defpar{ちくわ}{
+        おでんの具のうち，円環体と同相であるものを\newword{広義ちくわ}と呼ぶ．
+      }
+      \example{}{狭義ちくわおよびちくわ麸は広義ちくわである．}
+      \thmpar{自明な定理}{
+        \TeX と\LaTeX を混同することはアレである．
+      }
+  \section{本題}
+    \subsection{段落分類の宣言}
+      \defpar{段落分類}{
+        段落に分類を与え，分類ごとに装飾を施すのが\pkgname{gfndecox}パッケージの主要な仕事です．
+        この分類を\newword{段落分類}と呼ぶことにします．
+        段落分類は，基本的に
+        \begin{center}
+          \texttt{\bksl newdecoclass\{\meta{制御綴}\}\{\meta{分類名}\}\{\meta{体裁指定}\}\{\meta{\LaTeX 式カウンタ}\}}
+        \end{center}
+        という形で宣言します．分類名とカウンタによる番号がタイトルとなり，
+        段落全体に体裁指定にしたがった装飾が施されます（
+        といっても体裁指定は現状では\texttt{std}，\texttt{ul}，\texttt{top}，
+        \texttt{box}（\pkgname{ascmac}パッケージに依存）くらいしかありません）．
+        番号を振りたくない箇所には\texttt{*}をつけることで一部だけ消すことができ，
+        また番号を参照したい場合は\texttt{\bksl label}命令ではなくオプション引数で指定できます．
+      \decosep
+        根本的に番号のいらない段落分類は
+        \begin{center}
+          \texttt{\bksl newnonumberdecoclass\{\meta{制御綴}\}\{\meta{分類名}\}\{\meta{体裁指定}\}}
+        \end{center}
+        で宣言します．
+      }
+    \subsection{例}
+      \defpar*{番号をつけない}{
+        \texttt{*}をつけると，番号がふられなくなります．
+      }
+      \defpar[def:reference]{相互参照}{
+        相互参照はオプション引数で指定します．
+      }
+      \thmpar{引用するところの例}{
+        「定義\ref{def:reference}によると，」……という具合に引用されます．
+      }
+      \defpar{段落分類中の改段落}{
+        ひとつの分類中で改段落したい場合は，改段落したい箇所に\texttt{\bksl decosep}を入れてください．
+        あまり短いと例が綺麗に見えなさそうなので，あとは無意味な文章で分量を水増ししておきましょう．
+        そろそろ改段落したいなーいやしたくないかなーやっぱりしたいなーよし改段落するぞ
+      \decosep
+        改段落しました．まあでも後ろの段落も長くないと綺麗に見えませんよね，
+        色は匂へど散りぬるを，吾が世誰ぞ恒ならむ，有為の奥山今日越えて，浅き夢見じ酔ひもせず．
+      }
+\end{document}

@@ -2,3 +2,7 @@ gfncmd_old.sty
 gfndeco_n.sty
 gfnfml.tex
 gfnlf_old.sty
+*.dvi
+*.pdf
+*.log
+*.aux
