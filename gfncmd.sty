@@ -245,6 +245,12 @@
 \def\usetimessetMatrix{\let\setMatrix=\gfncmd@setMatrix@times}
 \usebfsetMatrix %(setting default option)
 % ---- power set ----
+\def\gfncmd@Power@rm#1{\mathop{\mathrm{Pow}}\nolimits#1}
+\def\gfncmd@Power@binary#1{2^{#1}}
+\def\gfncmd@Power@frak#1{\mathop{\mathfrak{P}}\nolimits#1}
+\def\gfncmd@Powerfin@rm#1{\mathop{\mathrm{Pow}_{\omega}}\nolimits#1}
+\def\gfncmd@Powerfin@binary#1{\mathop{2_{\omega}}\nolimits^{#1}}
+\def\gfncmd@Powerfin@frak#1{\mathop{\mathfrak{P}_{\omega}}\nolimits#1}
 \def\usermPower{%
   \let\Power=\gfncmd@Power@rm
   \let\Powerfin=\gfncmd@Powerfin@rm
@@ -258,12 +264,6 @@
   \let\Powerfin=\gfncmd@Powerfin@frak
 }
 \usefrakPower %(setting default option)
-\def\gfncmd@Power@rm#1{\mathop{\mathrm{Pow}}\nolimits#1}
-\def\gfncmd@Power@binary#1{2^{#1}}
-\def\gfncmd@Power@frak#1{\mathop{\mathfrak{P}}\nolimits#1}
-\def\gfncmd@Powerfin@rm#1{\mathop{\mathrm{Pow}_{\omega}}\nolimits#1}
-\def\gfncmd@Powerfin@binary#1{\mathop{2_{\omega}}\nolimits^{#1}}
-\def\gfncmd@Powerfin@frak#1{\mathop{\mathfrak{P}_{\omega}}\nolimits#1}
 % ---- the display of domain and codomain of a function ----
 \def\funcdoms#1#2#3{#1:\:#2\to #3}
 \def\funcdomswidebox#1#2#3#4#5{%
