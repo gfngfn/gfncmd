@@ -1,5 +1,6 @@
 %This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
 %
+\def\gfncmd@unique{\gfncmd@uniquesub}
 % ======== Parenthesis, Brackets and Braces ========
 \newif\ifgfncmd@bool@escape
 \def\gfncmd@disableescapedchar{\gfncmd@bool@escapefalse}
@@ -265,23 +266,81 @@
 }
 \usefrakPower %(setting default option)
 % ---- the display of domain and codomain of a function ----
-\def\funcdoms#1#2#3{#1:\:#2\to #3}
+\def\funcdoms#1#2#3{#1\colon\:\doms{#2}{#3}}
+\def\doms#1#2{#1\to#2}
+\newdimen\gfncmd@dimen@funcwidth
+\newdimen\gfncmd@dimen@domwidth
+\newdimen\gfncmd@dimen@domdepth
+\newdimen\gfncmd@dimen@codwidth
+\newdimen\gfncmd@dimen@coddepth
+\newdimen\gfncmd@dimen@paramwidth
+\newdimen\gfncmd@dimen@paramheight
+\newdimen\gfncmd@dimen@valwidth
+\newdimen\gfncmd@dimen@valheight
+\newdimen\gfncmd@dimen@upperdepth
+\newdimen\gfncmd@dimen@middle
+\newdimen\gfncmd@dimen@lowerpos
 \def\funcdomswidebox#1#2#3#4#5{%
-  \begin{center}
-    \begin{tabular}{lccc}
-      $\displaystyle #1:$ & $\displaystyle #2$ & $\longrightarrow$ & $\displaystyle #3$
-    \\
-       & \rotatebox[origin=c]{90}{$\in$} & & \rotatebox[origin=c]{90}{$\in$}
-    \\
-       & $\displaystyle #4$ & $\longmapsto$ & $\displaystyle #5$
-    \end{tabular}
-  \end{center}
-%  \setbox0=\hbox{$\displaystyle#1:$}%
-%  \gfncmd@dimen@funcwidth=\wd0\relax
 %  \begin{center}
-%    \begin{tikzpicture}
-%    \end{tikzpicture}
+%    \begin{tabular}{lccc}
+%      $\displaystyle #1\colon$ & $\displaystyle #2$ & $\longrightarrow$ & $\displaystyle #3$
+%    \\
+%       & \rotatebox[origin=c]{90}{$\in$} & & \rotatebox[origin=c]{90}{$\in$}
+%    \\
+%       & $\displaystyle #4$ & $\longmapsto$ & $\displaystyle #5$
+%    \end{tabular}
 %  \end{center}
+  \setbox0=\hbox{$\displaystyle#1\colon\quad$}\relax
+  \gfncmd@dimen@funcwidth=\wd0\relax
+  \setbox0=\hbox{$\displaystyle#2$}\relax
+  \gfncmd@dimen@domwidth=\wd0\relax
+  \gfncmd@dimen@domdepth=\dp0\relax
+  \setbox0=\hbox{$\displaystyle#3$}\relax
+  \gfncmd@dimen@codwidth=\wd0\relax
+  \gfncmd@dimen@coddepth=\dp0\relax
+  \setbox0=\hbox{$\displaystyle#4$}\relax
+  \gfncmd@dimen@paramwidth=\wd0\relax
+  \gfncmd@dimen@paramheight=\ht0\relax
+  \setbox0=\hbox{$\displaystyle#5$}\relax
+  \gfncmd@dimen@valwidth=\wd0\relax
+  \gfncmd@dimen@valheight=\ht0\relax
+  \ifdim\gfncmd@dimen@domdepth>\gfncmd@dimen@coddepth\relax
+    \gfncmd@dimen@upperdepth=\gfncmd@dimen@domdepth\relax
+  \else
+    \gfncmd@dimen@upperdepth=\gfncmd@dimen@coddepth\relax
+  \fi
+  \advance\gfncmd@dimen@upperdepth by1.5em\relax
+  \gfncmd@dimen@lowerpos=\gfncmd@dimen@upperdepth\relax
+  \advance\gfncmd@dimen@lowerpos by0.5em\relax
+  \ifdim\gfncmd@dimen@paramheight>\gfncmd@dimen@valheight\relax
+    \advance\gfncmd@dimen@lowerpos by\gfncmd@dimen@paramheight\relax
+  \else
+    \advance\gfncmd@dimen@lowerpos by\gfncmd@dimen@valheight\relax
+  \fi
+  \gfncmd@dimen@middle=4em\relax
+  \ifdim\gfncmd@dimen@domwidth>\gfncmd@dimen@paramwidth\relax
+    \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@domwidth\relax
+  \else
+    \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@paramwidth\relax
+  \fi
+  \ifdim\gfncmd@dimen@codwidth>\gfncmd@dimen@valwidth\relax
+    \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@codwidth\relax
+  \else
+    \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@valwidth\relax
+  \fi
+  \begin{center}
+    \begin{tikzpicture}
+      \node[rectangle] (FUNC) at (-0.5\gfncmd@dimen@funcwidth, 0) {$\displaystyle#1\colon\quad$};
+      \node[rectangle, inner sep=0.5em] (DOM) at (0, 0) {$\displaystyle#2$};
+      \node[rectangle, inner sep=0.5em] (COD) at (\gfncmd@dimen@middle, 0) {$\displaystyle#3$};
+      \draw (0, -\gfncmd@dimen@upperdepth) node {\rotatebox[origin=c]{90}{$\in$}};
+      \draw (\gfncmd@dimen@middle, -\gfncmd@dimen@upperdepth) node {\rotatebox[origin=c]{90}{$\in$}};
+      \node[rectangle, inner sep=0.5em] (PARAM) at (0, -\gfncmd@dimen@lowerpos) {$\displaystyle#4$};
+      \node[rectangle, inner sep=0.5em] (VAL) at (\gfncmd@dimen@middle, -\gfncmd@dimen@lowerpos) {$\displaystyle#5$};
+      \draw[->] (DOM) -- (COD);
+      \draw[|->] (PARAM) -- (VAL);
+    \end{tikzpicture}
+  \end{center}
 }
 %
 % ---- end of proof ----
@@ -556,12 +615,12 @@
 }
 \useitalicgreekcapital
 % ---- transposition of matrix ----
-\def\gfncmd@trsps@i#1{#1^\top\!}
-\def\gfncmd@trsps@ii#1{#1^{\mathrm{T}}}
-\def\gfncmd@trsps@iii#1{\,{}^{t}\!#1}
-\def\usetoptrsps{\let\trsps=\gfncmd@trsps@i}
-\def\useTtrsps{\let\trsps=\gfncmd@trsps@ii}
-\def\uselefttrsps{\let\trsps=\gfncmd@trsps@iii}
+\def\gfncmd@trsps@top#1{#1^\top\!}
+\def\gfncmd@trsps@T#1{#1^{\mathrm{T}}}
+\def\gfncmd@trsps@left#1{\,{}^{t}\!#1}
+\def\usetoptrsps{\let\trsps=\gfncmd@trsps@top}
+\def\useTtrsps{\let\trsps=\gfncmd@trsps@T}
+\def\uselefttrsps{\let\trsps=\gfncmd@trsps@left}
 \usetoptrsps
 %
 % ---- image by function ----
@@ -580,10 +639,7 @@
 %
 % ---- new word ----
 \newcommand{\newword}[2][]{%
-  \textsf{#2}%
-  \def\gfncmd@tempforifx{#1}
-  \ifx\gfncmd@tempforifx\empty
-  \else\index{#1}\fi
+  \textsf{#2}\ifx\gfncmd@unique#1\gfncmd@unique\else\index{#1}\fi
 }
 % ---- enumeration of theorem ----
 \newcounter{thmenum}
