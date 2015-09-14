@@ -97,33 +97,34 @@
 }
 % ---- 'std' style ----
 \long\def\gfndeco@nonumber@std#1*#2#3{%
-  \noindent\textsf{#1\gfndeco@ifempty{#1}{}{\enskip}#2}\par\vspace{-\parskip}\nobreak
-  \indent\ignorespaces#3\par
+  \noindent\textsf{#1\gfndeco@ifempty{#1}{}{\enskip}#2}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#3\par
+    %(it seems that \nopagebreak should be immediately after \par)
 }
 \long\def\gfndeco@number@std#1#2#3#4{%
   \refstepcounter{#1}%
-  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}\par\vspace{-\parskip}\nobreak
-  \indent\ignorespaces#4\par
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#4\par
 }
 \long\def\gfndeco@labeled@std#1#2[#3]#4#5{%
   \refstepcounter{#1}\label{#3}%
-  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}\par\vspace{-\parskip}\nobreak
-  \indent\ignorespaces#5\par
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#5\par
 }
 % ---- 'ul' style ----
 \long\def\gfndeco@nonumber@ul#1*#2#3{%
-  \noindent\underline{\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}}\newline\nopagebreak
-  \hskip\parindent\relax\ignorespaces#3\par
+  \noindent\underline{\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#3\par
 }
 \long\def\gfndeco@number@ul#1#2#3#4{%
   \refstepcounter{#1}%
-  \noindent\underline{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}}\newline\nopagebreak
-  \hskip\parindent\relax\ignorespaces#4\par
+  \noindent\underline{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#4\par
 }
 \long\def\gfndeco@labeled@ul#1#2[#3]#4#5{%
   \refstepcounter{#1}\label{#3}%
-  \noindent\underline{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}}\newline\nopagebreak
-  \hskip\parindent\relax\ignorespaces#5\par
+  \noindent\underline{\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#5\par
 }
 % ---- 'box' style ----
 \long\def\gfndeco@nonumber@box#1*#2#3{%
