@@ -94,12 +94,13 @@
 \def\gfncmd@escapedtabchar{&}
 %
 % ---- concrete quantifier ----
-\newcommand\forallin[4][0]{\quantifier{#2}{#3}{#4}{\forall}{\in}{#1}}
-\newcommand\existsin[4][0]{\quantifier{#2}{#3}{#4}{\exists}{\in}{#1}}
-\newcommand\forallsub[4][0]{\quantifier{#2}{#3}{#4}{\forall}{\subseteq}{#1}}
-\newcommand\existssub[4][0]{\quantifier{#2}{#3}{#4}{\exists}{\subseteq}{#1}}
-\newcommand\forallfunc[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\forall}{:}{#1}}
-\newcommand\existsfunc[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\exists}{:}{#1}}
+\newcommand{\forallin}[4][0]{\quantifier{#2}{#3}{#4}{\forall}{\in}{#1}}
+\newcommand{\existsin}[4][0]{\quantifier{#2}{#3}{#4}{\exists}{\in}{#1}}
+\newcommand{\forallsub}[4][0]{\quantifier{#2}{#3}{#4}{\forall}{\subseteq}{#1}}
+\newcommand{\existssub}[4][0]{\quantifier{#2}{#3}{#4}{\exists}{\subseteq}{#1}}
+\newcommand{\forallfunc}[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\forall}{:}{#1}}
+\newcommand{\existsfunc}[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\exists}{:}{#1}}
+\newcommand{\existsisom}[5][0]{\quantifier{#2}{#3 \cong #4}{#5}{\exists}{:}{#1}}
 %
 % ==== other logical operators ====
 % -- predicate symbols ----
@@ -180,26 +181,26 @@
 %   define when paren is omittable or mandatory
 %   if neigher \gfncmd@omitlist.. nor \gfncmd@mndtlist.. contains the token T,
 %   the token list whose head is T is regarded as an ordinary formula
-\def\gfncmd@omitlistLlfland{\lfpv\lflnot\lfland}
-  \def\gfncmd@mndtlistLlfland{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\lflor\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistLlfland{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland}
+  \def\gfncmd@mndtlistLlfland{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lflor\lflimpl\lflimpleqv}
 \def\gfncmd@omitlistLlflor{\lfpv\lflnot\lflor}
-  \def\gfncmd@mndtlistLlflor{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\lfland\lflimpl\lflimpleqv}
+  \def\gfncmd@mndtlistLlflor{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland\lflimpl\lflimpleqv}
 \def\gfncmd@omitlistLlflimpl{\lfpv\lflnot\lfland\lflor}
-  \def\gfncmd@mndtlistLlflimpl{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\lflimpl\lflimpleqv}
+  \def\gfncmd@mndtlistLlflimpl{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lflimpl\lflimpleqv}
 \def\gfncmd@omitlistLlflimpleqv{\lfpv\lflnot\lfland\lflor}
-  \def\gfncmd@mndtlistLlflimpleqv{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\lflimpl\lflimpleqv}
+  \def\gfncmd@mndtlistLlflimpleqv{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lflimpl\lflimpleqv}
 %
-\def\gfncmd@omitlistRquantifier{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\forallfunc\existsfunc}
+\def\gfncmd@omitlistRquantifier{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom}
   \def\gfncmd@mndtlistRquantifier{\lfland\lflor\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistRlflnot{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc}
+\def\gfncmd@omitlistRlflnot{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom}
   \def\gfncmd@mndtlistRlflnot{\lfland\lflor\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistRlfland{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\lfland}
+\def\gfncmd@omitlistRlfland{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland}
   \def\gfncmd@mndtlistRlfland{\lflor\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistRlflor{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\lflor}
+\def\gfncmd@omitlistRlflor{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lflor}
   \def\gfncmd@mndtlistRlflor{\lfland\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistRlflimpl{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\lfland\lflor\lflimpl}
+\def\gfncmd@omitlistRlflimpl{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland\lflor\lflimpl}
   \def\gfncmd@mndtlistRlflimpl{\lflimpleqv}
-\def\gfncmd@omitlistRlflimpleqv{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\lfland\lflor}
+\def\gfncmd@omitlistRlflimpleqv{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland\lflor}
   \def\gfncmd@mndtlistRlflimpleqv{\lflimpl\lflimpleqv}
 %
 % ==== control sequence for operating list ====

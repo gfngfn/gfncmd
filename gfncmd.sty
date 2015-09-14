@@ -175,6 +175,18 @@
 \def\gfncmd@sizedmidslash#1{%
   \fontsize{#1}{0pt}\selectfont $/$%
 }
+\def\gfncmd@sizedleftceil#1{%
+  \fontsize{#1}{0pt}\selectfont $\lceil$%
+}
+\def\gfncmd@sizedrightceil#1{%
+  \fontsize{#1}{0pt}\selectfont $\rceil$%
+}
+\def\gfncmd@sizedleftfloor#1{%
+  \fontsize{#1}{0pt}\selectfont $\lfloor$%
+}
+\def\gfncmd@sizedrightfloor#1{%
+  \fontsize{#1}{0pt}\selectfont $\rfloor$%
+}
 \def\gfncmd@noparen#1{}
 %
 \def\paren#1{\genparen{#1}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
@@ -182,6 +194,9 @@
 \def\curlybrace#1{\genparen{#1}{\gfncmd@sizedleftbrace}{\gfncmd@sizedrightbrace}{}{}}
 \def\absprn#1{\genparen{#1}{\gfncmd@sizedbar}{\gfncmd@sizedbar}{}{}}
 \def\distprn#1{\genparen{#1}{\gfncmd@sizedBar}{\gfncmd@sizedBar}{}{}}
+\def\ceilprn#1{\genparen{#1}{\gfncmd@sizedleftceil}{\gfncmd@sizedrightceil}{}{}}
+\def\floorprn#1{\genparen{#1}{\gfncmd@sizedleftfloor}{\gfncmd@sizedrightfloor}{}{}}
+\def\restrfunc#1#2{\genparen{#1}{\gfncmd@noparen}{\gfncmd@sizedbar}{}{}_{#2}}
 \let\setprn=\curlybrace
 \let\seqprn=\paren
 \let\card=\absprn
@@ -248,10 +263,10 @@
 % ---- power set ----
 \def\gfncmd@Power@rm#1{\mathop{\mathrm{Pow}}\nolimits#1}
 \def\gfncmd@Power@binary#1{2^{#1}}
-\def\gfncmd@Power@frak#1{\mathop{\mathfrak{P}}\nolimits#1}
+\def\gfncmd@Power@frak#1{\mathop{\mathfrak{P}\!}\nolimits#1}
 \def\gfncmd@Powerfin@rm#1{\mathop{\mathrm{Pow}_{\omega}}\nolimits#1}
 \def\gfncmd@Powerfin@binary#1{\mathop{2_{\omega}}\nolimits^{#1}}
-\def\gfncmd@Powerfin@frak#1{\mathop{\mathfrak{P}_{\omega}}\nolimits#1}
+\def\gfncmd@Powerfin@frak#1{\mathop{\mathfrak{P}_{\omega}\!}\nolimits#1}
 \def\usermPower{%
   \let\Power=\gfncmd@Power@rm
   \let\Powerfin=\gfncmd@Powerfin@rm
@@ -328,6 +343,7 @@
   \else
     \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@valwidth\relax
   \fi
+  \advance\gfncmd@dimen@funcwidth by\gfncmd@dimen@domwidth\relax
   \begin{center}
     \begin{tikzpicture}
       \node[rectangle] (FUNC) at (-0.5\gfncmd@dimen@funcwidth, 0) {$\displaystyle#1\colon\quad$};
@@ -714,3 +730,5 @@
 \def\catRng{\mathcat{Rng}}
 \def\catCRng{\mathcat{CRng}}
 %
+\def\dom{\mathop{\operator@font dom}\nolimits}
+\def\cod{\mathop{\operator@font cod}\nolimits}

@@ -45,6 +45,21 @@
   % #1 : counter, #2 : prefix, #3 : label, #4 : title, #5 : content
   % ---- ---- ---- ----
 %
+% ---- 'square' style ----
+\long\def\gfndeco@nonumber@square#1*#2#3{%
+  \noindent\fbox{\textsf{#1}}\textsf{\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}%
+  \quad\ignorespaces#3\par
+}
+\long\def\gfndeco@number@square#1#2#3#4{%
+  \refstepcounter{#1}%,
+  \noindent\fbox{\textsf{#2\csname the#1\endcsname}}\textsf{\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}%
+  \quad\ignorespaces#4\par
+}
+\long\def\gfndeco@labeled@square#1#2[#3]#4#5{%
+  \refstepcounter{#1}\label{#3}%
+  \noindent\fbox{\textsf{#2\csname the#1\endcsname}}\textsf{\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}%
+  \quad\ignorespaces#5\par
+}
 % ---- 'top' style ----
 \long\def\gfndeco@nonumber@top#1*#2#3{%
   \noindent\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}%
@@ -60,20 +75,40 @@
   \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}%
   \quad\ignorespaces#5\par
 }
+% ---- 'topwithbottom' style ----
+\long\def\gfndeco@nonumber@topwithbottom#1*#2#3{%
+  \noindent\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}%
+  \quad\ignorespaces#3\par\vspace{-\parskip}\vspace{-0.25em}\nobreak
+  \noindent
+  \begin{tikzpicture}
+    \draw[line width=1pt, dotted] (0,0) -- (0.99\textwidth,0);
+  \end{tikzpicture}%
+  \par
+}
+\long\def\gfndeco@number@topwithbottom#1#2#3#4{%
+  \refstepcounter{#1}%,
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}%
+  \quad\ignorespaces#4\par
+}
+\long\def\gfndeco@labeled@topwithbottom#1#2[#3]#4#5{%
+  \refstepcounter{#1}\label{#3}%
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}%
+  \quad\ignorespaces#5\par
+}
 % ---- 'std' style ----
 \long\def\gfndeco@nonumber@std#1*#2#3{%
-  \noindent\textsf{#1\gfndeco@ifempty{#1}{}{\enskip}#2}\newline\nopagebreak
-  \hskip\parindent\relax\ignorespaces#3\par
+  \noindent\textsf{#1\gfndeco@ifempty{#1}{}{\enskip}#2}\par\vspace{-\parskip}\nobreak
+  \indent\ignorespaces#3\par
 }
 \long\def\gfndeco@number@std#1#2#3#4{%
   \refstepcounter{#1}%
-  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}\newline\nopagebreak
-  \hskip\parindent\relax\ignorespaces#4\par
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}\par\vspace{-\parskip}\nobreak
+  \indent\ignorespaces#4\par
 }
 \long\def\gfndeco@labeled@std#1#2[#3]#4#5{%
   \refstepcounter{#1}\label{#3}%
-  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}\newline\nopagebreak
-  \hskip\parindent\relax\ignorespaces#5\par
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}\par\vspace{-\parskip}\nobreak
+  \indent\ignorespaces#5\par
 }
 % ---- 'ul' style ----
 \long\def\gfndeco@nonumber@ul#1*#2#3{%

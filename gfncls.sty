@@ -14,12 +14,14 @@
 %  }
 %\renewcommand{\thepage}{--\arabic{page}--}
 %\setlength{\parskip}{1em}
-\renewcommand{\thesection}{\@arabic\c@section.}
-\renewcommand{\thesubsection}{\@arabic\c@section.\@arabic\c@subsection.}
-\renewcommand{\thesubsubsection}{\@arabic\c@section.\@arabic\c@subsection.\@arabic\c@subsubsection.}
+\renewcommand{\thesection}{\@arabic\c@section}
+\renewcommand{\thesubsection}{\@arabic\c@section.\@arabic\c@subsection}
+\renewcommand{\thesubsubsection}{\@arabic\c@section.\@arabic\c@subsection.\@arabic\c@subsubsection}
 \renewcommand{\section}{%
-  \@startsection{section}{1}{\z@}{\Cvs \@plus.5\Cdp \@minus.2\Cdp}{.5\Cvs \@plus.3\Cdp}{\gfncls@sectionstyle}%
+  \@startsection{section}{1}{\z@}{\gfncls@sectionbeforeskip}{\gfncls@sectionafterskip}{\gfncls@sectionstyle}%
 }
+%\def\gfncls@sectionbeforeskip{\Cvs \@plus.5\Cdp \@minus.2\Cdp}
+%\def\gfncls@sectionafterskip{.5\Cvs \@plus.3\Cdp}
 \renewcommand{\subsection}{%
   \@startsection{subsection}{2}{\z@}{.5\Cvs \@plus.5\Cdp \@minus.2\Cdp}{.2\Cvs \@plus.3\Cdp}{\gfncls@subsectionstyle}%
 }
@@ -31,9 +33,10 @@
 \def\setsectiontheme#1{%
   \expandafter\let\expandafter\@maketitle\expandafter=\csname @maketitle@#1\endcsname
   \expandafter\let\expandafter\gfncls@sectionstyle\expandafter=\csname gfncls@sectionstyle@#1\endcsname
+  \expandafter\let\expandafter\gfncls@sectionbeforeskip\expandafter=\csname gfncls@sectionbeforeskip@#1\endcsname
+  \expandafter\let\expandafter\gfncls@sectionafterskip\expandafter=\csname gfncls@sectionafterskip@#1\endcsname
   \expandafter\let\expandafter\gfncls@subsectionstyle\expandafter=\csname gfncls@subsectionstyle@#1\endcsname
 }
-\setsectiontheme{line}
 % ---- std ----
   \def\@maketitle@std{%
     \newpage\null
@@ -55,6 +58,35 @@
   }
 \def\gfncls@sectionstyle@std#1{\textsf{\normalfont\Large\headfont #1}}
 \def\gfncls@subsectionstyle@std#1{\textsf{\normalfont\large\headfont #1}}
+\def\gfncls@sectionbeforeskip@std{\Cvs \@plus.5\Cdp \@minus.2\Cdp}
+\def\gfncls@sectionafterskip@std{.5\Cvs \@plus.3\Cdp}
+% ---- concise ----
+  \def\@maketitle@concise{%
+    \newpage\null
+    \begin{center}%
+      \let\footnote\thanks
+      {\LARGE \@title\par}%
+      \vskip 1.5em\relax
+      {\large
+        \lineskip .5em\relax
+        \begin{flushright}%
+          \@author
+        \end{flushright}\par}%
+    \end{center}%
+    \ifvoid\@abstractbox\else\centerline{\box\@abstractbox}\vskip1.5em\relax\fi
+  }
+\def\gfncls@sectionstyle@concise#1{%
+  {\parbox[c]{\textwidth}{%
+    \parbox[c]{0.99\textwidth}{\enskip\textsf{\normalfont\large\headfont #1}}\par
+    \vskip -2ex\relax
+    \begin{tikzpicture}
+      \draw[line width=1pt] (0,0) -- (0.99\textwidth,0);
+    \end{tikzpicture}%
+  }}%
+}
+\def\gfncls@subsectionstyle@concise#1{\textsf{\normalfont\large\headfont #1}}
+\def\gfncls@sectionbeforeskip@concise{.5\Cvs \@plus.1\Cdp \@minus.1\Cdp}
+\def\gfncls@sectionafterskip@concise{.2\Cvs \@plus.1\Cdp}
 % ---- line ----
 \def\@maketitle@line{%
   \setbox0=\hbox{\parbox{0.79\textwidth}{\centering\LARGE\@title\par}}%
@@ -99,7 +131,7 @@
     \begin{tikzpicture}
       \draw[line width=0.5pt] (0,0) -- (0.99\textwidth,0);
       \draw[line width=1pt] (0,-3pt) -- (0.99\textwidth,-3pt);
-    \end{tikzpicture}\par
+    \end{tikzpicture}
   }}%
 }
 \def\gfncls@subsectionstyle@line#1{%
@@ -111,3 +143,7 @@
     \end{tikzpicture}%
   }}%
 }
+\def\gfncls@sectionbeforeskip@line{\Cvs \@plus.5\Cdp \@minus.2\Cdp}
+\def\gfncls@sectionafterskip@line{.5\Cvs \@plus.3\Cdp}
+% ---- ----
+\setsectiontheme{line}
