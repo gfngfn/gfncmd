@@ -78,7 +78,7 @@
 % ---- 'topwithbottom' style ----
 \long\def\gfndeco@nonumber@topwithbottom#1*#2#3{%
   \noindent\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}%
-  \quad\ignorespaces#3\par\vspace{-\parskip}\vspace{-0.25em}\nobreak
+  \quad\ignorespaces#3\par\nopagebreak\vspace{-\parskip}\vspace{-0.25em}
   \noindent
   \begin{tikzpicture}
     \draw[line width=1pt, dotted] (0,0) -- (0.99\textwidth,0);
@@ -88,12 +88,22 @@
 \long\def\gfndeco@number@topwithbottom#1#2#3#4{%
   \refstepcounter{#1}%,
   \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}%
-  \quad\ignorespaces#4\par
+  \quad\ignorespaces#4\par\nopagebreak\vspace{-\parskip}\vspace{-0.25em}
+  \noindent
+  \begin{tikzpicture}
+    \draw[line width=1pt, dotted] (0,0) -- (0.99\textwidth,0);
+  \end{tikzpicture}%
+  \par
 }
 \long\def\gfndeco@labeled@topwithbottom#1#2[#3]#4#5{%
   \refstepcounter{#1}\label{#3}%
   \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}%
-  \quad\ignorespaces#5\par
+  \quad\ignorespaces#5\par\nopagebreak\vspace{-\parskip}\vspace{-0.25em}
+  \noindent
+  \begin{tikzpicture}
+    \draw[line width=1pt, dotted] (0,0) -- (0.99\textwidth,0);
+  \end{tikzpicture}%
+  \par
 }
 % ---- 'std' style ----
 \long\def\gfndeco@nonumber@std#1*#2#3{%
