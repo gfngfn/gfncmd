@@ -16,6 +16,13 @@
 \def\operatorparenskip{\hspace{0.125em}}
 \def\operatornoparenskip{\hspace{0.25em}}
 %
+\let\gfncmd@exists@normal\exists
+\def\gfncmd@exists@upper{\smash{\raise0.25em\hbox{$\exists$}}}
+\let\gfncmd@forall@normal\forall
+\def\gfncmd@forall@upper{\smash{\raise0.25em\hbox{$\forall$}}}
+\def\gfncmd@existssole@normal{\exists!}
+\def\gfncmd@existssole@upper{\smash{\raise0.25em\hbox{$\exists!$}}}
+%
 % -- option declaration --
 \def\usesinglequantifier{\def\gfncmd@option@quantifier{0}}
 \def\usepluralquantifier{\def\gfncmd@option@quantifier{1}}
@@ -25,6 +32,17 @@
 \def\useparenpluralquantifier{\def\gfncmd@option@quantifier{5}}
 \usedotpluralquantifier
 %
+\def\usenormalquantifierheight{%
+  \let\gfncmd@exists\gfncmd@exists@normal
+  \let\gfncmd@forall\gfncmd@forall@normal
+  \let\gfncmd@existssole\gfncmd@existssole@normal
+}
+\def\useupperquantifierheight{%
+  \let\gfncmd@exists\gfncmd@exists@upper
+  \let\gfncmd@forall\gfncmd@forall@upper
+  \let\gfncmd@existssole\gfncmd@existssole@upper
+}
+\usenormalquantifierheight
 % ==== quantifier ====
 % -- general quantifier --
 \def\quantifier#1#2#3#4#5#6{%
@@ -94,13 +112,16 @@
 \def\gfncmd@escapedtabchar{&}
 %
 % ---- concrete quantifier ----
-\newcommand{\forallin}[4][0]{\quantifier{#2}{#3}{#4}{\forall}{\in}{#1}}
-\newcommand{\existsin}[4][0]{\quantifier{#2}{#3}{#4}{\exists}{\in}{#1}}
-\newcommand{\forallsub}[4][0]{\quantifier{#2}{#3}{#4}{\forall}{\subseteq}{#1}}
-\newcommand{\existssub}[4][0]{\quantifier{#2}{#3}{#4}{\exists}{\subseteq}{#1}}
-\newcommand{\forallfunc}[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\forall}{:}{#1}}
-\newcommand{\existsfunc}[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\exists}{:}{#1}}
-\newcommand{\existsisom}[5][0]{\quantifier{#2}{#3 \cong #4}{#5}{\exists}{:}{#1}}
+\newcommand{\forallin}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@forall}{\in}{#1}}
+\newcommand{\existsin}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@exists}{\in}{#1}}
+\newcommand{\forallsub}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@forall}{\subseteq}{#1}}
+\newcommand{\existssub}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@exists}{\subseteq}{#1}}
+\newcommand{\existssolein}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@existssole}{\in}{#1}}
+\newcommand{\existssolesub}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@existssole}{\subseteq}{#1}}
+\newcommand{\forallfunc}[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\gfncmd@forall}{:}{#1}}
+\newcommand{\existsfunc}[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\gfncmd@exists}{:}{#1}}
+\newcommand{\existsisom}[5][0]{\quantifier{#2}{#3 \cong #4}{#5}{\gfncmd@exists}{:}{#1}}
+\def\gfnlf@quantifiers{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\existssolein\existssolesub}
 %
 % ==== other logical operators ====
 % -- predicate symbols ----
@@ -181,27 +202,47 @@
 %   define when paren is omittable or mandatory
 %   if neigher \gfncmd@omitlist.. nor \gfncmd@mndtlist.. contains the token T,
 %   the token list whose head is T is regarded as an ordinary formula
-\def\gfncmd@omitlistLlfland{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland}
-  \def\gfncmd@mndtlistLlfland{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lflor\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistLlflor{\lfpv\lflnot\lflor}
-  \def\gfncmd@mndtlistLlflor{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistLlflimpl{\lfpv\lflnot\lfland\lflor}
-  \def\gfncmd@mndtlistLlflimpl{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistLlflimpleqv{\lfpv\lflnot\lfland\lflor}
-  \def\gfncmd@mndtlistLlflimpleqv{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lflimpl\lflimpleqv}
+\expandafter\def\expandafter\gfncmd@omitlistLlfland\expandafter
+  {\gfnlf@quantifiers\lfpv\lflnot\lfland}
+\expandafter\def\expandafter\gfncmd@mndtlistLlfland\expandafter
+  {\gfnlf@quantifiers\lflor\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistLlflor
+  {\lfpv\lflnot\lflor}
+\expandafter\def\expandafter\gfncmd@mndtlistLlflor\expandafter
+  {\gfnlf@quantifiers\lfland\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistLlflimpl
+  {\lfpv\lflnot\lfland\lflor}
+\expandafter\def\expandafter\gfncmd@mndtlistLlflimpl\expandafter
+  {\gfnlf@quantifiers\lflimpl\lflimpleqv}
+\def\gfncmd@omitlistLlflimpleqv
+  {\lfpv\lflnot\lfland\lflor}
+\expandafter\def\expandafter\gfncmd@mndtlistLlflimpleqv\expandafter
+  {\gfnlf@quantifiers\lflimpl\lflimpleqv}
 %
-\def\gfncmd@omitlistRquantifier{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom}
-  \def\gfncmd@mndtlistRquantifier{\lfland\lflor\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistRlflnot{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom}
-  \def\gfncmd@mndtlistRlflnot{\lfland\lflor\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistRlfland{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland}
-  \def\gfncmd@mndtlistRlfland{\lflor\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistRlflor{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lflor}
-  \def\gfncmd@mndtlistRlflor{\lfland\lflimpl\lflimpleqv}
-\def\gfncmd@omitlistRlflimpl{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland\lflor\lflimpl}
-  \def\gfncmd@mndtlistRlflimpl{\lflimpleqv}
-\def\gfncmd@omitlistRlflimpleqv{\lfpv\lflnot\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\lfland\lflor}
-  \def\gfncmd@mndtlistRlflimpleqv{\lflimpl\lflimpleqv}
+\expandafter\def\expandafter\gfncmd@omitlistRquantifier\expandafter
+  {\gfnlf@quantifiers\lfpv\lflnot}
+\def\gfncmd@mndtlistRquantifier
+  {\lfland\lflor\lflimpl\lflimpleqv}
+\expandafter\def\expandafter\gfncmd@omitlistRlflnot\expandafter
+  {\gfnlf@quantifiers\lfpv\lflnot}
+\def\gfncmd@mndtlistRlflnot
+  {\lfland\lflor\lflimpl\lflimpleqv}
+\expandafter\def\expandafter\gfncmd@omitlistRlfland\expandafter
+  {\gfnlf@quantifiers\lfpv\lflnot\lfland}
+\def\gfncmd@mndtlistRlfland
+  {\lflor\lflimpl\lflimpleqv}
+\expandafter\def\expandafter\gfncmd@omitlistRlflor\expandafter
+  {\gfnlf@quantifiers\lfpv\lflnot\lflor}
+\def\gfncmd@mndtlistRlflor
+  {\lfland\lflimpl\lflimpleqv}
+\expandafter\def\expandafter\gfncmd@omitlistRlflimpl\expandafter
+  {\gfnlf@quantifiers\lfpv\lflnot\lfland\lflor\lflimpl}
+\def\gfncmd@mndtlistRlflimpl
+  {\lflimpleqv}
+\expandafter\def\expandafter\gfncmd@omitlistRlflimpleqv\expandafter
+  {\gfnlf@quantifiers\lfpv\lflnot\lfland\lflor}
+\def\gfncmd@mndtlistRlflimpleqv
+  {\lflimpl\lflimpleqv}
 %
 % ==== control sequence for operating list ====
 \def\makerightparenomittable#1#2{%

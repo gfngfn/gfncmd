@@ -409,9 +409,9 @@
     \fi
   }%
 }
-\def\join{\mathbin{\scriptstyle \!\mathord{\lor}\!}}
+\def\join{\mathbin{\text{\scriptsize \hspace{-0.125em}$\lor$\hspace{-0.125em}}}}
   %(join operator)
-\def\meet{\mathbin{\scriptstyle \!\mathord{\land}\!}}
+\def\meet{\mathbin{\text{\scriptsize \hspace{-0.125em}$\land$\hspace{-0.125em}}}}
   %(meet operator)
 %
 % ======== Integration and Differentiation ========
@@ -641,18 +641,22 @@
 %
 % ---- image by function ----
 \def\funcimg#1#2{#1\sqbracket{#2}}
+\def\funcinvimg#1#2{{#1}^{-1}\sqbracket{#2}}
 % ---- composition of functions ----
 \def\compnd#1{\gfncmd@compndsub#1|\gfncmd@endofargument}
 \def\gfncmd@compndsub#1|#2\gfncmd@endofargument{%
-  \ifx\relax#2\relax
+  \ifx\gfncmd@unique#2\gfncmd@unique
     #1%
   \else
     #1 \mathbin{\circ} \gfncmd@compndsub#2\gfncmd@endofargument
   \fi
 }
 % ---- equal-to sign for definition ----
-\def\defeq{\mathrel{:\hspace{-0.0625em}=}}
+%\def\defeq{\mathrel{:\hspace{-0.0625em}=}}
+\def\defeq{\mathrel{\raisebox{-0.115em}{$\cdot$}\hspace{-0.28em}\raisebox{0.1em}{$\cdot$}\hspace{-0.3em}=}}
 %
+% ---- logical function ----
+\def\bigland{\mathop{\text{\LARGE$\land$}}\limits}
 % ---- new word ----
 \newcommand{\newword}[2][]{%
   \textsf{#2}\ifx\gfncmd@unique#1\gfncmd@unique\else\index{#1}\fi
@@ -660,8 +664,9 @@
 % ---- enumeration of theorem ----
 \newcounter{thmenum}
 \newenvironment{thmenum}{\setcounter{thmenum}{0}\begin{itemize}}{\end{itemize}}
-\newcommand{\thmenumitem}{\refstepcounter{thmenum}\item[(\thethmenum)]}
-\newcommand{\thmenumref}[1]{(\ref{#1})}
+\newcommand{\thmenumitem}{\refstepcounter{thmenum}\item[(\the\c@thmenum)]}
+%\newcommand{\thmenumref}[1]{(\ref{#1})}
+\renewcommand{\thethmenum}{(\the\c@thmenum)}
 %
 % ---- optimization tableaux ----
 \newdimen\gfncmd@dimen@maxwidth
@@ -732,3 +737,9 @@
 %
 \def\dom{\mathop{\operator@font dom}\nolimits}
 \def\cod{\mathop{\operator@font cod}\nolimits}
+%
+\def\Order#1{\mathrm{O}\paren{#1}}
+\def\order#1{\mathrm{o}\paren{#1}}
+\def\LOrder#1{\rmOmega\paren{#1}}
+\def\lorder#1{\omega\paren{#1}}
+\def\TOrder#1{\rmTheta\paren{#1}}
