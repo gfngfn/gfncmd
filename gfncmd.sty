@@ -35,7 +35,11 @@
   \mathclose{\raisebox{#2}{\text{#5{#1}}}}%
 }
 \def\subparen#1{\text{$#1$}}%(adjustment for paren in subscript)
-\def\gfncmd@notinscriptstyle#1#2{#1}
+%\def\genparen#1#2#3#4#5{%
+%  \mathchoice{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{%
+%    \gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}%
+%}
+%\def\gfncmd@genparen@display#1#2#3#4#5{%
 \def\genparen#1#2#3#4#5{%
   % ---- ---- ---- ----
   % #1 : inner content
@@ -45,7 +49,6 @@
   % #5 : option depth (regarded as no option if empty)
   % ---- ---- ---- ----
   %(needs 'lmodern', '[T1]fontenc'.)
-  \gfncmd@notinscriptstyle{%
     \gfncmd@disableescapedchar
     \ifx\gfncmd@unique#4\gfncmd@unique
       \advance\gfncmd@count@rankofparen by1\relax
@@ -85,9 +88,6 @@
       \gfncmd@enableescapedchar
       \gfncmd@resultofparen
     \fi
-  }{%
-    #2#1#3%
-  }%
 }
 %
 \newdimen\gfncmd@dimen@heightA
