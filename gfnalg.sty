@@ -12,7 +12,7 @@
 }{%
   \endgroup
 }
-\long\def\IF#1#2#3{%
+\long\def\gfnalg@doubleblock#1#2#3{%
   %(-- measure height of conditional expression --
     \setbox0=\hbox{\fbox{#1}}%
     \gfnalg@dimen@condheight=\ht0\relax\advance\gfnalg@dimen@condheight by\dp0\relax
@@ -52,12 +52,12 @@
   \box\gfnalg@box@temp\par
   \rule[0.7em]{0.5em}{\arrayrulewidth}\par\vspace{-0.5em}%
 }
-\long\def\WHILE#1#2{%
+\long\def\gfnalg@singleblock#1#2#3#4{%
   %(-- measure height of conditional expression --
     \setbox0=\hbox{\fbox{#1}}%
     \gfnalg@dimen@condheight=\ht0\relax\advance\gfnalg@dimen@condheight by\dp0\relax
   %--)
-  \underline{\hspace{0.125em}\textbf{while}}\enskip#1\enskip\underline{\textbf{do}}\par
+  \underline{\hspace{0.125em}\textbf{#3}}\enskip#1\enskip\underline{\textbf{#4}}\par
   %(-- measure height of true block
     \setbox\gfnalg@box@temp=\hbox{\fbox{\parbox[b]{\textwidth}{#2}}}%(width needs fixing)
     \gfnalg@dimen@blockheight=\ht\gfnalg@box@temp\relax
@@ -77,3 +77,11 @@
   \box\gfnalg@box@temp\par
   \rule[0.7em]{0.5em}{\arrayrulewidth}\par\vspace{-0.5em}%
 }
+\long\def\IF#1#2#3{\gfnalg@doubleblock{$\displaystyle#1$}{#2}{#3}}
+\long\def\WHILE#1#2{\gfnalg@singleblock{$\displaystyle#1$}{#2}{while}{do}}
+\long\def\FORSUBST#1#2#3{\gfnalg@singleblock{$\displaystyle#1 \leftarrow #2$}{#3}{for}{do}}
+\long\def\FORIN#1#2#3{\gfnalg@singleblock{$\displaystyle#1 \in #2$}{#3}{for}{do}}
+\long\def\LETIN#1#2#3{\gfnalg@singleblock{$\displaystyle#1 \defeq #2$}{#3}{let}{in}}
+\def\TO{\ \mathbf{to}\ }
+\def\SUBST#1#2{$\displaystyle #1 \leftarrow #2$}
+\def\FUNC#1{\text{\textsc{#1}}}
