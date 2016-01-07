@@ -1,0 +1,36 @@
+%\def\IF{\futurelet\gfnalg@nextchar\gfnalg@ifsub}
+%\def\gfnalg@ifsub{%
+%  \ifx\gfnalg@nextchar*\let\gfnalg@ifchoose\gfnalg@if@star\else\fi}
+\newbox\gfnalg@box@temp
+\newdimen\gfnalg@dimen@blockheight
+\newdimen\gfnalg@dimen@blockdepth
+\newdimen\gfnalg@dimen@linesepl
+\newdimen\gfnalg@dimen@linesepr
+\gfnalg@dimen@linesepl=0em\relax
+\gfnalg@dimen@linesepr=1em\relax
+\long\def\IF#1#2#3{%
+  \underline{\textbf{if}}\enskip#1\enskip\underline{\textbf{then}}\par
+    \setbox\gfnalg@box@temp=\hbox{\parbox[b]{0.8\textwidth}{#2}}%(width needs fixing)
+    \gfnalg@dimen@blockheight=\ht\gfnalg@box@temp\relax
+    \gfnalg@dimen@blockdepth=\dp\gfnalg@box@temp\relax
+  \hspace{\gfnalg@dimen@linesepl}%
+    \advance\gfnalg@dimen@blockheight by0.5em\relax
+  \rule[-\gfnalg@dimen@blockdepth]{0pt}{\gfnalg@dimen@blockheight}%
+    \advance\gfnalg@dimen@blockheight by0.675em\relax
+    \advance\gfnalg@dimen@blockdepth by0.5em\relax
+  \smash{\rule[-\gfnalg@dimen@blockdepth]{\arrayrulewidth}{\gfnalg@dimen@blockheight}}%
+  \hspace{\gfnalg@dimen@linesepr}%
+  \box\gfnalg@box@temp\par
+  \underline{\textbf{else}}\par
+    \setbox\gfnalg@box@temp=\hbox{\parbox[b]{0.8\textwidth}{#3}}%
+    \gfnalg@dimen@blockheight=\ht\gfnalg@box@temp\relax
+    \gfnalg@dimen@blockdepth=\dp\gfnalg@box@temp\relax
+  \hspace{\gfnalg@dimen@linesepl}%
+    \advance\gfnalg@dimen@blockheight by0.5em\relax
+  \rule[-\gfnalg@dimen@blockdepth]{0pt}{\gfnalg@dimen@blockheight}%
+    \advance\gfnalg@dimen@blockheight by0.675em\relax
+    \advance\gfnalg@dimen@blockdepth by0.5em\relax
+  \smash{\rule[-\gfnalg@dimen@blockdepth]{\arrayrulewidth}{\gfnalg@dimen@blockheight}}%
+  \hspace{\gfnalg@dimen@linesepr}%
+  \box\gfnalg@box@temp\par
+}
