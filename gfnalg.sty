@@ -5,27 +5,27 @@
 \newdimen\gfnalg@dimen@condheight
 \newdimen\gfnalg@dimen@blockheight
 \newdimen\gfnalg@dimen@blockdepth
-\newdimen\gfnalg@dimen@linesepl
 \newdimen\gfnalg@dimen@linesepr
-\gfnalg@dimen@linesepl=-\arrayrulewidth\relax
 \gfnalg@dimen@linesepr=1em\relax
+\newenvironment{algorithm}{%
+  \begingroup\setlength{\parskip}{0pt}%
+}{%
+  \endgroup
+}
 \long\def\IF#1#2#3{%
   %(-- measure height of conditional expression --
     \setbox0=\hbox{\fbox{#1}}%
-    \gfnalg@dimen@condheight=\ht0\relax
-    \advance\gfnalg@dimen@condheight by\dp0\relax
+    \gfnalg@dimen@condheight=\ht0\relax\advance\gfnalg@dimen@condheight by\dp0\relax
   %--)
   \underline{\hspace{0.125em}\textbf{if}}\enskip#1\enskip\underline{\textbf{then}}\par
   %(-- measure height of true block
-    \setbox\gfnalg@box@temp=\hbox{\fbox{\parbox[b]{0.8\textwidth}{#2}}}%(width needs fixing)
+    \setbox\gfnalg@box@temp=\hbox{\fbox{\parbox[b]{\textwidth}{#2}}}%(width needs fixing)
     \gfnalg@dimen@blockheight=\ht\gfnalg@box@temp\relax
     \gfnalg@dimen@blockdepth=\dp\gfnalg@box@temp\relax
+    \advance\gfnalg@dimen@blockheight by\gfnalg@dimen@blockdepth\relax
     \setbox\gfnalg@box@temp=\hbox{\parbox[b]{0.8\textwidth}{#2}}%(width needs fixing)
   %--)
-  \hspace{\gfnalg@dimen@linesepl}%
-  %(--
-    \advance\gfnalg@dimen@blockheight by\gfnalg@dimen@blockdepth\relax
-  %--)
+  \hspace{-\arrayrulewidth}%
   \rule[-\gfnalg@dimen@blockdepth]{0pt}{\gfnalg@dimen@blockheight}%
   %(--
     \advance\gfnalg@dimen@blockheight by\gfnalg@dimen@condheight\relax
@@ -35,20 +35,45 @@
   \box\gfnalg@box@temp\par
   \underline{\hspace{0.125em}\textbf{else}}\par
   %(-- measure height of false block
-    \setbox\gfnalg@box@temp=\hbox{\fbox{\parbox[b]{0.8\textwidth}{#3}}}%
+    \setbox\gfnalg@box@temp=\hbox{\fbox{\parbox[b]{\textwidth}{#3}}}%
     \gfnalg@dimen@blockheight=\ht\gfnalg@box@temp\relax
     \gfnalg@dimen@blockdepth=\dp\gfnalg@box@temp\relax
     \setbox\gfnalg@box@temp=\hbox{\parbox[b]{0.8\textwidth}{#3}}%
-  %--)
-  \hspace{\gfnalg@dimen@linesepl}%
-  %(--
     \advance\gfnalg@dimen@blockheight by\gfnalg@dimen@blockdepth\relax
   %--)
+  \hspace{-\arrayrulewidth}%
   \rule[-\gfnalg@dimen@blockdepth]{0pt}{\gfnalg@dimen@blockheight}%
+  %(--
     \advance\gfnalg@dimen@blockheight by2.55em\relax
     \advance\gfnalg@dimen@blockdepth by0.55em\relax
+  %--)
   \smash{\rule[-\gfnalg@dimen@blockdepth]{\arrayrulewidth}{\gfnalg@dimen@blockheight}}%
   \hspace{\gfnalg@dimen@linesepr}%
   \box\gfnalg@box@temp\par
-  \rule[0.7em]{0.5em}{\arrayrulewidth}\par\vspace{-1em}%
+  \rule[0.7em]{0.5em}{\arrayrulewidth}\par\vspace{-0.5em}%
+}
+\long\def\WHILE#1#2{%
+  %(-- measure height of conditional expression --
+    \setbox0=\hbox{\fbox{#1}}%
+    \gfnalg@dimen@condheight=\ht0\relax\advance\gfnalg@dimen@condheight by\dp0\relax
+  %--)
+  \underline{\hspace{0.125em}\textbf{while}}\enskip#1\enskip\underline{\textbf{do}}\par
+  %(-- measure height of true block
+    \setbox\gfnalg@box@temp=\hbox{\fbox{\parbox[b]{\textwidth}{#2}}}%(width needs fixing)
+    \gfnalg@dimen@blockheight=\ht\gfnalg@box@temp\relax
+    \gfnalg@dimen@blockdepth=\dp\gfnalg@box@temp\relax
+    \advance\gfnalg@dimen@blockheight by\gfnalg@dimen@blockdepth\relax
+    \setbox\gfnalg@box@temp=\hbox{\parbox[b]{0.8\textwidth}{#2}}%(width needs fixing)
+  %--)
+  \hspace{-\arrayrulewidth}%
+  \rule[-\gfnalg@dimen@blockdepth]{0pt}{\gfnalg@dimen@blockheight}%
+  %(--
+    \advance\gfnalg@dimen@blockheight by\gfnalg@dimen@condheight\relax
+    \advance\gfnalg@dimen@blockheight by0.55em\relax
+    \advance\gfnalg@dimen@blockdepth by0.55em\relax
+  %--)
+  \smash{\rule[-\gfnalg@dimen@blockdepth]{\arrayrulewidth}{\gfnalg@dimen@blockheight}}%
+  \hspace{\gfnalg@dimen@linesepr}%
+  \box\gfnalg@box@temp\par
+  \rule[0.7em]{0.5em}{\arrayrulewidth}\par\vspace{-0.5em}%
 }
