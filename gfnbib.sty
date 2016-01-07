@@ -1,0 +1,8 @@
+\def\gfnbib@unique{\gfnbib@uniquesub}
+\def\bibauthor#1{\gfnbib@bibauthor#1|\gfnbib@endofargument}
+\def\gfnbib@bibauthor#1|#2\gfnbib@endofargument{%
+  #1\ifx\gfnbib@unique#2\gfnbib@unique\else\gfnbib@bibauthorsub#2\gfnbib@endofargument\fi
+}
+\def\gfnbib@bibauthorsub#1|#2\gfnbib@endofargument{%
+  \ifx\gfnbib@unique#2\gfnbib@unique\ and #1\else, #1\gfnbib@bibauthorsub#2\gfnbib@endofargument\fi
+}

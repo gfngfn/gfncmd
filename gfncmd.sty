@@ -47,8 +47,7 @@
   %(needs 'lmodern', '[T1]fontenc'.)
   \gfncmd@notinscriptstyle{%
     \gfncmd@disableescapedchar
-    \def\gfncmd@tempcsforifx{#4}%
-    \ifx\gfncmd@tempcsforifx\empty
+    \ifx\gfncmd@unique#4\gfncmd@unique
       \advance\gfncmd@count@rankofparen by1\relax
       \setbox0=\hbox{$\displaystyle #1$\rule[0pt]{0pt}{2ex}}%
       \gfncmd@dimen@height=\ht0\relax
