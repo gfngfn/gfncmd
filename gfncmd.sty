@@ -34,7 +34,32 @@
   \ifmmode\else\displaystyle\fi#3%
   \mathclose{\raisebox{#2}{\text{#5{#1}}}}%
 }
-\def\subparen#1{\text{$#1$}}%(adjustment for paren in subscript)
+\def\gfncmd@parenmode{0}
+\newcount\gfncmd@count@modedepth
+\gfncmd@count@modedepth=0\relax
+\def\scriptrange#1{%(adjustment for paren in scriptstyle)
+  \expandafter\def\expandafter\gfncmd@temp\expandafter{\gfncmd@parenmode}%
+  \expandafter\let\csname gfncmd@modearray[\the\gfncmd@count@modedepth]\endcsname\gfncmd@temp
+    %(p\the\gfncmd@count@modedepth/\gfncmd@parenmode)%(for test)
+  \advance\gfncmd@count@modedepth by1\relax
+  \def\gfncmd@parenmode{2}%
+  #1%
+  \advance\gfncmd@count@modedepth by-1\relax
+  \expandafter\let\expandafter\gfncmd@parenmode\csname gfncmd@modearray[\the\gfncmd@count@modedepth]\endcsname
+    %(q\the\gfncmd@count@modedepth/\gfncmd@parenmode)%(for test)
+}
+\def\textrange#1{%(adjustment for paren in textstyle)
+  \expandafter\def\expandafter\gfncmd@temp\expandafter{\gfncmd@parenmode}%
+  \expandafter\let\csname gfncmd@modearray[\the\gfncmd@count@modedepth]\endcsname\gfncmd@temp
+    %(r\the\gfncmd@count@modedepth/\gfncmd@parenmode)%(for test)
+  \advance\gfncmd@count@modedepth by1\relax
+  \def\gfncmd@parenmode{1}%
+  #1%
+  \advance\gfncmd@count@modedepth by-1\relax
+  \expandafter\let\expandafter\gfncmd@parenmode\csname gfncmd@modearray[\the\gfncmd@count@modedepth]\endcsname
+    %(s\the\gfncmd@count@modedepth/\gfncmd@parenmode)%(for test)
+}
+%
 %\def\genparen#1#2#3#4#5{%
 %  \mathchoice{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{%
 %    \gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}%
@@ -52,7 +77,15 @@
     \gfncmd@disableescapedchar
     \ifx\gfncmd@unique#4\gfncmd@unique
       \advance\gfncmd@count@rankofparen by1\relax
-      \setbox0=\hbox{$\displaystyle #1$\rule[0pt]{0pt}{2ex}}%
+      \setbox0=\hbox{%
+        \expandafter\ifcase\gfncmd@parenmode
+          $\displaystyle #1$\rule[0pt]{0pt}{2ex}%
+        \or
+          $#1$\rule[0pt]{0pt}{2ex}%
+        \or
+          $\scriptstyle #1$\rule[0pt]{0pt}{1.2ex}%
+        \fi
+      }%
       \gfncmd@dimen@height=\ht0\relax
       \gfncmd@dimen@depth=\dp0\relax
       \advance\gfncmd@count@rankofparen by-1\relax
