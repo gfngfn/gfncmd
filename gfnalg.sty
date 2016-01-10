@@ -59,6 +59,7 @@
     \advance\gfnalg@dimen@currentwidth by-\gfnalg@dimen@linesepr\relax
     \setbox\gfnalg@box@temp=\hbox{\parbox[b]{\gfnalg@dimen@currentwidth}{#3}}%
     \advance\gfnalg@dimen@currentwidth by\gfnalg@dimen@linesepr\relax
+    \advance\gfnalg@dimen@blockheight by0.5em\relax
   %--)
   \hspace{-\arrayrulewidth}%
   \rule[-\gfnalg@dimen@blockdepth]{0pt}{\gfnalg@dimen@blockheight}%
@@ -69,7 +70,7 @@
   \smash{\rule[-\gfnalg@dimen@blockdepth]{\arrayrulewidth}{\gfnalg@dimen@blockheight}}%
   \rlap{\rule[-\gfnalg@dimen@blockdepth]{0.5em}{\arrayrulewidth}}%
   \hspace{\gfnalg@dimen@linesepr}%
-  \box\gfnalg@box@temp\par\vspace{0.5em}%
+  \box\gfnalg@box@temp\par\vspace{0.25em}%
 }
 \long\def\gfnalg@singleblock#1#2#3#4{%
   %(-- measure height of conditional expression --
@@ -100,14 +101,15 @@
   \hspace{\gfnalg@dimen@linesepr}%
   \box\gfnalg@box@temp\par\vspace{0.25em}%
 }
-\def\gfnalg@elsetoken{\ELSE}
+\def\ELSE{\gfncld@elsetokensub}
 \long\def\IF#1\THEN#2{%
   \def\gfnalg@condcontent{#1}%
   \def\gfnalg@trueblockcontent{#2}%
   \futurelet\gfnalg@nexttoken\gfnalg@ifsub
 }
+\long\def\IFX#1\THEN#2\ELSE#3{\gfnalg@doubleblock{$#1$}{#2}{#3}}
 \def\gfnalg@ifsub{%
-  \ifx\gfnalg@nexttoken\gfnalg@elsetoken
+  \ifx\gfnalg@nexttoken\ELSE
     \expandafter\gfnalg@ifsub@else
   \else
     \expandafter\gfnalg@ifsub@noelse
@@ -124,7 +126,9 @@
 \long\def\FORSUBST#1#2#3{\gfnalg@singleblock{$\displaystyle#1 \leftarrow #2$}{#3}{\gfnalg@tokenstyle{for}}{\gfnalg@tokenstyle{do}}}
 \long\def\FORIN#1#2#3{\gfnalg@singleblock{$\displaystyle#1 \in #2$}{#3}{\gfnalg@tokenstyle{for}}{\gfnalg@tokenstyle{do}}}
 \long\def\LETIN#1#2#3{\gfnalg@singleblock{$\displaystyle#1 \defeq #2$}{#3}{\gfnalg@tokenstyle{let}}{\gfnalg@tokenstyle{in}}}
-\long\def\LETFUNC#1#2#3{\gfnalg@singleblock{$\displaystyle#1\paren{#2}$}{#3}{\gfnalg@tokenstyle{let}}{$\defeq$}}
+\long\def\LETFUNC#1#2#3{\gfnalg@singleblock{$\displaystyle#1\paren{#2}$}{#3}{\gfnalg@tokenstyle{let}}{{$\defeq$}}}
+\long\def\MATCH#1#2{\gfnalg@singleblock{$\displaystyle#1$}{#2}{\gfnalg@tokenstyle{match}}{\gfnalg@tokenstyle{with}}}
+\long\def\CASE#1#2{\gfnalg@singleblock{$\displaystyle#1$}{#2}{\gfnalg@tokenstyle{case}}{{$\rightarrow$}}}
 \def\TO{\ \mathbf{to}\ }
 \def\SUBST#1#2{$\displaystyle #1 \leftarrow #2$}
 \def\FUNC#1{\text{\textsc{#1}}}
@@ -136,3 +140,20 @@
 \def\OR{\ \mathbf{or}\ }
 \def\NOT{\mathbf{not}\ }
 \def\RETURN#1{\gfnalg@tokenstyle{return}\ $\displaystyle #1$}
+\def\CONSTR#1{\mathrm{#1}}
+\def\TYPE#1{\mathit{#1}}
+\def\RECORD#1{\{\gfnalg@record#1|\gfnalg@endofargument\}}
+\def\gfnalg@record#1,#2|#3\gfnalg@endofargument{%
+  \mathrm{#1}\!= #2%
+  \ifx\gfnalg@unique#3\gfnalg@unique\else,\enskip \gfnalg@record#3\gfnalg@endofargument\fi
+}
+\def\DECRECORD#1#2{\gfnalg@tokenstyle{record}\ $#1 \defeq \{\gfnalg@decrecord#2|\gfnalg@endofargument\}$\par}
+\def\gfnalg@decrecord#1,#2|#3\gfnalg@endofargument{%
+  \mathrm{#1}: #2%
+  \ifx\gfnalg@unique#3\gfnalg@unique\else,\enskip \gfnalg@decrecord#3\gfnalg@endofargument\fi
+}
+\def\DECVARIANT#1#2{\gfnalg@tokenstyle{variant}\ $#1 \defeq \gfnalg@decvariant#2|\gfnalg@endofargument$\par}
+\def\gfnalg@decvariant#1,#2|#3\gfnalg@endofargument{
+  \mathrm{#1}\ \text{\gfnalg@tokenstyle{of}}\ #2%
+  \ifx\gfnalg@unique#3\gfnalg@unique\else\ {|}\ \gfnalg@decvariant#3\gfnalg@endofargument\fi
+}
