@@ -24,7 +24,7 @@
     \begin{center}
       \begin{tabular}{l}
       \hline
-        \parbox{0.9\textwidth}{\vspace*{0.25em}#1}%
+        \parbox{0.9\textwidth}{\vspace*{0.25em}#1\vspace*{0.25em}}%
       \\\hline
       \end{tabular}
     \end{center}
@@ -212,21 +212,28 @@
     \gfnalg@match#3\gfnalg@endofargument
   \fi
 }
-\def\TO{\ \mathbf{to}\ }
+\def\TO{\ \gfnalg@tokenstyle{to}\ }
 \def\SUBST#1#2{$\displaystyle #1 \leftarrow #2$}
 \def\FUNC#1{\text{\textsc{#1}}}
-\def\APP#1#2{\gfnalg@iffirstisspecialforapp#2\gfnalg@endofargument{#1#2}{#1\paren{#2}}}
+\def\APP#1#2{%
+  \ifx\gfnalg@unique#2\gfnalg@unique
+    #1\paren{}%
+  \else
+    \gfnalg@iffirstisspecialforapp#2\gfnalg@endofargument{#1#2}{#1\paren{#2}}
+  \fi
+}
 \def\gfnalg@recordtokensub{\RECORD}
 \def\gfnalg@iffirstisspecialforapp#1#2\gfnalg@endofargument#3#4{%
   \def\gfnalg@temp{#1}%
   \ifx\gfnalg@temp\gfnalg@recordtokensub#3\else#4\fi
 }
 \def\VAR#1{\mathit{#1}}
+\def\ARRAY#1#2{#1\sqbracket{#2}}
 \def\TRUE{\mathrm{true}}
 \def\FALSE{\mathrm{false}}
-\def\AND{\ \mathbf{and}\ }
-\def\OR{\ \mathbf{or}\ }
-\def\NOT{\mathbf{not}\ }
+%\def\AND{\ \mathbf{and}\ }
+%\def\OR{\ \mathbf{or}\ }
+%\def\NOT{\mathbf{not}\ }
 \def\RETURN#1{\gfnalg@tokenstyle{return}\ $\displaystyle #1$}
 \def\VALUE#1{$\displaystyle #1$}
 \def\CONSTR#1{\mathrm{#1}}
