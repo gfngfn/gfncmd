@@ -74,35 +74,36 @@
       #5#1%
     \fi
   \fi
-  \ifx\relax#2\relax
+  \ifx\gfncmd@unique#2\gfncmd@unique
     #6#3%
-    % whether inserting tab character or not
-    \ifcase#8\relax
-    \else
-      \gfncmd@escapedtabchar
-    \fi
     \expandafter\ifcase\gfncmd@option@quantifier\relax
     %%%%(option: \usesinglequantifier)
+      \gfncmd@midoption{#8}%
       \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@omitlistRquantifier}{\quantifiernoparenskip#4}{%
         \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@mndtlistRquantifier}{%
           \quantifierparenskip\paren{#4}}{\quantifiernoparenskip#4}}%
     \or%(option: \usepluralquantifier)
+      \gfncmd@midoption{#8}%
       \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@omitlistRquantifier}{\quantifiernoparenskip#4}{%
         \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@mndtlistRquantifier}{%
           \quantifierparenskip\paren{#4}}{\quantifiernoparenskip#4}}%
     \or%(option: \usedotsinglequantifier)
       .%
+      \gfncmd@midoption{#8}%
       \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@omitlistRquantifier}{\quantifiernoparenskip#4}{%
         \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@mndtlistRquantifier}{%
           \quantifierparenskip\paren{#4}}{\quantifiernoparenskip#4}}%
     \or%(option: \usedotpluralquantifier)
       .%
+      \gfncmd@midoption{#8}%
       \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@omitlistRquantifier}{\quantifiernoparenskip#4}{%
         \gfncmd@checkparenisneeded#4\gfncmd@punct{\gfncmd@mndtlistRquantifier}{%
           \quantifierparenskip\paren{#4}}{\quantifiernoparenskip#4}}%
     \or%(option: \useparensinglequantifier)
+      \gfncmd@midoption{#8}%
       \quantifierparenskip\paren{#4}%
     \or%(option: \useparenpluralquantifier)
+      \gfncmd@midoption{#8}%
       \quantifierparenskip\paren{#4}%
     \fi
   \else
@@ -110,6 +111,15 @@
   \fi
 }
 \def\gfncmd@escapedtabchar{&}
+\def\gfncmd@escapedbreakchar{\\}
+\def\gfncmd@midoption#1{%
+  \ifcase#1\relax
+  \or
+    \gfncmd@escapedtabchar
+  \or
+    \gfncmd@escapedbreakchar
+  \fi
+}
 %
 % ---- concrete quantifier ----
 \newcommand{\forallin}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@forall}{\in}{#1}}
