@@ -121,6 +121,22 @@
   \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}\par
   \nopagebreak\vspace{-\parskip}\indent\ignorespaces#5\par
 }
+% ---- 'stdwithboxsign' style ----
+\long\def\gfndeco@nonumber@stdwithboxsign#1*#2#3{%
+  \noindent\textsf{#1\gfndeco@ifempty{#1}{}{\enskip}#2}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#3\hfill$\square$\par
+    %(it seems that \nopagebreak should be immediately after \par)
+}
+\long\def\gfndeco@number@stdwithboxsign#1#2#3#4{%
+  \refstepcounter{#1}%
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#3}{}{\gfndeco@ifempty{#2}{}{\enskip}#3}}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#4\hfill$\square$\par
+}
+\long\def\gfndeco@labeled@stdwithboxsign#1#2[#3]#4#5{%
+  \refstepcounter{#1}\label{#3}%
+  \noindent\textsf{#2\csname the#1\endcsname\gfndeco@ifempty{#4}{}{\gfndeco@ifempty{#2}{}{\enskip}#4}}\par
+  \nopagebreak\vspace{-\parskip}\indent\ignorespaces#5\hfill$\square$\par
+}
 % ---- 'ul' style ----
 \long\def\gfndeco@nonumber@ul#1*#2#3{%
   \noindent\underline{\textsf{#1\gfndeco@ifempty{#2}{}{\gfndeco@ifempty{#1}{}{\enskip}#2}}}\par

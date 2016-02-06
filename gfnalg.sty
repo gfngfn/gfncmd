@@ -12,6 +12,7 @@
 \def\gfnalg@tokenstyle#1{\gfnalg@color{\underline{\textbf{#1}}}}
 \def\gfnalg@emptytop{\rule[-0.2em]{0pt}{1em}}
 \def\gfnalg@color#1{\textcolor{blue}{#1}}
+\def\gfnalg@recordcolor{orange!75!black}
 \def\gfnalg@defeq{\mathrel{\text{\gfnalg@color{$\defeq$}}}}
 \long\def\algorithm#1{%
   {%
@@ -22,6 +23,7 @@
       \gfnalg@dimen@currentwidth=0.85\textwidth\relax
     %--)
     \begin{center}
+      \vspace*{-1.5em}
       \begin{tabular}{l}
       \hline
         \parbox{0.9\textwidth}{\vspace*{0.25em}#1\vspace*{0.25em}}%
@@ -236,17 +238,19 @@
 %\def\NOT{\mathbf{not}\ }
 \def\RETURN#1{\gfnalg@tokenstyle{return}\ $\displaystyle #1$}
 \def\VALUE#1{$\displaystyle #1$}
+\def\REF#1{\mathbf{ref}\ #1}
+\def\NOT#1{\mathbf{not}\ #1}
 \def\CONSTR#1{\mathrm{#1}}
 \def\TYPE#1{\mathit{#1}}
 \def\RECORD#1{\{\gfnalg@record#1|\gfnalg@endofargument\}}
 \def\gfnalg@record#1,#2|#3\gfnalg@endofargument{%
-  \mathrm{#1}\!= #2%
+  \text{\textcolor{\gfnalg@recordcolor}{#1$=$}} #2%
   \ifx\gfnalg@unique#3\gfnalg@unique\else,\enskip \gfnalg@record#3\gfnalg@endofargument\fi
 }
 \def\DECRECORD#1#2{%
   \gfnalg@tokenstyle{record}\ $#1 \gfnalg@defeq \{\gfnalg@decrecord#2|\gfnalg@endofargument\}$\par}
 \def\gfnalg@decrecord#1,#2|#3\gfnalg@endofargument{%
-  \mathrm{#1}: #2%
+  \text{\textcolor{\gfnalg@recordcolor}{#1}}: #2%
   \ifx\gfnalg@unique#3\gfnalg@unique\else,\enskip \gfnalg@decrecord#3\gfnalg@endofargument\fi
 }
 \def\DECVARIANT#1#2{%
