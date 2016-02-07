@@ -159,6 +159,8 @@
   \gfnalg@subseqblock{$\displaystyle#1$}{#2}{\gfnalg@ulspace\gfnalg@tokenstyle{else if}}{\gfnalg@tokenstyle{then}}}
 \long\def\ELSE#1{%
   \gfnalg@singleblock{\gfnalg@emptytop}{#1}{\gfnalg@ulspace\gfnalg@tokenstyle{else}}{}}
+\long\def\ELSEIF#1\THEN#2{%
+  \gfnalg@singleblock{$\displaystyle#1$}{#2}{\gfnalg@ulspace\gfnalg@tokenstyle{else if}}{\gfnalg@tokenstyle{then}}}
 %\def\gfnalg@ifsub{%
 %  \ifx\gfnalg@nexttoken\ELSE
 %    \expandafter\gfnalg@ifsub@else
