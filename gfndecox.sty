@@ -30,6 +30,14 @@
   % ---- ---- ---- ----
   \long\def#1{\csname gfndeco@nonumber@#3\endcsname{#2}*}%
 }
+\def\newnotitledecoclass#1#2#3{%
+  % ---- ---- ---- ----
+  % #1 : class name
+  % #2 : prefix
+  % #3 : style
+  % ---- ---- ---- ----
+  \long\def#1{\csname gfndeco@nonumber@#3\endcsname{#2}*{}}%
+}
 %
 \def\gfndeco@unique{\gfndeco@uniquesub}
 \def\gfndeco@ifempty#1#2#3{%

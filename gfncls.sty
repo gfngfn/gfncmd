@@ -80,7 +80,8 @@
     \parbox[c]{0.99\textwidth}{\enskip\textsf{\normalfont\large\headfont #1}}\par
     \vskip -2ex\relax
     \begin{tikzpicture}
-      \draw[line width=1pt] (0,0) -- (0.99\textwidth,0);
+      \path[use as bounding box] (0,0) rectangle (\textwidth,1pt);
+      \draw[line width=1pt] (0,0) -- (\textwidth,0);
     \end{tikzpicture}%
   }}%
 }
@@ -122,15 +123,17 @@
 \def\gfncls@sectionstyle@line#1{%
   {\parbox[c]{\textwidth}{%
     \begin{tikzpicture}
-      \draw[line width=1pt] (0,0) -- (0.99\textwidth,0);
-      \draw[line width=0.5pt] (0,-3pt) -- (0.99\textwidth,-3pt);
+    \path[use as bounding box] (0,0) rectangle (\textwidth,-5pt);
+      \draw[line width=1pt] (0,0) -- (\textwidth,0);
+      \draw[line width=0.5pt] (0,-3pt) -- (\textwidth,-3pt);
     \end{tikzpicture}\par\vspace{-\parskip}%
     \vspace{-0.75ex}%
     \parbox[c][3ex][c]{0.99\textwidth}{\enskip\textsf{\normalfont\Large\headfont #1}}\par\vspace{-\parskip}%
     \vspace{-0.75ex}%
     \begin{tikzpicture}
-      \draw[line width=0.5pt] (0,0) -- (0.99\textwidth,0);
-      \draw[line width=1pt] (0,-3pt) -- (0.99\textwidth,-3pt);
+    \path[use as bounding box] (0,0) rectangle (\textwidth,-3pt);
+      \draw[line width=0.5pt] (0,0) -- (\textwidth,0);
+      \draw[line width=1pt] (0,-3pt) -- (\textwidth,-3pt);
     \end{tikzpicture}
   }}%
 }
@@ -150,17 +153,19 @@
 \def\gfncls@sectionstyle@strongline#1{%
   {\parbox[c]{\textwidth}{%
     \begin{tikzpicture}
-      \draw[line width=2pt] (0,0) -- (0.99\textwidth,0);
-      \draw[line width=2pt] (0,-4pt) -- (0.99\textwidth,-4pt);
-    \end{tikzpicture}\par\vspace{-\parskip}\vspace{1pt}%
-    \colorbox{black}{\parbox{0.98\textwidth}{%
+    \path[use as bounding box] (0,0) rectangle (\textwidth,-6pt);
+      \draw[line width=2pt] (0,0) -- (\textwidth,0);
+      \draw[line width=2pt] (0,-4pt) -- (\textwidth,-4pt);
+    \end{tikzpicture}\par\vspace{-\parskip}%
+    \colorbox{black}{\parbox{0.987\textwidth}{%
       \vspace{0.25em}\noindent
       \textcolor{white}{\enskip\textsf{\LARGE #1}}%
       \par\vspace{-\parskip}\vspace{0.25em}%
-    }}\par\vspace{-\parskip}\vspace{1pt}%
+    }}\par\vspace{-\parskip}%
     \begin{tikzpicture}
-      \draw[line width=2pt] (0,0) -- (0.99\textwidth,0);
-      \draw[line width=2pt] (0,-4pt) -- (0.99\textwidth,-4pt);
+    \path[use as bounding box] (0,2pt) rectangle (\textwidth,-4pt);
+      \draw[line width=2pt] (0,0) -- (\textwidth,0);
+      \draw[line width=2pt] (0,-4pt) -- (\textwidth,-4pt);
     \end{tikzpicture}\par\vspace{-\parskip}%
   }}%
 }

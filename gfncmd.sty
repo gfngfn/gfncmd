@@ -31,7 +31,7 @@
   % #5 : right parenthesis
   % ---- ---- ---- ----
   \mathopen{\raisebox{#2}{\text{#4{#1}}}}%
-  \ifmmode\else\displaystyle\fi#3%
+  \relax\ifmmode\else\displaystyle\fi#3%
   \mathclose{\raisebox{#2}{\text{#5{#1}}}}%
 }
 \def\gfncmd@parenmode{0}
@@ -185,15 +185,20 @@
   \fontsize{#1}{0pt}\selectfont $]$%
 }
 \def\gfncmd@sizedleftbrace#1{%
-  %\ifdim#1<3ex\relax
-    \fontsize{#1}{0pt}\selectfont $\{$%
-  %\else
-  %  \gfncmd@dimen@parenheight=#1\relax
-  %  \fontsize{0.75\gfncmd@dimen@parenheight}{0pt}\selectfont $\bigl\{$%
-  %\fi
+  %\fontsize{#1}{0pt}\selectfont $\{$%
+  \ifdim#1<2em\relax
+    \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+  \else
+    \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+  \fi
 }
 \def\gfncmd@sizedrightbrace#1{%
-  \fontsize{#1}{0pt}\selectfont $\}$%
+  %\fontsize{#1}{0pt}\selectfont $\}$%
+  \ifdim#1<2em\relax
+    \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+  \else
+    \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+  \fi
 }
 \def\gfncmd@sizedbar#1{%
   \fontsize{#1}{0pt}\selectfont $|$%
@@ -202,7 +207,8 @@
   \fontsize{#1}{0pt}\selectfont $\|$%
 }%
 \def\gfncmd@sizedmidbar#1{%
-  \fontsize{#1}{0pt}\selectfont $\:|\:$%
+  %$\:${\fontsize{#1}{0pt}\selectfont $|$}A$\:$
+  $\:$\resizebox{3pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $|$}}$\:$%
 }
 \def\gfncmd@sizedmidslash#1{%
   \fontsize{#1}{0pt}\selectfont $/$%
@@ -219,15 +225,22 @@
 \def\gfncmd@sizedrightfloor#1{%
   \fontsize{#1}{0pt}\selectfont $\rfloor$%
 }
+\def\gfncmd@sizedleftedged#1{%
+  \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{【}}%
+}
+\def\gfncmd@sizedrightedged#1{%
+  \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{】}}%
+}
 \def\gfncmd@noparen#1{}
 %
-\def\paren#1{\genparen{#1}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
-\def\sqbracket#1{\genparen{#1}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightbracket}{}{}}
-\def\curlybrace#1{\genparen{#1}{\gfncmd@sizedleftbrace}{\gfncmd@sizedrightbrace}{}{}}
-\def\absprn#1{\genparen{#1}{\gfncmd@sizedbar}{\gfncmd@sizedbar}{}{}}
-\def\distprn#1{\genparen{#1}{\gfncmd@sizedBar}{\gfncmd@sizedBar}{}{}}
-\def\ceilprn#1{\genparen{#1}{\gfncmd@sizedleftceil}{\gfncmd@sizedrightceil}{}{}}
-\def\floorprn#1{\genparen{#1}{\gfncmd@sizedleftfloor}{\gfncmd@sizedrightfloor}{}{}}
+% ---- parens ----
+\def\paren      #1{\genparen{#1}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
+\def\sqbracket  #1{\genparen{#1}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightbracket}{}{}}
+\def\curlybrace #1{\genparen{#1}{\gfncmd@sizedleftbrace}{\gfncmd@sizedrightbrace}{}{}}
+\def\absprn     #1{\genparen{#1}{\gfncmd@sizedbar}{\gfncmd@sizedbar}{}{}}
+\def\distprn    #1{\genparen{#1}{\gfncmd@sizedBar}{\gfncmd@sizedBar}{}{}}
+\def\ceilprn    #1{\genparen{#1}{\gfncmd@sizedleftceil}{\gfncmd@sizedrightceil}{}{}}
+\def\floorprn   #1{\genparen{#1}{\gfncmd@sizedleftfloor}{\gfncmd@sizedrightfloor}{}{}}
 \def\restrfunc#1#2{\genparen{#1}{\gfncmd@noparen}{\gfncmd@sizedbar}{}{}_{#2}}
 \let\setprn=\curlybrace
 \let\seqprn=\paren
@@ -235,11 +248,16 @@
 \def\setprnsep#1#2{\genparenwithmiddle{#1}{#2}{\gfncmd@sizedleftbrace}{\gfncmd@sizedmidbar}{\gfncmd@sizedrightbrace}}
 \def\slashfrac#1#2{\genparenwithmiddle{#1}{#2}{\gfncmd@noparen}{\gfncmd@sizedmidslash}{\gfncmd@noparen}}
 \def\app#1#2{#1\paren{#2}}
-% ---- interval ----
-\def\opintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
-\def\clintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightbracket}{}{}}
+%
+% ---- intervals ----
+\def\opintvl  #1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
+\def\clintvl  #1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightbracket}{}{}}
 \def\opclintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightbracket}{}{}}
 \def\clopintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftbracket}{\gfncmd@sizedrightparen}{}{}}
+%
+% ---- intervals of integer ----
+  \def\Natleq#1{\genparen{#1}{\gfncmd@sizedleftedged}{\gfncmd@sizedrightedged}{}{}}
+  \def\Natintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftedged}{\gfncmd@sizedrightedged}{}{}}
 %
 %% ---- change catcode of & ----
 %  \def\makeampactive{\begingroup\catcode`\&=\active\relax}
@@ -266,236 +284,360 @@
 %  }
 % ======== Sets ========
 % ---- famous sets ----
-\def\setZ{\setcapital{Z}}
-\def\setN{\setcapital{N}}
-\def\setQ{\setcapital{Q}}
-\def\setR{\setcapital{R}}
-\def\setC{\setcapital{C}}
-\def\setH{\setcapital{H}}
-\def\setP{\setcapital{P}}
-\def\setNpos{\setcapital{N}^{+}}
-\def\setRpos{\setcapital{R}^{+}}
-\def\setRnonneg{\setcapital{R}_{{}\geq 0}}
-\def\usebfsetcapital{\let\setcapital=\mathbf}
-\def\usebmsetcapital{\let\setcapital=\bm}
-\def\usebbsetcapital{\let\setcapital=\mathbb}
-\usebfsetcapital %(setting defaultoption)
-% ---- set of matrix ----
-\def\gfncmd@setMatrix@bf#1#2#3{\mathbf{M}_{#1, #2}\paren{#3}}
-\def\gfncmd@setMatrix@bm#1#2#3{\bm{M}_{#1, #2}\paren{#3}}
-\def\gfncmd@setMatrix@rm#1#2#3{\mathrm{M}_{#1, #2}\paren{#3}}
-\def\gfncmd@setMatrix@it#1#2#3{M_{#1, #2}\paren{#3}}
-\def\gfncmd@setMatrix@times#1#2#3{#3^{#1\times#2}}
-\def\usebfsetMatrix{\let\setMatrix=\gfncmd@setMatrix@bf}
-\def\usebmsetMatrix{\let\setMatrix=\gfncmd@setMatrix@bm}
-\def\usermsetMatrix{\let\setMatrix=\gfncmd@setMatrix@rm}
-\def\useitsetMatrix{\let\setMatrix=\gfncmd@setMatrix@it}
-\def\usetimessetMatrix{\let\setMatrix=\gfncmd@setMatrix@times}
-\usebfsetMatrix %(setting default option)
-% ---- power set ----
-\def\gfncmd@Power@rm#1{\mathop{\mathrm{Pow}}\nolimits#1}
-\def\gfncmd@Power@binary#1{2^{#1}}
-\def\gfncmd@Power@frak#1{\mathop{\mathfrak{P}\!}\nolimits#1}
-\def\gfncmd@Powerfin@rm#1{\mathop{\mathrm{Pow}_{\omega}}\nolimits#1}
-\def\gfncmd@Powerfin@binary#1{\mathop{2_{\omega}}\nolimits^{#1}}
-\def\gfncmd@Powerfin@frak#1{\mathop{\mathfrak{P}_{\omega}\!}\nolimits#1}
-\def\usermPower{%
-  \let\Power=\gfncmd@Power@rm
-  \let\Powerfin=\gfncmd@Powerfin@rm
-}
-\def\usebinaryPower{%
-  \let\Power=\gfncmd@Power@binary
-  \let\Powerfin=\gfncmd@Powerfin@binary
-}
-\def\usefrakPower{%
-  \let\Power=\gfncmd@Power@frak
-  \let\Powerfin=\gfncmd@Powerfin@frak
-}
-\usefrakPower %(setting default option)
-% ---- the display of domain and codomain of a function ----
-\def\funcdoms#1#2#3{#1\colon\:\doms{#2}{#3}}
-\def\doms#1#2{#1\to#2}
-\newdimen\gfncmd@dimen@funcwidth
-\newdimen\gfncmd@dimen@domwidth
-\newdimen\gfncmd@dimen@domdepth
-\newdimen\gfncmd@dimen@codwidth
-\newdimen\gfncmd@dimen@coddepth
-\newdimen\gfncmd@dimen@paramwidth
-\newdimen\gfncmd@dimen@paramheight
-\newdimen\gfncmd@dimen@valwidth
-\newdimen\gfncmd@dimen@valheight
-\newdimen\gfncmd@dimen@upperdepth
-\newdimen\gfncmd@dimen@middle
-\newdimen\gfncmd@dimen@lowerpos
-\def\funcdomswidebox#1#2#3#4#5{%
-%  \begin{center}
-%    \begin{tabular}{lccc}
-%      $\displaystyle #1\colon$ & $\displaystyle #2$ & $\longrightarrow$ & $\displaystyle #3$
-%    \\
-%       & \rotatebox[origin=c]{90}{$\in$} & & \rotatebox[origin=c]{90}{$\in$}
-%    \\
-%       & $\displaystyle #4$ & $\longmapsto$ & $\displaystyle #5$
-%    \end{tabular}
-%  \end{center}
-  \setbox0=\hbox{$\displaystyle#1\colon\quad$}\relax
-  \gfncmd@dimen@funcwidth=\wd0\relax
-  \setbox0=\hbox{$\displaystyle#2$}\relax
-  \gfncmd@dimen@domwidth=\wd0\relax
-  \gfncmd@dimen@domdepth=\dp0\relax
-  \setbox0=\hbox{$\displaystyle#3$}\relax
-  \gfncmd@dimen@codwidth=\wd0\relax
-  \gfncmd@dimen@coddepth=\dp0\relax
-  \setbox0=\hbox{$\displaystyle#4$}\relax
-  \gfncmd@dimen@paramwidth=\wd0\relax
-  \gfncmd@dimen@paramheight=\ht0\relax
-  \setbox0=\hbox{$\displaystyle#5$}\relax
-  \gfncmd@dimen@valwidth=\wd0\relax
-  \gfncmd@dimen@valheight=\ht0\relax
-  \ifdim\gfncmd@dimen@domdepth>\gfncmd@dimen@coddepth\relax
-    \gfncmd@dimen@upperdepth=\gfncmd@dimen@domdepth\relax
-  \else
-    \gfncmd@dimen@upperdepth=\gfncmd@dimen@coddepth\relax
-  \fi
-  \advance\gfncmd@dimen@upperdepth by1.5em\relax
-  \gfncmd@dimen@lowerpos=\gfncmd@dimen@upperdepth\relax
-  \advance\gfncmd@dimen@lowerpos by0.5em\relax
-  \ifdim\gfncmd@dimen@paramheight>\gfncmd@dimen@valheight\relax
-    \advance\gfncmd@dimen@lowerpos by\gfncmd@dimen@paramheight\relax
-  \else
-    \advance\gfncmd@dimen@lowerpos by\gfncmd@dimen@valheight\relax
-  \fi
-  \gfncmd@dimen@middle=4em\relax
-  \ifdim\gfncmd@dimen@domwidth>\gfncmd@dimen@paramwidth\relax
-    \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@domwidth\relax
-  \else
-    \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@paramwidth\relax
-  \fi
-  \ifdim\gfncmd@dimen@codwidth>\gfncmd@dimen@valwidth\relax
-    \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@codwidth\relax
-  \else
-    \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@valwidth\relax
-  \fi
-  \advance\gfncmd@dimen@funcwidth by\gfncmd@dimen@domwidth\relax
-  \begin{center}
-    \begin{tikzpicture}
-      \node[rectangle] (FUNC) at (-0.5\gfncmd@dimen@funcwidth, 0) {$\displaystyle#1\colon\quad$};
-      \node[rectangle, inner sep=0.5em] (DOM) at (0, 0) {$\displaystyle#2$};
-      \node[rectangle, inner sep=0.5em] (COD) at (\gfncmd@dimen@middle, 0) {$\displaystyle#3$};
-      \draw (0, -\gfncmd@dimen@upperdepth) node {\rotatebox[origin=c]{90}{$\in$}};
-      \draw (\gfncmd@dimen@middle, -\gfncmd@dimen@upperdepth) node {\rotatebox[origin=c]{90}{$\in$}};
-      \node[rectangle, inner sep=0.5em] (PARAM) at (0, -\gfncmd@dimen@lowerpos) {$\displaystyle#4$};
-      \node[rectangle, inner sep=0.5em] (VAL) at (\gfncmd@dimen@middle, -\gfncmd@dimen@lowerpos) {$\displaystyle#5$};
-      \draw[->] (DOM) -- (COD);
-      \draw[|->] (PARAM) -- (VAL);
-    \end{tikzpicture}
-  \end{center}
-}
+  \def\setZ{\setcapital{Z}}
+  \def\setN{\setcapital{N}}
+  \def\setQ{\setcapital{Q}}
+  \def\setR{\setcapital{R}}
+  \def\setC{\setcapital{C}}
+  \def\setH{\setcapital{H}}
+  \def\setP{\setcapital{P}}
+  \def\setNpos{\setcapital{N}^{+}}
+  \def\setRpos{\setcapital{R}^{+}}
+  \def\setRnonneg{\setcapital{R}_{{}\geq 0}}
+  \def\usebfsetcapital{\let\setcapital=\mathbf}
+  \def\usebmsetcapital{\let\setcapital=\bm}
+  \def\usebbsetcapital{\let\setcapital=\mathbb}
+  \usebfsetcapital %(setting defaultoption)
 %
-% ---- end of proof ----
-\def\qed{\hfill ■}
+% ---- power set ----
+  \def\gfncmd@Power@rm#1{\mathop{\mathrm{Pow}}\nolimits#1}
+  \def\gfncmd@Power@binary#1{2^{#1}}
+  \def\gfncmd@Power@frak#1{\mathop{\mathfrak{P}\!}\nolimits#1}
+  \def\gfncmd@Powerfin@rm#1{\mathop{\mathrm{Pow}_{\omega}}\nolimits#1}
+  \def\gfncmd@Powerfin@binary#1{\mathop{2_{\omega}}\nolimits^{#1}}
+  \def\gfncmd@Powerfin@frak#1{\mathop{\mathfrak{P}_{\omega}\!}\nolimits#1}
+  \def\usermPower    {\let\Power=\gfncmd@Power@rm
+                      \let\Powerfin=\gfncmd@Powerfin@rm}
+  \def\usebinaryPower{\let\Power=\gfncmd@Power@binary
+                      \let\Powerfin=\gfncmd@Powerfin@binary}
+  \def\usefrakPower  {\let\Power=\gfncmd@Power@frak
+                      \let\Powerfin=\gfncmd@Powerfin@frak}
+  \usefrakPower %(setting default option)
+%
+% ---- set of matrix ----
+  \def\gfncmd@setMatrix@bf#1#2#3{\mathbf{M}_{#1, #2}\paren{#3}}
+  \def\gfncmd@setMatrix@bm#1#2#3{\bm{M}_{#1, #2}\paren{#3}}
+  \def\gfncmd@setMatrix@rm#1#2#3{\mathrm{M}_{#1, #2}\paren{#3}}
+  \def\gfncmd@setMatrix@it#1#2#3{M_{#1, #2}\paren{#3}}
+  \def\gfncmd@setMatrix@times#1#2#3{#3^{#1\times#2}}
+  \def\usebfsetMatrix   {\let\setMatrix=\gfncmd@setMatrix@bf}
+  \def\usebmsetMatrix   {\let\setMatrix=\gfncmd@setMatrix@bm}
+  \def\usermsetMatrix   {\let\setMatrix=\gfncmd@setMatrix@rm}
+  \def\useitsetMatrix   {\let\setMatrix=\gfncmd@setMatrix@it}
+  \def\usetimessetMatrix{\let\setMatrix=\gfncmd@setMatrix@times}
+  \usebfsetMatrix %(setting default option)
+%
+% ---- set operations ----
+  \let\setmns=\setminus
+%
+% ---- image by function ----
+  \def\funcimg#1#2{#1\sqbracket{#2}}
+  \def\funcinvimg#1#2{{#1}^{-1}\sqbracket{#2}}
+%
+% ---- composition of functions ----
+  \def\compnd#1{\gfncmd@compndsub#1|\gfncmd@endofargument}
+  \def\gfncmd@compndsub#1|#2\gfncmd@endofargument{%
+    #1%
+    \ifx\gfncmd@unique#2\gfncmd@unique\else
+      \mathbin{\circ} \gfncmd@compndsub#2\gfncmd@endofargument
+    \fi
+  }
+%
+% ---- the display of domain and codomain of a function ----
+  \def\funcdoms#1#2#3{#1\colon\:\doms{#2}{#3}}
+  \def\doms#1#2{#1\to#2}
+  \newdimen\gfncmd@dimen@funcwidth
+  \newdimen\gfncmd@dimen@domwidth
+  \newdimen\gfncmd@dimen@domdepth
+  \newdimen\gfncmd@dimen@codwidth
+  \newdimen\gfncmd@dimen@coddepth
+  \newdimen\gfncmd@dimen@paramwidth
+  \newdimen\gfncmd@dimen@paramheight
+  \newdimen\gfncmd@dimen@valwidth
+  \newdimen\gfncmd@dimen@valheight
+  \newdimen\gfncmd@dimen@upperdepth
+  \newdimen\gfncmd@dimen@middle
+  \newdimen\gfncmd@dimen@lowerpos
+  \def\funcdomswidebox#1#2#3#4#5{%
+  %  \begin{center}
+  %    \begin{tabular}{lccc}
+  %      $\displaystyle #1\colon$ & $\displaystyle #2$ & $\longrightarrow$ & $\displaystyle #3$
+  %    \\
+  %       & \rotatebox[origin=c]{90}{$\in$} & & \rotatebox[origin=c]{90}{$\in$}
+  %    \\
+  %       & $\displaystyle #4$ & $\longmapsto$ & $\displaystyle #5$
+  %    \end{tabular}
+  %  \end{center}
+    \setbox0=\hbox{$\displaystyle#1\colon\quad$}\relax
+    \gfncmd@dimen@funcwidth=\wd0\relax
+    \setbox0=\hbox{$\displaystyle#2$}\relax
+    \gfncmd@dimen@domwidth=\wd0\relax
+    \gfncmd@dimen@domdepth=\dp0\relax
+    \setbox0=\hbox{$\displaystyle#3$}\relax
+    \gfncmd@dimen@codwidth=\wd0\relax
+    \gfncmd@dimen@coddepth=\dp0\relax
+    \setbox0=\hbox{$\displaystyle#4$}\relax
+    \gfncmd@dimen@paramwidth=\wd0\relax
+    \gfncmd@dimen@paramheight=\ht0\relax
+    \setbox0=\hbox{$\displaystyle#5$}\relax
+    \gfncmd@dimen@valwidth=\wd0\relax
+    \gfncmd@dimen@valheight=\ht0\relax
+    \ifdim\gfncmd@dimen@domdepth>\gfncmd@dimen@coddepth\relax
+      \gfncmd@dimen@upperdepth=\gfncmd@dimen@domdepth\relax
+    \else
+      \gfncmd@dimen@upperdepth=\gfncmd@dimen@coddepth\relax
+    \fi
+    \advance\gfncmd@dimen@upperdepth by1.5em\relax
+    \gfncmd@dimen@lowerpos=\gfncmd@dimen@upperdepth\relax
+    \advance\gfncmd@dimen@lowerpos by0.5em\relax
+    \ifdim\gfncmd@dimen@paramheight>\gfncmd@dimen@valheight\relax
+      \advance\gfncmd@dimen@lowerpos by\gfncmd@dimen@paramheight\relax
+    \else
+      \advance\gfncmd@dimen@lowerpos by\gfncmd@dimen@valheight\relax
+    \fi
+    \gfncmd@dimen@middle=4em\relax
+    \ifdim\gfncmd@dimen@domwidth>\gfncmd@dimen@paramwidth\relax
+      \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@domwidth\relax
+    \else
+      \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@paramwidth\relax
+    \fi
+    \ifdim\gfncmd@dimen@codwidth>\gfncmd@dimen@valwidth\relax
+      \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@codwidth\relax
+    \else
+      \advance\gfncmd@dimen@middle by0.5\gfncmd@dimen@valwidth\relax
+    \fi
+    \advance\gfncmd@dimen@funcwidth by\gfncmd@dimen@domwidth\relax
+    \begin{center}
+      \begin{tikzpicture}
+        \node[rectangle] (FUNC) at (-0.5\gfncmd@dimen@funcwidth, 0) {$\displaystyle#1\colon\quad$};
+        \node[rectangle, inner sep=0.5em] (DOM) at (0, 0) {$\displaystyle#2$};
+        \node[rectangle, inner sep=0.5em] (COD) at (\gfncmd@dimen@middle, 0) {$\displaystyle#3$};
+        \draw (0, -\gfncmd@dimen@upperdepth) node {\rotatebox[origin=c]{90}{$\in$}};
+        \draw (\gfncmd@dimen@middle, -\gfncmd@dimen@upperdepth) node {\rotatebox[origin=c]{90}{$\in$}};
+        \node[rectangle, inner sep=0.5em] (PARAM) at (0, -\gfncmd@dimen@lowerpos) {$\displaystyle#4$};
+        \node[rectangle, inner sep=0.5em] (VAL) at (\gfncmd@dimen@middle, -\gfncmd@dimen@lowerpos) {$\displaystyle#5$};
+        \draw[->] (DOM) -- (COD);
+        \draw[|->] (PARAM) -- (VAL);
+      \end{tikzpicture}
+    \end{center}
+  }
+%
+% ---- signs ----
+  \def\qed{\hfill ■}
+  \def\dummysign{\text{--}}
 %
 % ======== Logic ========
-\def\rightdeduct{\mathrel{\enskip\vdash\enskip}}
-\def\rightdeductnoassump{{}\rightdeduct}
-\def\leftdeduct{\enskip \dashv \enskip}
-\def\leftrightdeduct{\mathrel{\enskip\vdash\dashv\enskip}}
+  \def\rightdeduct{\mathrel{\enskip\vdash\enskip}}
+  \def\rightdeductnoassump{{}\rightdeduct}
+  \def\leftdeduct{\enskip \dashv \enskip}
+  \def\leftrightdeduct{\mathrel{\enskip\vdash\dashv\enskip}}
 % ---- implimentation ----
-\def\userightarrowaslimpl{%
-  \def\limpl{\mathrel{\rightarrow}}%
-  \def\backlimpl{\mathrel{\lefttarrow}}%
-}
-\def\useRightarrowaslimpl{%
-  \def\limpl{\mathrel{\Rightarrow}}%
-  \def\backlimpl{\mathrel{\Leftarrow}}%
-}
-\def\useinvertedCaslimpl{%
-  \def\limpl{\mathrel{\supset}}%
-  \def\backlimpl{\mathrel{\subset}}%
-}
-\useRightarrowaslimpl
+  \def\userightarrowaslimpl{\def\limpl    {\mathrel{\rightarrow}}%
+                            \def\backlimpl{\mathrel{\lefttarrow}}}
+  \def\useRightarrowaslimpl{\def\limpl    {\mathrel{\Rightarrow}}%
+                            \def\backlimpl{\mathrel{\Leftarrow}}}
+  \def\useinvertedCaslimpl {\def\limpl    {\mathrel{\supset}}%
+                            \def\backlimpl{\mathrel{\subset}}}
+  \useRightarrowaslimpl %(setting default option)
+%
 % ---- logical equivalence of implimentation ----
-\def\useLeftrightarrowaslimpleqv{\def\limpleqv{\mathrel{\Leftrightarrow}}}
-\def\useleftrightarrowaslimpleqv{\def\limpleqv{\mathrel{\leftrightarrow}}}
-\def\userightleftarrowsaslimpleqv{\def\limpleqv{\mathrel{\rightleftarrows}}}
-  %(needs amssymb)
-\useLeftrightarrowaslimpleqv
+  \def\useLeftrightarrowaslimpleqv {\def\limpleqv{\mathrel{\Leftrightarrow}}}
+  \def\useleftrightarrowaslimpleqv {\def\limpleqv{\mathrel{\leftrightarrow}}}
+  \def\userightleftarrowsaslimpleqv{\def\limpleqv{\mathrel{\rightleftarrows}}}%(needs amssymb)
+  \useLeftrightarrowaslimpleqv %(setting default option)
+%
+% ---- logical function ----
+  \def\bigland{\mathop{\text{\LARGE$\land$}}\limits}
+  \def\biglor {\mathop{\text{\LARGE$\lor$}}\limits}
+%
 % ======== Lattice Theory ========
-% ---- partial order ----
-\newcount\gfncmd@casepord
-\gfncmd@casepord=0\relax
-\def\usepreccurlyeqaspord{\gfncmd@casepord=0\relax}
-\def\usepreceqaspord{\gfncmd@casepord=1\relax}
-\def\useleqaspord{\gfncmd@casepord=2\relax}
-\def\useleqslantaspord{\gfncmd@casepord=3\relax}
-\def\pord{%
-  \mathrel{%
-    \ifcase\gfncmd@casepord
-      %(needs amssymb)
-      \preccurlyeq
-    \or
-      \preceq
-    \or
-      \leq
-    \or
-      \leqslant
-    \fi
-  }%
-}
-\def\join{\mathbin{\text{\scriptsize \hspace{-0.125em}$\lor$\hspace{-0.125em}}}}
-  %(join operator)
-\def\meet{\mathbin{\text{\scriptsize \hspace{-0.125em}$\land$\hspace{-0.125em}}}}
-  %(meet operator)
+% ---- general partial order ----
+  \def\usepreccurlyeqaspord{\let\pord=\preccurlyeq
+                            \let\pordneq=\prec
+                            \def\covered{\mathrel{\prec\!\!\cdot}}}
+  \def\usepreceqaspord     {\let\pord=\preceq
+                            \let\pordneq=\prec
+                            \def\covered{\mathrel{\prec\!\!\cdot}}}
+  \def\useleqaspord        {\let\pord=\leq
+                            \def\pordneq{<}%
+                            \def\covered{\mathrel{<\!\!\cdot}}}
+  \def\useleqslantaspord   {\let\pord=\leqslant
+                            \def\pordneq{<}%
+                            \def\covered{\mathrel{<\!\!\cdot}}}
+  \usepreccurlyeqaspord %(setting default option)
+%
+% ---- general quasi order ----
+  \def\qord{\mathrel{\rule[-0.125em]{0pt}{0.75em}\smash{\text{\oalign{{$\prec$}\crcr{\hspace*{0.1em}\smash{$\sim$}\rule{0pt}{0.175em}}}}}}}
+%
+% ---- general join and meet operator ----
+  \def\join{\mathbin{\text{\scriptsize \hspace{-0.125em}$\lor$\hspace{-0.125em}}}}
+  \def\meet{\mathbin{\text{\scriptsize \hspace{-0.125em}$\land$\hspace{-0.125em}}}}
+  \let\bigjoin=\bigvee
+  \let\bigmeet=\bigwedge
+  \def\minelm{\bot}
+  \def\maxelm{\top}
 %
 % ======== Integration and Differentiation ========
 % ---- differentiation ----
-\def\dif#1#2{\frac{\ordd#1}{\ordd#2}}
-\def\ddif#1#2{\frac{\ordd^{2}#1}{\ordd#2^{2}}}
-\def\ndif#1#2#3{\frac{\ordd^{#1}#2}{\ordd#3^{#1}}}
-\def\pdif#1#2{\frac{\partial#1}{\partial#2}}
-\def\pddif#1#2{{\pndif{2}{#1}{#2}}}
-\def\pndif#1#2#3{\frac{\partial^{#1}#2}{\partial#3^{#1}}}
-\def\plpdif#1#2#3{%
-  \frac{\partial^{#1}#2}{\gfncmd@plpdif@sub#3|\gfncmd@endplpdif@sub}%
-}
-\def\gfncmd@plpdif@sub#1|#2\gfncmd@endplpdif@sub{%
-  \partial#1%
-  \ifx\relax#2\relax\else
-    \gfncmd@plpdif@sub#2\gfncmd@endplpdif@sub
-  \fi
-}
-\def\thmpdif#1#2#3{\paren{\frac{\partial#1}{\partial#2}}_{#3}}
+  \def\dif     #1#2{\frac{\ordd#1}{\ordd#2}}
+  \def\ddif    #1#2{\ndif{2}{#1}{#2}}
+  \def\ndif  #1#2#3{\frac{\ordd^{#1}#2}{\ordd#3^{#1}}}
+  \def\pdif    #1#2{\frac{\partial#1}{\partial#2}}
+  \def\pddif   #1#2{\pndif{2}{#1}{#2}}
+  \def\pndif #1#2#3{\frac{\partial^{#1}#2}{\partial#3^{#1}}}
+  \def\plpdif#1#2#3{\frac{\partial^{#1}#2}{\gfncmd@plpdif@sub#3|\gfncmd@endplpdif@sub}}
+  \def\gfncmd@plpdif@sub#1|#2\gfncmd@endplpdif@sub{%
+    \partial#1%
+    \ifx\gfncmd@unique#2\gfncmd@unique\else
+      \gfncmd@plpdif@sub#2\gfncmd@endplpdif@sub
+    \fi
+  }
+  \def\thmpdif#1#2#3{\paren{\frac{\partial#1}{\partial#2}}_{#3}}
 % ---- 'd' of differentiation ----
-\def\gfncmd@ordd@rm{\mathord{\,\mathrm{d}}}
-\def\gfncmd@ordd@it{\mathord{\,d}}
-\def\usermordd{\let\ordd=\gfncmd@ordd@rm}
-\def\useitordd{\let\ordd=\gfncmd@ordd@it}
-\usermordd %(setting default option)
+  \def\gfncmd@ordd@rm{\mathord{\,\mathrm{d}}}
+  \def\gfncmd@ordd@it{\mathord{\,d}}
+  \def\usermordd{\let\ordd=\gfncmd@ordd@rm}
+  \def\useitordd{\let\ordd=\gfncmd@ordd@it}
+  \usermordd %(setting default option)
+%
+% ==== Others ====
+% ---- log-like operator ----
+  \def\dom{\mathop{\operator@font dom}\nolimits}
+  \def\cod{\mathop{\operator@font cod}\nolimits}
+  \def\minl{\mathop{\operator@font minl}}
+  \def\maxl{\mathop{\operator@font maxl}}
+  \def\conv{\mathop{\operator@font conv}}
+%
+% ---- order notation -----
+  \def\Order #1{\mathrm{O}\paren{#1}}
+  \def\order #1{\mathrm{o}\paren{#1}}
+  \def\LOrder#1{\rmOmega\paren{#1}}
+  \def\lorder#1{\omega\paren{#1}}
+  \def\TOrder#1{\rmTheta\paren{#1}}
+%
+% ---- transposition of matrix ----
+  \def\gfncmd@trsps@top #1{#1^\top\!}
+  \def\gfncmd@trsps@T   #1{#1^{\mathrm{T}}}
+  \def\gfncmd@trsps@left#1{\,{}^{t}\!#1}
+  \def\usetoptrsps {\let\trsps=\gfncmd@trsps@top}
+  \def\useTtrsps   {\let\trsps=\gfncmd@trsps@T}
+  \def\uselefttrsps{\let\trsps=\gfncmd@trsps@left}
+  \usetoptrsps %(setting default option)
+%
+% ---- equal-to sign for definition ----
+  \def\defeq{\mathrel{\raisebox{-0.115em}{$\cdot$}\hspace{-0.28em}\raisebox{0.1em}{$\cdot$}\hspace{-0.3em}=}}
+  \def\afterdefeq{\mathrel{\hspace*{0.251em}=}}
+  \def\defiff{\mathrel{\enskip\text{\raisebox{0.025em}{$:$}}\hspace{-0.75em}\iff\enskip}}
+%
+  \def\subproof#1#2{\par\noindent\textsf{[#1]}\quad#2}
+  \def\caseif#1{\paren{\text{if}\enskip #1}}
+  \def\caseow{\paren{\text{otherwise}}}
+% ---- new word ----
+  \newcommand{\newword}[2][]{\textsf{#2}\ifx\gfncmd@unique#1\gfncmd@unique\else\index{#1}\fi}
+  \newcommand{\newwordjaen}[3][]{%
+    \textsf{#2}\ifx\gfncmd@unique#3\gfncmd@unique\else{\small(\textit{#3})}\fi
+    \ifx\gfncmd@unique#1\gfncmd@unique\else\index{#1}\fi
+  }
+%
+% ---- enumeration of theorem ----
+  \newcounter{thmenum}
+  \newenvironment{thmenum}{\setcounter{thmenum}{0}\begin{itemize}}{\end{itemize}}
+  \newcommand{\thmenumitem}{\refstepcounter{thmenum}\item[(\the\c@thmenum)]}
+  %\newcommand{\thmenumref}[1]{(\ref{#1})}
+  \renewcommand{\thethmenum}{(\the\c@thmenum)}
+%
+% ---- optimization tableaux ----
+  \newdimen\gfncmd@dimen@maxwidth
+  \def\Minimize#1#2#3{%
+    \def\gfncmd@contenti{\gfncmd@sub@Minimize#2|\gfncmd@end}
+    \def\gfncmd@contentii{\gfncmd@sub@Minimize#3|\gfncmd@end}
+    \setbox0=\hbox{$\begin{aligned}\gfncmd@contenti\end{aligned}$}
+    \gfncmd@dimen@maxwidth=\wd0\relax
+  %  \gfncmd@measurewidth#2|\gfncmd@end
+  %  \gfncmd@measurewidth#3|\gfncmd@end
+    \vspace{2ex}
+    \begin{center}
+      \begin{tabular}{rl}
+      \hline
+        Minimize
+          & $\displaystyle#1$
+      \\\hline
+        subject to
+          & \parbox[t]{\gfncmd@dimen@maxwidth}{%
+              $\begin{aligned}[t]
+                \gfncmd@contenti
+              \end{aligned}$
+            }
+      \\
+      \if\gfncmd@unique#3\gfncmd@unique
+      \else
+          & \parbox[t]{\gfncmd@dimen@maxwidth}{%
+              $\begin{aligned}[t]
+                \gfncmd@contentii
+              \end{aligned}$
+            }
+        \\
+      \fi
+      \hline
+      \end{tabular}
+    \end{center}
+    \vspace{2ex}
+  }
+%\def\gfncmd@measurewidth#1&#2|#3\gfncmd@end{%
+%  \setbox0=\hbox{$\displaystyle#1#2$}%
+%  \ifdim\gfncmd@dimen@maxwidth<\wd0\relax
+%    \gfncmd@dimen@maxwidth=\wd0\relax
+%  \fi
+%  \ifx\relax#3\relax
+%  \else
+%    \gfncmd@measurewidth#3\gfncmd@end
+%  \fi
+%}
+  \def\gfncmd@sub@Minimize#1&#2|#3\gfncmd@end{%
+    #1&#2\\%
+    \ifx\gfncmd@unique#3\gfncmd@unique\else
+      \gfncmd@sub@Minimize#3\gfncmd@end
+    \fi
+  }
+% ---- category ----
+  \def\mathcat#1{\mathbf{#1}}
+  \def\catMatr{\mathcat{Matr}}
+  \def\catEns{\mathcat{Ens}}
+  \def\catCat{\mathcat{Cat}}
+  \def\catSet{\mathcat{Set}}
+  \def\catTop{\mathcat{Top}}
+  \def\catToph{\mathcat{Toph}}
+  \def\catGrp{\mathcat{Grp}}
+  \def\catAb{\mathcat{Ab}}
+  \def\catRng{\mathcat{Rng}}
+  \def\catCRng{\mathcat{CRng}}
 %
 % ======== Letters ========
 % ---- redefinition of epsilon ----
-\let\gfncmd@varepsilon=\varepsilon
-\let\gfncmd@epsilon=\epsilon
-\def\usesymbolepsilon{%
-  \let\epsilon=\gfncmd@epsilon
-  \let\varepsilon=\gfncmd@undefined
-}
-\def\usescriptepsilon{%
-  \let\epsilon=\gfncmd@varepsilon
-  \let\varepsilon=\gfncmd@undefined
-}
-\usescriptepsilon
+  \let\gfncmd@varepsilon=\varepsilon
+  \let\gfncmd@epsilon=\epsilon
+  \def\usesymbolepsilon{%
+    \let\epsilon=\gfncmd@epsilon
+    \let\varepsilon=\gfncmd@undefined
+  }
+  \def\usescriptepsilon{%
+    \let\epsilon=\gfncmd@varepsilon
+    \let\varepsilon=\gfncmd@undefined
+  }
+  \usescriptepsilon
+%
 % ---- redefinition of phi ----
-\let\gfncmd@phi=\phi
-\let\gfncmd@varphi=\varphi
-\def\usesymbolphi{%
-  \let\phi=\gfncmd@phi
-  \let\varphi=\gfncmd@undefined
-}
-\def\usescriptphi{%
-  \let\phi=\gfncmd@varphi
-  \let\varphi=\gfncmd@undefined
-}
-\usesymbolphi
+  \let\gfncmd@phi=\phi
+  \let\gfncmd@varphi=\varphi
+  \def\usesymbolphi{%
+    \let\phi=\gfncmd@phi
+    \let\varphi=\gfncmd@undefined
+  }
+  \def\usescriptphi{%
+    \let\phi=\gfncmd@varphi
+    \let\varphi=\gfncmd@undefined
+  }
+  \usesymbolphi
 %
 % ---- redefintion of Greek capital letters ----
 \def\gfncmd@Alpha{\mathrm{A}}
@@ -662,117 +804,3 @@
   \let\rmOmega=\gfncmd@Omega
 }
 \useitalicgreekcapital
-% ---- transposition of matrix ----
-\def\gfncmd@trsps@top#1{#1^\top\!}
-\def\gfncmd@trsps@T#1{#1^{\mathrm{T}}}
-\def\gfncmd@trsps@left#1{\,{}^{t}\!#1}
-\def\usetoptrsps{\let\trsps=\gfncmd@trsps@top}
-\def\useTtrsps{\let\trsps=\gfncmd@trsps@T}
-\def\uselefttrsps{\let\trsps=\gfncmd@trsps@left}
-\usetoptrsps
-%
-% ---- image by function ----
-\def\funcimg#1#2{#1\sqbracket{#2}}
-\def\funcinvimg#1#2{{#1}^{-1}\sqbracket{#2}}
-% ---- composition of functions ----
-\def\compnd#1{\gfncmd@compndsub#1|\gfncmd@endofargument}
-\def\gfncmd@compndsub#1|#2\gfncmd@endofargument{%
-  \ifx\gfncmd@unique#2\gfncmd@unique
-    #1%
-  \else
-    #1 \mathbin{\circ} \gfncmd@compndsub#2\gfncmd@endofargument
-  \fi
-}
-% ---- equal-to sign for definition ----
-%\def\defeq{\mathrel{:\hspace{-0.0625em}=}}
-\def\defeq{\mathrel{\raisebox{-0.115em}{$\cdot$}\hspace{-0.28em}\raisebox{0.1em}{$\cdot$}\hspace{-0.3em}=}}
-\def\afterdefeq{\mathrel{\hspace*{0.251em}=}}
-%
-% ---- logical function ----
-\def\bigland{\mathop{\text{\LARGE$\land$}}\limits}
-% ---- new word ----
-\newcommand{\newword}[2][]{%
-  \textsf{#2}\ifx\gfncmd@unique#1\gfncmd@unique\else\index{#1}\fi
-}
-% ---- enumeration of theorem ----
-\newcounter{thmenum}
-\newenvironment{thmenum}{\setcounter{thmenum}{0}\begin{itemize}}{\end{itemize}}
-\newcommand{\thmenumitem}{\refstepcounter{thmenum}\item[(\the\c@thmenum)]}
-%\newcommand{\thmenumref}[1]{(\ref{#1})}
-\renewcommand{\thethmenum}{(\the\c@thmenum)}
-%
-% ---- optimization tableaux ----
-\newdimen\gfncmd@dimen@maxwidth
-\def\Minimize#1#2#3{%
-  \def\gfncmd@contenti{\gfncmd@sub@Minimize#2|\gfncmd@end}
-  \def\gfncmd@contentii{\gfncmd@sub@Minimize#3|\gfncmd@end}
-  \setbox0=\hbox{$\begin{aligned}\gfncmd@contenti\end{aligned}$}
-  \gfncmd@dimen@maxwidth=\wd0\relax
-%  \gfncmd@measurewidth#2|\gfncmd@end
-%  \gfncmd@measurewidth#3|\gfncmd@end
-  \vspace{2ex}
-  \begin{center}
-    \begin{tabular}{rl}
-    \hline
-      Minimize
-        & $\displaystyle#1$
-    \\\hline
-      subject to
-        & \parbox[t]{\gfncmd@dimen@maxwidth}{%
-            $\begin{aligned}[t]
-              \gfncmd@contenti
-            \end{aligned}$
-          }
-    \\
-    \if\relax#3\relax
-    \else
-        & \parbox[t]{\gfncmd@dimen@maxwidth}{%
-            $\begin{aligned}[t]
-              \gfncmd@contentii
-            \end{aligned}$
-          }
-      \\
-    \fi
-    \hline
-    \end{tabular}
-  \end{center}
-  \vspace{2ex}
-}
-%\def\gfncmd@measurewidth#1&#2|#3\gfncmd@end{%
-%  \setbox0=\hbox{$\displaystyle#1#2$}%
-%  \ifdim\gfncmd@dimen@maxwidth<\wd0\relax
-%    \gfncmd@dimen@maxwidth=\wd0\relax
-%  \fi
-%  \ifx\relax#3\relax
-%  \else
-%    \gfncmd@measurewidth#3\gfncmd@end
-%  \fi
-%}
-\def\gfncmd@sub@Minimize#1&#2|#3\gfncmd@end{%
-  #1&#2\\%
-  \ifx\relax#3\relax
-  \else
-    \gfncmd@sub@Minimize#3\gfncmd@end
-  \fi
-}
-% ---- category ----
-\def\mathcat#1{\mathbf{#1}}
-\def\catMatr{\mathcat{Matr}}
-\def\catEns{\mathcat{Ens}}
-\def\catCat{\mathcat{Cat}}
-\def\catSet{\mathcat{Set}}
-\def\catTop{\mathcat{Top}}
-\def\catToph{\mathcat{Toph}}
-\def\catGrp{\mathcat{Grp}}
-\def\catAb{\mathcat{Ab}}
-\def\catRng{\mathcat{Rng}}
-\def\catCRng{\mathcat{CRng}}
-%
-\def\dom{\mathop{\operator@font dom}\nolimits}
-\def\cod{\mathop{\operator@font cod}\nolimits}
-%
-\def\Order#1{\mathrm{O}\paren{#1}}
-\def\order#1{\mathrm{o}\paren{#1}}
-\def\LOrder#1{\rmOmega\paren{#1}}
-\def\lorder#1{\omega\paren{#1}}
-\def\TOrder#1{\rmTheta\paren{#1}}
