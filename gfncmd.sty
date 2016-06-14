@@ -1,4 +1,4 @@
-%This is a LaTeX style file "gfncmd.sty" made by @bd_gfngfn
+%This is a LaTeX style file "gfncmd.sty"
 %
 \def\gfncmd@unique{\gfncmd@uniquesub}
 % ======== Parenthesis, Brackets and Braces ========
@@ -185,53 +185,60 @@
   \fontsize{#1}{0pt}\selectfont $]$%
 }
 \def\gfncmd@sizedleftbrace#1{%
-  %\fontsize{#1}{0pt}\selectfont $\{$%
-  \ifdim#1<2em\relax
-    \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+  \ifgfncmd@parenwidthresized
+    \ifdim#1<2em\relax
+      \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+    \else
+      \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+    \fi
   \else
-    \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+    \fontsize{#1}{0pt}\selectfont $\{$%
   \fi
 }
 \def\gfncmd@sizedrightbrace#1{%
-  %\fontsize{#1}{0pt}\selectfont $\}$%
-  \ifdim#1<2em\relax
-    \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+  \ifgfncmd@parenwidthresized
+    \ifdim#1<2em\relax
+      \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+    \else
+      \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+    \fi
   \else
-    \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+    \fontsize{#1}{0pt}\selectfont $\}$%
   \fi
 }
-\def\gfncmd@sizedbar#1{%
-  \fontsize{#1}{0pt}\selectfont $|$%
-}%
-\def\gfncmd@sizedBar#1{%
-  \fontsize{#1}{0pt}\selectfont $\|$%
-}%
+\def\gfncmd@sizedbar#1{\fontsize{#1}{0pt}\selectfont $|$}
+\def\gfncmd@sizedBar#1{\fontsize{#1}{0pt}\selectfont $\|$}
 \def\gfncmd@sizedmidbar#1{%
-  %$\:${\fontsize{#1}{0pt}\selectfont $|$}A$\:$
-  $\:$\resizebox{3pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $|$}}$\:$%
+  \ifgfncmd@parenwidthresized
+    $\:$\resizebox{3pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $|$}}$\:$%
+  \else
+    $\:${\fontsize{#1}{0pt}\selectfont $|$}A$\:$%
+  \fi
 }
-\def\gfncmd@sizedmidslash#1{%
-  \fontsize{#1}{0pt}\selectfont $/$%
-}
-\def\gfncmd@sizedleftceil#1{%
-  \fontsize{#1}{0pt}\selectfont $\lceil$%
-}
-\def\gfncmd@sizedrightceil#1{%
-  \fontsize{#1}{0pt}\selectfont $\rceil$%
-}
-\def\gfncmd@sizedleftfloor#1{%
-  \fontsize{#1}{0pt}\selectfont $\lfloor$%
-}
-\def\gfncmd@sizedrightfloor#1{%
-  \fontsize{#1}{0pt}\selectfont $\rfloor$%
-}
+\def\gfncmd@sizedmidslash#1{\fontsize{#1}{0pt}\selectfont $/$}
+\def\gfncmd@sizedleftceil#1{\fontsize{#1}{0pt}\selectfont $\lceil$}
+\def\gfncmd@sizedrightceil#1{\fontsize{#1}{0pt}\selectfont $\rceil$}
+\def\gfncmd@sizedleftfloor#1{\fontsize{#1}{0pt}\selectfont $\lfloor$}
+\def\gfncmd@sizedrightfloor#1{\fontsize{#1}{0pt}\selectfont $\rfloor$}
 \def\gfncmd@sizedleftedged#1{%
-  \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{【}}%
+  \ifgfncmd@parenwidthresized
+    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{【}%
+  \else
+    \message{[gfncmd.sty] Use \string\makeparenresized.}
+  \fi
 }
 \def\gfncmd@sizedrightedged#1{%
-  \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{】}}%
+  \ifgfncmd@parenwidthresized
+    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{】}%
+  \else
+  \fi
 }
 \def\gfncmd@noparen#1{}
+%
+\newif\ifgfncmd@parenwidthresized
+\let\makeparenwidthresized\gfncmd@parenwidthresizedtrue
+\let\makeparenwidthnormal\gfncmd@parenwidthresizedfalse
+\makeparenwidthnormal
 %
 % ---- parens ----
 \def\paren      #1{\genparen{#1}{\gfncmd@sizedleftparen}{\gfncmd@sizedrightparen}{}{}}
@@ -259,29 +266,6 @@
   \def\Natleq#1{\genparen{#1}{\gfncmd@sizedleftedged}{\gfncmd@sizedrightedged}{}{}}
   \def\Natintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftedged}{\gfncmd@sizedrightedged}{}{}}
 %
-%% ---- change catcode of & ----
-%  \def\makeampactive{\begingroup\catcode`\&=\active\relax}
-%  \def\makeampother{\endgroup}
-%  \makeampactive
-%  \global\let&=\midtab
-%  \makeampother
-%  \newenvironment{gfnmath}{%
-%    \makeampactive
-%    % ---- from amsmath
-%    \start@align\@ne\st@rredtrue\m@ne
-%    % ----
-%  }{%
-%    % ---- from amsmath
-%    \math@cr \black@\totwidth@
-%    \egroup
-%    \ifingather@\restorealignstate@
-%    \egroup
-%    \nonumber\ifnum0=‘{\fi\iffalse}\fi
-%    \else$$\fi
-%    \ignorespacesafterend
-%    % ----
-%    \makeampother
-%  }
 % ======== Sets ========
 % ---- famous sets ----
   \def\setZ{\setcapital{Z}}
