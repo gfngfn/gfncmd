@@ -212,7 +212,7 @@
   \ifgfncmd@parenwidthresized
     $\:$\resizebox{3pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $|$}}$\:$%
   \else
-    $\:${\fontsize{#1}{0pt}\selectfont $|$}A$\:$%
+    $\:${\fontsize{#1}{0pt}\selectfont $|$}$\:$%
   \fi
 }
 \def\gfncmd@sizedmidslash#1{\fontsize{#1}{0pt}\selectfont $/$}
@@ -222,14 +222,14 @@
 \def\gfncmd@sizedrightfloor#1{\fontsize{#1}{0pt}\selectfont $\rfloor$}
 \def\gfncmd@sizedleftedged#1{%
   \ifgfncmd@parenwidthresized
-    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{„Äê}%
+    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{Åy}}%
   \else
     \message{[gfncmd.sty] Use \string\makeparenresized.}
   \fi
 }
 \def\gfncmd@sizedrightedged#1{%
   \ifgfncmd@parenwidthresized
-    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{„Äë}%
+    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{Åz}}%
   \else
   \fi
 }
@@ -407,7 +407,7 @@
   }
 %
 % ---- signs ----
-  \def\qed{\hfill ‚ñ†}
+  \def\qed{\hfill $\blacksquare$}
   \def\dummysign{\text{--}}
 %
 % ======== Logic ========
