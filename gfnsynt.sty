@@ -1,0 +1,21 @@
+\def\gfnsynt@syntcolor{{blue}}
+\def\gfnsynt@metacolor{{red}}
+\newcommand{\setsyntcolor}[2][]{%
+  \ifx\gfncmd@unique#1\gfncmd@unique
+    \def\gfnsynt@syntcolor{{#2}}%
+  \else
+    \def\gfnsynt@syntcolor{[#1]{#2}}%
+  \fi
+}
+\newcommand{\setmetacolor}[2][]{%
+  \ifx\gfncmd@unique#1\gfncmd@unique
+    \def\gfnsynt@metacolor{{#2}}%
+  \else
+    \def\gfnsynt@metacolor{[#1]{#2}}%
+  \fi
+}
+\def\synt#1{\expandafter\textcolor\gfnsynt@syntcolor{\texttt{#1}}}
+\def\meta#1{\expandafter\textcolor\gfnsynt@metacolor{\textit{\texttt{#1}}}}
+\def\gensynt#1{\expandafter\textcolor\gfnsynt@syntcolor{#1}}
+\def\genmeta#1{\expandafter\textcolor\gfnsynt@metacolor{#1}}
+
