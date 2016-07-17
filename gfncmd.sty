@@ -500,7 +500,7 @@
   \def\TOrder#1{\rmTheta\paren{#1}}
 %
 % ---- transposition of matrix ----
-  \def\gfncmd@trsps@top #1{#1^\top\!}
+  \def\gfncmd@trsps@top #1{#1^{\top\rule{0pt}{0.7em}}\!}
   \def\gfncmd@trsps@T   #1{#1^{\mathrm{T}}}
   \def\gfncmd@trsps@left#1{\,{}^{t}\!#1}
   \def\usetoptrsps {\let\trsps=\gfncmd@trsps@top}
@@ -533,33 +533,31 @@
 %
 % ---- optimization tableaux ----
   \newdimen\gfncmd@dimen@maxwidth
-  \def\Minimize#1#2#3{%
+  \def\Minimize#1#2#3{\gfncmd@MinimizeOrMaximize{#1}{#2}{#3}{Minimize}}
+  \def\Maximize#1#2#3{\gfncmd@MinimizeOrMaximize{#1}{#2}{#3}{Maximize}}
+  \def\gfncmd@MinimizeOrMaximize#1#2#3#4{%
     \def\gfncmd@contenti{\gfncmd@sub@Minimize#2|\gfncmd@end}
     \def\gfncmd@contentii{\gfncmd@sub@Minimize#3|\gfncmd@end}
     \setbox0=\hbox{$\begin{aligned}\gfncmd@contenti\end{aligned}$}
     \gfncmd@dimen@maxwidth=\wd0\relax
-  %  \gfncmd@measurewidth#2|\gfncmd@end
-  %  \gfncmd@measurewidth#3|\gfncmd@end
-    \vspace{2ex}
+    \vspace{2ex}%
     \begin{center}
       \begin{tabular}{rl}
       \hline
-        Minimize
-          & $\displaystyle#1$
+        #4 & $\displaystyle#1$
       \\\hline
-        subject to
-          & \parbox[t]{\gfncmd@dimen@maxwidth}{%
-              $\begin{aligned}[t]
-                \gfncmd@contenti
-              \end{aligned}$
-            }
+        subject to &
+          \parbox[t]{\gfncmd@dimen@maxwidth}{%
+            $\begin{aligned}[t]
+              \gfncmd@contenti
+            \end{aligned}$%
+          }
       \\
-      \if\gfncmd@unique#3\gfncmd@unique
-      \else
+      \ifx\gfncmd@unique#3\gfncmd@unique\else
           & \parbox[t]{\gfncmd@dimen@maxwidth}{%
               $\begin{aligned}[t]
                 \gfncmd@contentii
-              \end{aligned}$
+              \end{aligned}$%
             }
         \\
       \fi
@@ -568,16 +566,6 @@
     \end{center}
     \vspace{2ex}
   }
-%\def\gfncmd@measurewidth#1&#2|#3\gfncmd@end{%
-%  \setbox0=\hbox{$\displaystyle#1#2$}%
-%  \ifdim\gfncmd@dimen@maxwidth<\wd0\relax
-%    \gfncmd@dimen@maxwidth=\wd0\relax
-%  \fi
-%  \ifx\relax#3\relax
-%  \else
-%    \gfncmd@measurewidth#3\gfncmd@end
-%  \fi
-%}
   \def\gfncmd@sub@Minimize#1&#2|#3\gfncmd@end{%
     #1&#2\\%
     \ifx\gfncmd@unique#3\gfncmd@unique\else

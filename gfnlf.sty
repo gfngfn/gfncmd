@@ -112,12 +112,18 @@
 }
 \def\gfncmd@escapedtabchar{&}
 \def\gfncmd@escapedbreakchar{\\}
-\def\gfncmd@midoption#1{%
+\def\gfncmd@midoption#1{\gfncmd@midoptionsub#1\gfncmd@endofargument}
+\def\gfncmd@midoptionsub#1#2\gfncmd@endofargument{
   \ifcase#1\relax
   \or
     \gfncmd@escapedtabchar
   \or
     \gfncmd@escapedbreakchar
+  \or
+    \gfncmd@escapedbreakchar\gfncmd@escapedtabchar
+  \fi
+  \ifx\gfncmd@unique#2\gfncmd@unique\else
+    \ifx=#2\else\fi
   \fi
 }
 %
