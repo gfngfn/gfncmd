@@ -59,12 +59,6 @@
   \expandafter\let\expandafter\gfncmd@parenmode\csname gfncmd@modearray[\the\gfncmd@count@modedepth]\endcsname
     %(s\the\gfncmd@count@modedepth/\gfncmd@parenmode)%(for test)
 }
-%
-%\def\genparen#1#2#3#4#5{%
-%  \mathchoice{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{%
-%    \gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}{\gfncmd@genparen@display{#1}{#2}{#3}{#4}{#5}}%
-%}
-%\def\gfncmd@genparen@display#1#2#3#4#5{%
 \def\genparen#1#2#3#4#5{%
   % ---- ---- ---- ----
   % #1 : inner content
@@ -115,7 +109,12 @@
     \fi
 %
     \advance\gfncmd@dimen@total by0.2ex\relax
-    \rule[-\gfncmd@dimen@depth]{0pt}{\gfncmd@dimen@total}%
+    \expandafter\ifcase\gfncmd@parenmode\relax
+      \rule[-\gfncmd@dimen@depth]{0pt}{\gfncmd@dimen@total}%
+    \or
+      \rule[-\gfncmd@dimen@depth]{0pt}{\gfncmd@dimen@total}%
+    \or
+    \fi
 %
     \ifnum\gfncmd@count@rankofparen=0\relax
       \gfncmd@enableescapedchar
@@ -186,10 +185,20 @@
 }
 \def\gfncmd@sizedleftbrace#1{%
   \ifgfncmd@parenwidthresized
-    \ifdim#1<2em\relax
-      \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+    \ifdim#1<1em\relax
+      \expandafter\ifcase\gfncmd@parenmode\relax
+        $\{$%
+      \or
+        $\{$%
+      \or
+        $\scriptstyle\{$%
+      \fi
     \else
-      \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+      \ifdim#1<2em\relax
+        \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+      \else
+        \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\{$}}%
+      \fi
     \fi
   \else
     \fontsize{#1}{0pt}\selectfont $\{$%
@@ -197,10 +206,20 @@
 }
 \def\gfncmd@sizedrightbrace#1{%
   \ifgfncmd@parenwidthresized
-    \ifdim#1<2em\relax
-      \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+    \ifdim#1<1em\relax
+      \expandafter\ifcase\gfncmd@parenmode\relax
+        $\}$%
+      \or
+        $\}$%
+      \or
+        $\scriptstyle\}$%
+      \fi
     \else
-      \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+      \ifdim#1<2em\relax
+        \resizebox{6pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+      \else
+        \resizebox{9pt}{#1}{\rule{0pt}{#1}{\fontsize{#1}{0pt}\selectfont $\}$}}%
+      \fi
     \fi
   \else
     \fontsize{#1}{0pt}\selectfont $\}$%
@@ -265,6 +284,17 @@
 % ---- intervals of integer ----
   \def\Natleq#1{\genparen{#1}{\gfncmd@sizedleftedged}{\gfncmd@sizedrightedged}{}{}}
   \def\Natintvl#1#2{\genparen{#1, #2}{\gfncmd@sizedleftedged}{\gfncmd@sizedrightedged}{}{}}
+%
+% ======== Linear Algebra ========
+  \def\Perm#1{\mathfrak{S}_{#1}}
+  \def\sgn{\mathop{\operator@font sgn}}
+  \def\rank{\mathop{\operator@font rank}}
+  \def\Img{\mathop{\operator@font Im}}
+  \def\Ker{\mathop{\operator@font Ker}}
+  \def\diag{\mathop{\operator@font diag}}
+  \def\veczero{\bm{0}}
+  \def\vecone{\bm{1}}
+  \def\vecsglone#1{\mathbf{e}_{\scriptrange{#1}}}
 %
 % ======== Sets ========
 % ---- famous sets ----
@@ -517,6 +547,10 @@
   \def\subproof#1#2{\par\noindent\textsf{[#1]}\quad#2}
   \def\caseif#1{\paren{\text{if}\enskip #1}}
   \def\caseow{\paren{\text{otherwise}}}
+  \def\holdby#1{\tag*{$\because$\ #1\hspace*{1em}}}
+  \def\argmax{\mathop{\operator@font arg\ max}}
+  \def\argmin{\mathop{\operator@font arg\ min}}
+%
 % ---- new word ----
   \newcommand{\newword}[2][]{\textsf{#2}\ifx\gfncmd@unique#1\gfncmd@unique\else\index{#1}\fi}
   \newcommand{\newwordjaen}[3][]{%
