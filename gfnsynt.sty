@@ -14,8 +14,74 @@
     \def\gfnsynt@metacolor{[#1]{#2}}%
   \fi
 }
-\def\synt#1{\expandafter\textcolor\gfnsynt@syntcolor{\texttt{#1}}}
-\def\meta#1{\expandafter\textcolor\gfnsynt@metacolor{\textit{\texttt{#1}}}}
-\def\gensynt#1{\expandafter\textcolor\gfnsynt@syntcolor{#1}}
-\def\genmeta#1{\expandafter\textcolor\gfnsynt@metacolor{#1}}
-
+\newcommand\synt[1]{\expandafter\textcolor\gfnsynt@syntcolor{\texttt{#1}}}
+\newcommand\meta[1]{\expandafter\textcolor\gfnsynt@metacolor{\textit{\texttt{#1}}}}
+\newcommand\gensynt[1]{\expandafter\textcolor\gfnsynt@syntcolor{#1}}
+\newcommand\genmeta[1]{\expandafter\textcolor\gfnsynt@metacolor{#1}}
+%
+\def\newgrammar#1{%
+  % ---- ---- ---- ----
+  % #1 : grammar name
+  % ---- ---- ---- ----
+  \expandafter\def\csname gfnsynt@grammar[#1]\endcsname{}
+}
+\def\addtogrammar#1#2#3#4#5{%
+  % ---- ---- ---- ----
+  % #1 : grammar name
+  % #2 : constructor name
+  % #3 : strength of association
+  % #4 : number of arguments
+  % #5 : naive definition
+  % ---- ---- ---- ----
+  \expandafter\def\csname gfnsynt@constructortogrammar[#2]\endcsname{#1}
+  \expandafter\let\expandafter\gfnsynt@tempi\expandafter=\csname gfnsynt@grammar[#1]\endcsname
+  \expandafter\def\expandafter\gfnsynt@tempii\expandafter{\gfncmd@tempi{#2|#3}}
+  \expandafter\let\csname gfnsynt@grammar[#1]\endcsname=\gfnsynt@tempii
+  \expandafter\def\expandafter#2\expandafter\gfnsynt@argumentarray\expandafter{\expandafter#4\expandafter}\expandafter
+    {\gfnsynt@replaceupto{#4}{#3}{#5}}
+}
+\def\gfnsynt@argumentarray#1{%
+  \ifcase#1%
+  \or
+    ##1%
+  \or
+    ##1##2%
+  \fi
+}
+\def\gfnsynt@replaceupto#1#2#3{%
+  % ---- ---- ---- ----
+  % #1 : number of arguments
+  % #2 : strength of association
+  % #3 : naive definition
+  % ---- ---- ---- ----
+  \ifx 0#1#3\else
+    \expandafter\gfnsynt@replaceupto\expandafter{\csname gfnsynt@predof#1\endcsname}{#2}{%
+      \gfnsynt@replace{#1}{#2}\gfnsynt@punct#3\gfnsynt@endofargument}
+  \fi
+}
+\expandafter\def\csname gfnsynt@predof1\endcsname{0}
+\expandafter\def\csname gfnsynt@predof2\endcsname{1}
+\expandafter\def\csname gfnsynt@predof3\endcsname{2}
+\expandafter\def\csname gfnsynt@predof4\endcsname{3}
+\expandafter\def\csname gfnsynt@predof5\endcsname{4}
+\expandafter\def\csname gfnsynt@predof6\endcsname{5}
+\expandafter\def\csname gfnsynt@predof7\endcsname{6}
+\expandafter\def\csname gfnsynt@predof8\endcsname{7}
+\expandafter\def\csname gfnsynt@predof9\endcsname{8}
+\def\gfnsynt@replace#1#2\gfnsynt@punct#3#4#5\gfnsynt@endofargument{%
+  \ifx#3\syntarg
+    \ifx#4#1
+      %YABAI
+    \else
+      \syntarg1
+    \fi
+  \else
+  \fi
+\def\syntarg{\gfnsynt@syntargdummy}
+  % ---- ---- ---- ----
+  % #1 : number of arguments
+  % #2 : strength of association
+  % #3 : naive definition
+  % ---- ---- ---- ----
+  
+}

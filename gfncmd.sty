@@ -1,6 +1,18 @@
-%This is a LaTeX style file "gfncmd.sty"
-%
+%%
+%% This is file `gfncmd.sty',
+%% a LaTeX package for semantic markup of mathematical formulae.
+%%
+%% Copyright 2016 Takashi SUWA
+%%      Email (Private) : b d . g f n g f n ( a t m a r k ) g m a i l . c o m
+%%               GitHub : https://github.com/gfngfn
+%%
+\NeedsTeXFormat{LaTeX2e}
+  [1994/12/01]% LaTeX date must be December 1994 or later
+\ProvidesPackage{gfnlf}[2016/08/11 v0.91 by Takashi SUWA]
+%%
+% ---- ----
 \def\gfncmd@unique{\gfncmd@uniquesub}
+%
 % ======== Parenthesis, Brackets and Braces ========
 \newif\ifgfncmd@bool@escape
 \def\gfncmd@disableescapedchar{\gfncmd@bool@escapefalse}
@@ -576,7 +588,7 @@
     \gfncmd@dimen@maxwidth=\wd0\relax
     \vspace{2ex}%
     \begin{center}
-      \begin{tabular}{rl}
+      \begin{tabular}{ll}
       \hline
         #4 & $\displaystyle#1$
       \\\hline

@@ -2,14 +2,17 @@
 %% This is file `gfnlf.sty',
 %% a LaTeX package for writing logical formulae in structurized style.
 %%
-%% Copyright 2015 gfn (Takashi SUWA)
+%% Copyright 2016 Takashi SUWA
 %%      Email (Private) : b d . g f n g f n ( a t m a r k ) g m a i l . c o m
 %%               GitHub : https://github.com/gfngfn
-%%             Web Site : http://buddhagaja.soregashi.com/
 %%
 \NeedsTeXFormat{LaTeX2e}
   [1994/12/01]% LaTeX date must be December 1994 or later
-\ProvidesPackage{gfnlf}[2015/02/07 v0.9 by gfn (Takashi SUWA)]
+\ProvidesPackage{gfnlf}[2016/08/11 v0.91 by Takashi SUWA]
+%%
+% ---- ----
+\def\gfnlf@unique{\gfnlf@uniquesub}
+%
 % ---- style options ----
 \def\quantifierparenskip{\hspace{0.25em}}
 \def\quantifiernoparenskip{\hspace{0.75em}}
@@ -74,7 +77,7 @@
       #5#1%
     \fi
   \fi
-  \ifx\gfncmd@unique#2\gfncmd@unique
+  \ifx\gfnlf@unique#2\gfnlf@unique
     #6#3%
     \expandafter\ifcase\gfncmd@option@quantifier\relax
     %%%%(option: \usesinglequantifier)
@@ -122,7 +125,7 @@
   \or
     \gfncmd@escapedbreakchar\gfncmd@escapedtabchar
   \fi
-  \ifx\gfncmd@unique#2\gfncmd@unique\else
+  \ifx\gfnlf@unique#2\gfnlf@unique\else
     \ifx=#2\else\fi
   \fi
 }
