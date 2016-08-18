@@ -357,11 +357,11 @@
   \let\setmns=\setminus
 %
 % ---- image by function ----
-  \def\funcimg#1#2{#1\sqbracket{#2}}
-  \def\funcinvimg#1#2{{#1}^{-1}\sqbracket{#2}}
+  \newcommand\funcimg[2]{#1\sqbracket{#2}}
+  \newcommand\funcinvimg[2]{{#1}^{-1}\sqbracket{#2}}
 %
 % ---- composition of functions ----
-  \def\compnd#1{\gfncmd@compndsub#1|\gfncmd@endofargument}
+  \newcommand\compnd[1]{\gfncmd@compndsub#1|\gfncmd@endofargument}
   \def\gfncmd@compndsub#1|#2\gfncmd@endofargument{%
     #1%
     \ifx\gfncmd@unique#2\gfncmd@unique\else
@@ -370,8 +370,10 @@
   }
 %
 % ---- the display of domain and codomain of a function ----
-  \def\funcdoms#1#2#3{#1\colon\:\doms{#2}{#3}}
-  \def\doms#1#2{#1\to#2}
+  \newcommand\funcdoms[3]{#1\colon\:\doms{#2}{#3}}
+  \newcommand\parfuncdoms[3]{#1\colon\:\pardoms{#2}{#3}}
+  \newcommand\doms[2]{#1\to#2}
+  \newcommand\pardoms[2]{#1\rightharpoonup#2}
   \newdimen\gfncmd@dimen@funcwidth
   \newdimen\gfncmd@dimen@domwidth
   \newdimen\gfncmd@dimen@domdepth
@@ -384,7 +386,7 @@
   \newdimen\gfncmd@dimen@upperdepth
   \newdimen\gfncmd@dimen@middle
   \newdimen\gfncmd@dimen@lowerpos
-  \def\funcdomswidebox#1#2#3#4#5{%
+  \newcommand\funcdomswidebox[5]{%
   %  \begin{center}
   %    \begin{tabular}{lccc}
   %      $\displaystyle #1\colon$ & $\displaystyle #2$ & $\longrightarrow$ & $\displaystyle #3$
