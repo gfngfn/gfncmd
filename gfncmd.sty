@@ -8,7 +8,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}
   [1994/12/01]% LaTeX date must be December 1994 or later
-\ProvidesPackage{gfnlf}[2016/08/11 v0.91 by Takashi SUWA]
+\ProvidesPackage{gfncmd}[2016/08/11 v0.91 by Takashi SUWA]
 %%
 % ---- ----
 \def\gfncmd@unique{\gfncmd@uniquesub}
@@ -311,31 +311,6 @@
 \def\argmax{\mathop{\operator@font arg\ max}}
 \def\argmin{\mathop{\operator@font arg\ min}}
 %
-% ==== BNF ====
-\def\local@BNFtab{&}
-\def\local@BNFbreak{\\}
-\newcommand\BNFdefeq{\mathrel{%
-  \raisebox{-0.115em}{$\cdot$}\hspace{-0.28em}\raisebox{0.1em}{$\cdot$}%
-  \raisebox{-0.115em}{$\cdot$}\hspace{-0.28em}\raisebox{0.1em}{$\cdot$}\hspace{-0.3em}=%
-}}
-\newcommand\BNFin{\mathrel{%
-  \raisebox{-0.115em}{$\cdot$}\hspace{-0.28em}\raisebox{0.1em}{$\cdot$}%
-  \raisebox{-0.115em}{$\cdot$}\hspace{-0.28em}\raisebox{0.1em}{$\cdot$}\hspace{-0.3em}\in%
-}}
-\newcommand\defbyBNFin[2]{#1\local@BNFtab\ \BNFin\ #2}
-\newcommand\defbyBNF[2]{#1\local@BNFtab\ \BNFdefeq\ \local@defbyBNF#2|\local@endofargument}
-\def\local@defbyBNF#1|#2\local@endofargument{%
-  \ifx\local@unique#2\local@unique
-    #1%
-  \else
-    \expandafter\if\expandafter*\expandafter\local@car#2\local@endofargument
-      #1\local@BNFbreak\local@BNFtab\phantom{{}\BNFdefeq{}}\hspace{-0.5em}%
-        \mathrel{|}\ \expandafter\local@defbyBNF\local@cdr#2\local@endofargument\local@endofargument
-    \else
-      #1\ \mathrel{|}\ \local@defbyBNF#2\local@endofargument
-    \fi
-  \fi
-}
 %
 % ======== Linear Algebra ========
 \def\Perm#1{\mathfrak{S}_{#1}}
