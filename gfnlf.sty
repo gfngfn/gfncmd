@@ -131,14 +131,18 @@
 }
 %
 % ---- concrete quantifier ----
+\providecommand{\doms}[2]{#1\rightarrow#2}
+\providecommand{\pardoms}[2]{#1\rightharpoonup#2}
 \newcommand{\forallin}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@forall}{\in}{#1}}
 \newcommand{\existsin}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@exists}{\in}{#1}}
 \newcommand{\forallsub}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@forall}{\subseteq}{#1}}
 \newcommand{\existssub}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@exists}{\subseteq}{#1}}
 \newcommand{\existssolein}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@existssole}{\in}{#1}}
 \newcommand{\existssolesub}[4][0]{\quantifier{#2}{#3}{#4}{\gfncmd@existssole}{\subseteq}{#1}}
-\newcommand{\forallfunc}[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\gfncmd@forall}{:}{#1}}
-\newcommand{\existsfunc}[5][0]{\quantifier{#2}{#3 \rightarrow #4}{#5}{\gfncmd@exists}{:}{#1}}
+\newcommand{\forallfunc}[5][0]{\quantifier{#2}{\doms{#3}{#4}}{#5}{\gfncmd@forall}{:}{#1}}
+\newcommand{\forallparfunc}[5][0]{\quantifier{#2}{\pardoms{#3}{#4}}{#5}{\gfncmd@forall}{:}{#1}}
+\newcommand{\existsfunc}[5][0]{\quantifier{#2}{\doms{#3}{#4}}{#5}{\gfncmd@exists}{:}{#1}}
+\newcommand{\existsparfunc}[5][0]{\quantifier{#2}{\pardoms{#3}{#4}}{#5}{\gfncmd@exists}{:}{#1}}
 \newcommand{\existsisom}[5][0]{\quantifier{#2}{#3 \cong #4}{#5}{\gfncmd@exists}{:}{#1}}
 \def\gfnlf@quantifiers{\forallin\existsin\forallsub\existssub\forallfunc\existsfunc\existsisom\existssolein\existssolesub}
 %

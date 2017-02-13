@@ -23,7 +23,7 @@
       \gfnalg@dimen@currentwidth=0.85\textwidth\relax
     %--)
     \begin{center}
-      \vspace*{-1.5em}
+      %\vspace*{-1.5em}
       \begin{tabular}{l}
       \hline
         \parbox{0.9\textwidth}{\vspace*{0.25em}#1\vspace*{0.25em}}%
@@ -155,6 +155,8 @@
   \gfnalg@singleblock{$\displaystyle#1$}{#2}{\gfnalg@ulspace\gfnalg@tokenstyle{if}}{\gfnalg@tokenstyle{then}}}
 \long\def\IFX#1\THEN#2{%
   \gfnalg@subseqblock{$\displaystyle#1$}{#2}{\gfnalg@ulspace\gfnalg@tokenstyle{if}}{\gfnalg@tokenstyle{then}}}
+\long\def\IFY#1\THEN#2\ELSE#3{%
+  \gfnalg@singleblock{$\displaystyle#1$\ \gfnalg@tokenstyle{then}\ #2}{#3}{\gfnalg@ulspace\gfnalg@tokenstyle{if}}{\gfnalg@tokenstyle{else}}}
 \long\def\ELSEIFX#1\THEN#2{%
   \gfnalg@subseqblock{$\displaystyle#1$}{#2}{\gfnalg@ulspace\gfnalg@tokenstyle{else if}}{\gfnalg@tokenstyle{then}}}
 \long\def\ELSE#1{%
@@ -204,6 +206,8 @@
 }
 \long\def\LETFUNC#1#2#3{%
   \gfnalg@singleblock{$\displaystyle#1\paren{#2}$}{#3}{\gfnalg@ulspace\gfnalg@tokenstyle{let}}{{$\gfnalg@defeq$}}}
+\long\def\DEFFUNC#1#2#3{%
+  \gfnalg@singleblock{$\displaystyle#1\paren{#2}$}{#3}{}{{$\gfnalg@defeq$}}}
 \long\def\MATCH#1#2{%
   \gfnalg@subseqline{$\displaystyle#1$}{\gfnalg@ulspace\gfnalg@tokenstyle{match}}{\gfnalg@tokenstyle{with}}%
   \gfnalg@match#2|\gfnalg@endofargument
@@ -235,6 +239,7 @@
 \def\ARRAY#1#2{#1\sqbracket{#2}}
 \def\TRUE{\mathrm{true}}
 \def\FALSE{\mathrm{false}}
+\def\FAIL{\mathrm{fail}}
 %\def\AND{\ \mathbf{and}\ }
 %\def\OR{\ \mathbf{or}\ }
 %\def\NOT{\mathbf{not}\ }
