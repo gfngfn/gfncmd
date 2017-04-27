@@ -596,7 +596,7 @@
   \def\gfncmd@MinimizeOrMaximize#1#2#3#4{%
     \def\gfncmd@contenti{\gfncmd@sub@Minimize#2|\gfncmd@end}
     \def\gfncmd@contentii{\gfncmd@sub@Minimize#3|\gfncmd@end}
-    \setbox0=\hbox{$\begin{aligned}\gfncmd@contenti\end{aligned}$}
+    \ifx\gfncmd@unique#2\gfncmd@unique\else\setbox0=\hbox{$\begin{aligned}\gfncmd@contenti\end{aligned}$}\fi
     \gfncmd@dimen@maxwidth=\wd0\relax
     \vspace{2ex}%
     \begin{center}
@@ -604,22 +604,24 @@
       \hline
         #4 & $\displaystyle#1$
       \\\hline
-        subject to &
-          \parbox[t]{\gfncmd@dimen@maxwidth}{%
-            $\begin{aligned}[t]
-              \gfncmd@contenti
-            \end{aligned}$%
-          }
-      \\
-      \ifx\gfncmd@unique#3\gfncmd@unique\else
-          & \parbox[t]{\gfncmd@dimen@maxwidth}{%
+      \ifx\gfncmd@unique#2\gfncmd@unique\else
+          subject to &
+            \parbox[t]{\gfncmd@dimen@maxwidth}{%
               $\begin{aligned}[t]
-                \gfncmd@contentii
+                \gfncmd@contenti
               \end{aligned}$%
             }
         \\
+        \ifx\gfncmd@unique#3\gfncmd@unique\else
+            & \parbox[t]{\gfncmd@dimen@maxwidth}{%
+                $\begin{aligned}[t]
+                  \gfncmd@contentii
+                \end{aligned}$%
+              }
+          \\
+        \fi
+        \hline
       \fi
-      \hline
       \end{tabular}
     \end{center}
     \vspace{2ex}
