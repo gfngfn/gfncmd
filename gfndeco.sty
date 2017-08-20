@@ -19,7 +19,7 @@
 \newcommand{\einnerv}{\noindent}
 \newcommand{\binnervb}{\par\vblank}
 \newcommand{\einnervb}{\vblank\noindent}
-%====ÍEß‚Ìƒe[ƒ}=============================================================
+%====ç« ãƒ»ç¯€ã®ãƒ†ãƒ¼ãƒ=============================================================
 \newcommand{\setsectiontheme}[1]{%
   \expandafter\let\expandafter\decosection\csname#1section@gfndeco\endcsname
   \expandafter\let\expandafter\decononumsection\csname#1nonumsection@gfndeco\endcsname
@@ -129,7 +129,7 @@
   \nopagebreak
   \vblank
 }%
-%====•ª—Ş‚ÌƒXƒ^ƒCƒ‹=============================================================
+%====åˆ†é¡ã®ã‚¹ã‚¿ã‚¤ãƒ«=============================================================
 \newcommand{\newdecoclass}[1]{%
   \expandafter\newcommand\expandafter{\csname prefixof#1@gfndeco\endcsname}{}%
   \expandafter\newcommand\expandafter{\csname setprefixof#1\endcsname}[1]{%
@@ -154,30 +154,30 @@
     }%
   }%
 }%
-% \newdecoclass{œ} ‚ ‚é‚¢‚Í \newnonumdecoclass{œ} ‚É‚æ‚è \setprefixofœC\setstyleofœC\decoœ ‚ª‚»‚ê‚¼‚ê‚Â‚­‚ç‚ê‚é
+% \newdecoclass{â—} ã‚ã‚‹ã„ã¯ \newnonumdecoclass{â—} ã«ã‚ˆã‚Š \setprefixofâ—ï¼Œ\setstyleofâ—ï¼Œ\decoâ— ãŒãã‚Œãã‚Œã¤ãã‚‰ã‚Œã‚‹
 %   +--------------------------------+
-%   |  \newdecoclass{œ}             |
-%   |  \setprefixofœ{£}            |
-%   |  \setstyleofœ{¡}             |
+%   |  \newdecoclass{â—}             |
+%   |  \setprefixofâ—{â–²}            |
+%   |  \setstyleofâ—{â– }             |
 %   +--------------------------------+
-% ‚Æ‚·‚é‚±‚Æ‚ÅC•ª—Şœi—á‚¦‚Î"def"j‚ÌÚ“ªŒê‚ª£i—á‚¦‚Îu’è‹`vj‚ÉCƒXƒ^ƒCƒ‹‚ª¡i—á‚¦‚Î"ul"j‚Éİ’è‚³‚ê‚é
-% \setprefixofœ ‚ğ“Á‚Éw’è‚µ‚Ä‚¢‚È‚¢ê‡CÚ“ªŒê‚Í‹ó•¶š—ñ‚É‚È‚é
-% \setstyleofœ ‚ğ“Á‚Éw’è‚µ‚Ä‚¢‚È‚¢ê‡CƒXƒ^ƒCƒ‹‚Ístd‚É‚È‚é
-% Ú“ªŒêCƒXƒ^ƒCƒ‹‚Æ‚à‚É•¶‘‚Ì“r’†‚Å•ÏX‚·‚é‚±‚Æ‚à‚Å‚«‚é‚ªC“ˆê«‚ÌŠÏ“_‚©‚ç”ñ„§
-% \newdecoclass ‚Í”Ô†‚Â‚«‚Ì•ª—Ş‚ğC\newnonumdecoclass ‚Í”Ô†‚È‚µ‚Ì•ª—Ş‚ğ‚Â‚­‚é
-% •ª—Ş‚Ì–¼‘O‹óŠÔ‚Í”Ô†‚Â‚«‚Æ”Ô†‚È‚µ‚Å•ª‚¯‚Ä‚¢‚È‚¢‚Ì‚Å
+% ã¨ã™ã‚‹ã“ã¨ã§ï¼Œåˆ†é¡â—ï¼ˆä¾‹ãˆã°"def"ï¼‰ã®æ¥é ­èªãŒâ–²ï¼ˆä¾‹ãˆã°ã€Œå®šç¾©ã€ï¼‰ã«ï¼Œã‚¹ã‚¿ã‚¤ãƒ«ãŒâ– ï¼ˆä¾‹ãˆã°"ul"ï¼‰ã«è¨­å®šã•ã‚Œã‚‹
+% \setprefixofâ— ã‚’ç‰¹ã«æŒ‡å®šã—ã¦ã„ãªã„å ´åˆï¼Œæ¥é ­èªã¯ç©ºæ–‡å­—åˆ—ã«ãªã‚‹
+% \setstyleofâ— ã‚’ç‰¹ã«æŒ‡å®šã—ã¦ã„ãªã„å ´åˆï¼Œã‚¹ã‚¿ã‚¤ãƒ«ã¯stdã«ãªã‚‹
+% æ¥é ­èªï¼Œã‚¹ã‚¿ã‚¤ãƒ«ã¨ã‚‚ã«æ–‡æ›¸ã®é€”ä¸­ã§å¤‰æ›´ã™ã‚‹ã“ã¨ã‚‚ã§ãã‚‹ãŒï¼Œçµ±ä¸€æ€§ã®è¦³ç‚¹ã‹ã‚‰éæ¨å¥¨
+% \newdecoclass ã¯ç•ªå·ã¤ãã®åˆ†é¡ã‚’ï¼Œ\newnonumdecoclass ã¯ç•ªå·ãªã—ã®åˆ†é¡ã‚’ã¤ãã‚‹
+% åˆ†é¡ã®åå‰ç©ºé–“ã¯ç•ªå·ã¤ãã¨ç•ªå·ãªã—ã§åˆ†ã‘ã¦ã„ãªã„ã®ã§
 %   +--------------------------------+
 %   |  \newdecoclass{hoge}           |
 %   |  \newnonumdecoclass{hoge}      |
 %   +--------------------------------+
-% ‚Íd•¡’è‹`‚É‚È‚Á‚Ä‚µ‚Ü‚¤
-% ˆÈ‰º‚ÍÅ‰‚©‚çg‚¦‚é‚à‚Ì
-\newdecoclass{def}\setprefixofdef{’è‹`}%
-\newdecoclass{thm}\setprefixofthm{’è—}%
-\newdecoclass{lem}\setprefixoflem{•â‘è}%
-\newdecoclass{cor}\setprefixofcor{Œn}%
-\newnonumdecoclass{proof}\setprefixofproof{Ø–¾}%
-\newnonumdecoclass{compl}\setprefixofcompl{•â‘«}%
+% ã¯é‡è¤‡å®šç¾©ã«ãªã£ã¦ã—ã¾ã†
+% ä»¥ä¸‹ã¯æœ€åˆã‹ã‚‰ä½¿ãˆã‚‹ã‚‚ã®
+\newdecoclass{def}\setprefixofdef{å®šç¾©}%
+\newdecoclass{thm}\setprefixofthm{å®šç†}%
+\newdecoclass{lem}\setprefixoflem{è£œé¡Œ}%
+\newdecoclass{cor}\setprefixofcor{ç³»}%
+\newnonumdecoclass{proof}\setprefixofproof{è¨¼æ˜}%
+\newnonumdecoclass{compl}\setprefixofcompl{è£œè¶³}%
 %
 \newcommand{\decopunctu@gfndeco}{}%
 \newcommand{\decopunctb@gfndeco}{.}%
@@ -230,7 +230,7 @@
     }%
   }%
 }%
-%----stdiŠî–{j--------------------------------------------
+%----stdï¼ˆåŸºæœ¬ï¼‰--------------------------------------------
 \newcommand{\stdcmd@gfndeco}[4]{%
   \dealwithsubsubsectioncounter@gfndeco{#1}%
   \noindent
@@ -251,7 +251,7 @@
   \vblank
 }%
 %
-%----uli‰ºü‚Â‚«j-----------------------------------------
+%----ulï¼ˆä¸‹ç·šã¤ãï¼‰-----------------------------------------
 \newcommand{\ulcmd@gfndeco}[4]{%
   \dealwithsubsubsectioncounter@gfndeco{#1}%
   \noindent
@@ -272,7 +272,7 @@
   \vblank
 }%
 %
-%---topiƒ^ƒCƒgƒ‹‚İ’i—j---------------------------------
+%---topï¼ˆã‚¿ã‚¤ãƒˆãƒ«è¾¼ã¿æ®µè½ï¼‰---------------------------------
 \newcommand{\topcmd@gfndeco}[4]{%
   \dealwithsubsubsectioncounter@gfndeco{#1}%
   \noindent
@@ -287,7 +287,7 @@
   \vblank
 }%
 %
-%---topiƒ^ƒCƒgƒ‹‚İ’i—j---------------------------------
+%---topï¼ˆã‚¿ã‚¤ãƒˆãƒ«è¾¼ã¿æ®µè½ï¼‰---------------------------------
 \newcommand{\ultopcmd@gfndeco}[4]{%
   \dealwithsubsubsectioncounter@gfndeco{#1}%
   \noindent
@@ -302,7 +302,7 @@
   \vblank
 }%
 %
-%----boxi” “ü‚èj------------------------------------------
+%----boxï¼ˆç®±å…¥ã‚Šï¼‰------------------------------------------
 \newcommand{\boxcmd@gfndeco}[4]{%
   \dealwithsubsubsectioncounter@gfndeco{#1}%
   \noindent

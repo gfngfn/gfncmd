@@ -1,3 +1,5 @@
+<!-- -*- coding: utf-8 -*- -->
+
 # `gfncmd.sty`
 
 `gfncmd.sty` is a LaTeX package useful for making LaTeX codes more structurized and semantic

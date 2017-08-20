@@ -1,3 +1,4 @@
+%% -*- coding: utf-8 -*-
 %%
 %% This is file `gfncmd.sty',
 %% a LaTeX package for semantic markup of mathematical formulae.
@@ -253,14 +254,14 @@
 \def\gfncmd@sizedrightfloor#1{\fontsize{#1}{0pt}\selectfont $\rfloor$}
 \def\gfncmd@sizedleftedged#1{%
   \ifgfncmd@parenwidthresized
-    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{Åy}}%
+    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{„Äê}}%
   \else
     \message{[gfncmd.sty] Use \string\makeparenwidthresized.}
   \fi
 }
 \def\gfncmd@sizedrightedged#1{%
   \ifgfncmd@parenwidthresized
-    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{Åz}}%
+    \fontsize{#1}{0pt}\selectfont \scalebox{1}[1.2]{\raisebox{-0.125em}{„Äë}}%
   \else
   \fi
 }
